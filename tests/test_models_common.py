@@ -27,6 +27,7 @@ def test_command_status_body() -> None:
     """Test the CommandStatusBody model."""
     item0 = CommandStatus.from_dict(json.loads(COMMANDS)[0])
     body0 = item0.body
+    assert isinstance(body0, CommandStatusBody)
     assert body0.isNewSeries is False
     assert body0.sendUpdatesToClient is True
     assert body0.updateScheduledTask is True

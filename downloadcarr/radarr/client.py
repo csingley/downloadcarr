@@ -247,7 +247,7 @@ class RadarrClient(Client):
 
     def delete_movie(
         self, movieId: int, deleteFiles: bool = False, addExclusion: bool = False,
-    ) -> bool:
+    ) -> None:
         """Delete the movie with the given ID.
         """
         query = {
@@ -291,7 +291,7 @@ class RadarrClient(Client):
 
         return tuple(QueueItem.from_dict(result) for result in results)
 
-    def delete_queue_item(self, queueItemId, blacklist=False) -> bool:
+    def delete_queue_item(self, queueItemId, blacklist=False) -> None:
         """Deletes an item from the queue and download client.
         Optionally blacklist item after deletion.
         """

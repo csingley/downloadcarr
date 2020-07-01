@@ -26,6 +26,7 @@ def test_quality() -> None:
     movie = queue.movie
     assert isinstance(movie, models.Movie)
     mf = movie.movieFile
+    assert isinstance(mf, models.MovieFile)
     qualrev = mf.quality
     assert isinstance(qualrev, models.QualityRevision)
     quality = qualrev.quality
@@ -53,6 +54,7 @@ def test_revision() -> None:
     movie = queue.movie
     assert isinstance(movie, models.Movie)
     mf = movie.movieFile
+    assert isinstance(mf, models.MovieFile)
     qualrev = mf.quality
     assert isinstance(qualrev, models.QualityRevision)
     revision = qualrev.revision
@@ -77,6 +79,7 @@ def test_quality_revision() -> None:
     movie = queue.movie
     assert isinstance(movie, models.Movie)
     mf = movie.movieFile
+    assert isinstance(mf, models.MovieFile)
     qualrev = mf.quality
     assert isinstance(qualrev, models.QualityRevision)
     assert isinstance(qualrev.quality, models.Quality)  # tested elsewhere

@@ -283,7 +283,7 @@ class SonarrClient(Client):
 
         return EpisodeFile.from_dict(result)
 
-    def delete_episode_file(self, episodeFileId: int) -> bool:
+    def delete_episode_file(self, episodeFileId: int) -> None:
         """Delete the given episode file.
 
         NEEDS EXAMPLE
@@ -380,7 +380,7 @@ class SonarrClient(Client):
 
         return tuple(QueueItem.from_dict(result) for result in results)
 
-    def delete_queue_item(self, queueItemId, blacklist=False) -> bool:
+    def delete_queue_item(self, queueItemId, blacklist=False) -> None:
         """Deletes an item from the queue and download client.
         Optionally blacklist item after deletion.
 
@@ -397,7 +397,7 @@ class SonarrClient(Client):
             raise ArrClientError(msg)
 
     #  https://github.com/Sonarr/Sonarr/wiki/Parse
-    def parse_title(self, title: str) -> ParseResult:
+    def parse_title(self, title: str) -> Optional[ParseResult]:
         """Returns the result of parsing a title.
 
         Series and episodes will be returned only if the parsing matches to a
@@ -411,8 +411,9 @@ class SonarrClient(Client):
         result = self._request("parse", query=query)
         if result is not None:
             return ParseResult.from_dict(result)
+        return None
 
-    def parse_path(self, path: str) -> ParseResult:
+    def parse_path(self, path: str) -> Optional[ParseResult]:
         """Returns the result of parsing a path.
 
         Series and episodes will be returned only if the parsing matches to a
@@ -424,7 +425,9 @@ class SonarrClient(Client):
         """
         query = {"path": path}
         result = self._request("parse", query=query)
-        return ParseResult.from_dict(result)
+        if result is not None:
+            return ParseResult.from_dict(result)
+        return None
 
     #  https://github.com/Sonarr/Sonarr/wiki/Profile
     def get_quality_profiles(self) -> Tuple[QualityAllowedProfile, ...]:
@@ -446,7 +449,7 @@ class SonarrClient(Client):
 
         LIVETESTME
         """
-        query = {"episodeId": episodeId}
+        query = {"episodeId": str(episodeId)}
         results = self._request("release", query=query)
         return tuple(Release.from_dict(result) for result in results)
 
@@ -591,7 +594,7 @@ class SonarrClient(Client):
         result = self._request(f"series/{series.id}", method=HttpMethod.PUT, data=data)
         return Series.from_dict(result)
 
-    def delete_series(self, seriesId: int, deleteFiles: bool = False) -> bool:
+    def delete_series(self, seriesId: int, deleteFiles: bool = False) -> None:
         """Delete the series with the given ID.
 
         DELETE http://$HOST:8989/api/series/345?deleteFiles=false
@@ -677,7 +680,7 @@ class SonarrClient(Client):
         result = self._request("tag", method=HttpMethod.PUT, data=data)
         return Tag.from_dict(result)
 
-    def delete_tag(self, tagId: int) -> bool:
+    def delete_tag(self, tagId: int) -> None:
         """Delete the series with the given ID
 
         NEEDS EXAMPLE

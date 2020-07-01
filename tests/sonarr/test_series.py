@@ -40,6 +40,7 @@ def test_season_statistics() -> None:
     seas0, seas1 = seasons
 
     stats0 = seas0.statistics
+    assert isinstance(stats0, models.SeasonStatistics)
     assert stats0.previousAiring == datetime(2015, 4, 10, 4, 1, tzinfo=UTC)
     assert stats0.episodeFileCount == 13
     assert stats0.episodeCount == 13
@@ -48,6 +49,7 @@ def test_season_statistics() -> None:
     assert stats0.percentOfEpisodes == 100
 
     stats1 = seas1.statistics
+    assert isinstance(stats1, models.SeasonStatistics)
     assert stats1.previousAiring == datetime(2016, 3, 18, 4, 1, tzinfo=UTC)
     assert stats1.episodeFileCount == 13
     assert stats1.episodeCount == 13
@@ -102,6 +104,7 @@ def test_season() -> None:
     ep0, ep1 = want.records
 
     ser0 = ep0.series
+    assert isinstance(ser0, models.Series)
     seasons = ser0.seasons
     assert isinstance(seasons, tuple)
     assert len(seasons) == 5
@@ -118,6 +121,7 @@ def test_season() -> None:
     assert seas4.monitored is False
 
     ser1 = ep1.series
+    assert isinstance(ser1, models.Series)
     seasons = ser1.seasons
     assert isinstance(seasons, tuple)
     assert len(seasons) == 9
@@ -148,13 +152,17 @@ def test_rating() -> None:
     """Test the Rating model."""
     # instance returned by /series
     series = models.Series.from_dict(json.loads(ALLSERIES)[0])
+    assert isinstance(series, models.Series)
     ratings = series.ratings
+    assert isinstance(ratings, models.Rating)
     assert ratings.votes == 461
     assert ratings.value == 8.9
 
     # instance returned by /series/lookup
     series = models.Series.from_dict(json.loads(SERIESLOOKUP)[0])
+    assert isinstance(series, models.Series)
     ratings = series.ratings
+    assert isinstance(ratings, models.Rating)
     assert ratings.votes == 182
     assert ratings.value == 8.6
 
@@ -164,19 +172,25 @@ def test_rating() -> None:
     dl0, dl1 = hist.records
 
     ser0 = dl0.series
+    assert isinstance(ser0, models.Series)
     rating0 = ser0.ratings
+    assert isinstance(rating0, models.Rating)
     assert rating0.votes == 51
     assert rating0.value == 8.1
 
     ser1 = dl1.series
+    assert isinstance(ser1, models.Series)
     rating1 = ser1.ratings
+    assert isinstance(rating1, models.Rating)
     assert rating1.votes == 51
     assert rating1.value == 8.1
 
     # instance returned by /queue
     item = models.QueueItem.from_dict(json.loads(QUEUE)[0])
     series = item.series
+    assert isinstance(series, models.Series)
     rating = series.ratings
+    assert isinstance(rating, models.Rating)
     assert rating.votes == 547
     assert rating.value == 8.6
 
@@ -232,6 +246,7 @@ def test_image() -> None:
     ep0, ep1 = want.records
 
     ser0 = ep0.series
+    assert isinstance(ser0, models.Series)
     images = ser0.images
     assert len(images) == 3
     img0, img1, img2 = images
@@ -246,6 +261,7 @@ def test_image() -> None:
     assert img2.url == "http://slurm.trakt.us/images/fanart/1387.6.jpg"
 
     ser1 = ep1.series
+    assert isinstance(ser1, models.Series)
     images = ser1.images
     assert len(images) == 3
     img0, img1, img2 = images
@@ -289,11 +305,11 @@ def test_series() -> None:
     assert series.network == "Netflix"
     assert series.airTime == time(0, 1)
     assert isinstance(series.images, tuple)
-    for at in series.images:
-        assert isinstance(at, models.Image)  # tested in test_image()
+    for im in series.images:
+        assert isinstance(im, models.Image)  # tested in test_image()
     assert isinstance(series.seasons, tuple)
-    for at in series.seasons:
-        assert isinstance(at, models.Season)  # tested in test_season()
+    for seas in series.seasons:
+        assert isinstance(seas, models.Season)  # tested in test_season()
     assert series.year == 2015
     assert series.path == "F:\\TV_Shows\\Marvels Daredevil"
     assert series.profileId == 6
@@ -341,8 +357,8 @@ def test_series() -> None:
     assert series.network == "NBC"
     assert series.airTime == time(21)
     assert isinstance(series.images, tuple)
-    for at in series.images:
-        assert isinstance(at, models.Image)  # tested in test_image()
+    for im in series.images:
+        assert isinstance(im, models.Image)  # tested in test_image()
     assert series.remotePoster == "http://thetvdb.com/banners/posters/266189-14.jpg"
     assert isinstance(series.seasons, tuple)
     for seas in series.seasons:
@@ -373,6 +389,7 @@ def test_series() -> None:
     ep0, ep1 = want.records
 
     ser0 = ep0.series
+    assert isinstance(ser0, models.Series)
     assert ser0.tvdbId == 194031
     assert ser0.tvRageId == 24607
     assert ser0.imdbId == "tt1561755"
@@ -422,6 +439,7 @@ def test_series() -> None:
     assert ser0.id == 66
 
     ser1 = ep1.series
+    assert isinstance(ser1, models.Series)
     assert ser1.imdbId == ""
     assert ser1.tvdbId == 77754
     assert ser1.tvRageId == 5574

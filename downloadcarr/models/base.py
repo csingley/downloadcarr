@@ -22,11 +22,15 @@ the basic serialization/deserialization provided by stdlib json, i.e.
 """
 
 import dataclasses
-from typing import Tuple, Optional, Union
+from typing import Tuple, Optional, Union, TypeVar, Type, Callable, Any, Generic
 from datetime import date, datetime, time, timedelta
 import enum
 
 from downloadcarr import utils
+
+
+T = TypeVar("T")
+B = TypeVar("B", bound="Base")
 
 
 class Base:
@@ -49,7 +53,7 @@ class Base:
         return encoded
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Base":
+    def from_dict(cls: Type[B], data: dict) -> B:
         """Instantiate from output of stock json.JSONDecoder.
         """
         if cls is Base:
@@ -95,7 +99,7 @@ class Base:
             decoded[attr] = decoded_val
 
         try:
-            instance = cls(**decoded)
+            instance = cls(**decoded)  # type: ignore
         except Exception as e:
             msg = f"{cls.__name__}.from_dict() failed: " + e.args[0]
             raise ValueError(msg)
@@ -136,7 +140,7 @@ def encode_timedelta(val: timedelta) -> str:
 
 
 def encode_tuple(val: tuple) -> list:
-    encoded = [TYPE_ENCODERS[type(v)](v) for v in val]
+    encoded = [TYPE_ENCODERS[type(v)](v) for v in val]  # type: ignore
     return encoded
 
 
@@ -192,12 +196,12 @@ def make_decoder_generic(attr_type):
     return attr_type, decoder
 
 
-def decode_list_to_tuple(attr_type, val: list) -> Tuple:
+def decode_list_to_tuple(attr_type: Type[T], val: list) -> Tuple[T, ...]:
     decoder = make_decoder_specific(attr_type)
     return tuple(decoder(attr_type, item) for item in val)
 
 
-def decode_optional(attr_type, val) -> Optional:
+def decode_optional(attr_type: Type[T], val) -> Optional[T]:
     if val is None:
         return None
     elif issubclass(attr_type, Base) and len(val) == 0:
@@ -222,7 +226,7 @@ def decode_model(attr_type: Base, val: dict) -> Base:
 
 
 def decode_enum(attr_type: enum.Enum, val) -> enum.Enum:
-    members = {member.value: member for member in attr_type}
+    members = {member.value: member for member in attr_type}  # type: ignore
     return members[val]
 
 
@@ -241,14 +245,12 @@ def decode_date(attr_type, val) -> date:
 
 
 def decode_time(attr_type, val) -> time:
-    #  return time.fromisoformat(val)
     return utils.time_fromisoformat(val)
 
 
 def decode_timedelta(attr_type, val) -> timedelta:
     # datetime.timedelta lacks a parsing constructor, so reuse
     # time_fromisoformat() and cast as datetime.timedelta.
-    #  tm = time.fromisoformat(val)
     tm = utils.time_fromisoformat(val)
     return timedelta(
         hours=tm.hour, minutes=tm.minute, seconds=tm.second, microseconds=tm.microsecond

@@ -2,6 +2,7 @@
 """
 import pathlib
 import urllib.request
+import urllib.error
 import urllib.parse
 import ssl
 import json
@@ -101,16 +102,16 @@ class Client:
                 content_type = response_info["Content-Type"]
                 assert "application/json" in content_type
                 response = json.load(f)
-        except urllib.request.HTTPError as err:
+        except urllib.error.HTTPError as err:
             # HTTPError subclasses URLError; catch it first
             errcode = str(err.code)
             # Redirects should be handled by urllib
             assert errcode.startswith(("4", "5"))
             raise ArrHttpError(errcode, err.reason, err.url)
-        except urllib.request.URLError as err:
+        except urllib.error.URLError as err:
             reason = err.reason
             assert isinstance(reason, ConnectionError)
-            raise ArrConnectionError(url, err.reason.args[1])
+            raise ArrConnectionError(url, err.reason.args[1])  # type: ignore
         except socket.timeout:
             raise ArrConnectionError(url, "Timeout")
 

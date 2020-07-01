@@ -65,7 +65,7 @@ def datetime_fromisoformat(dt_str: str) -> datetime:
     return dt.replace(microsecond=microsecond, tzinfo=UTC)
 
 
-def time_fromisoformat(time_str: str) -> datetime:
+def time_fromisoformat(time_str: str) -> time:
     """Parse ISO-8601 time strings as provided by Sonarr's API.
 
     Specifically handle:

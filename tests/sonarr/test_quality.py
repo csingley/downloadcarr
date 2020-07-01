@@ -66,8 +66,12 @@ def test_quality() -> None:
     assert len(want.records) == 2
     ep0, ep1 = want.records
 
-    qual0 = ep0.series.qualityProfile
-    qval0 = qual0.value
+    series = ep0.series
+    assert isinstance(series, models.Series)
+    qp0 = series.qualityProfile
+    assert isinstance(qp0, models.QualityProfile)
+    qval0 = qp0.value
+    assert isinstance(qval0, models.QualityValue)
     allowed = qval0.allowed
     assert isinstance(allowed, tuple)
     assert len(allowed) == 3
@@ -88,8 +92,12 @@ def test_quality() -> None:
     assert cutoff.name == "SDTV"
     assert cutoff.weight == 1
 
-    qual1 = ep1.series.qualityProfile
-    qval1 = qual1.value
+    series = ep1.series
+    assert isinstance(series, models.Series)
+    qp1 = series.qualityProfile
+    assert isinstance(qp1, models.QualityProfile)
+    qval1 = qp1.value
+    assert isinstance(qval1, models.QualityValue)
     allowed = qval1.allowed
     assert isinstance(allowed, tuple)
     assert len(allowed) == 3
@@ -156,12 +164,16 @@ def test_revision() -> None:
     dl0, dl1 = hist.records
 
     qualrev0 = dl0.quality
+    assert isinstance(qualrev0, models.QualityRevision)
     rev0 = qualrev0.revision
+    assert isinstance(rev0, models.Revision)
     assert rev0.version == 1
     assert rev0.real == 0
 
     qualrev1 = dl1.quality
+    assert isinstance(qualrev1, models.QualityRevision)
     rev1 = qualrev1.revision
+    assert isinstance(rev1, models.Revision)
     assert rev1.version == 2
     assert rev1.real == 0
 
@@ -169,14 +181,18 @@ def test_revision() -> None:
     parsed = models.ParseResult.from_dict(json.loads(PARSE))
     info = parsed.parsedEpisodeInfo
     qualrev = info.quality
+    assert isinstance(qualrev, models.QualityRevision)
     revision = qualrev.revision
+    assert isinstance(revision, models.Revision)
     assert revision.version == 1
     assert revision.real == 0
 
     # instance returned by /queue
     item = models.QueueItem.from_dict(json.loads(QUEUE)[0])
     qualrev = item.quality
+    assert isinstance(qualrev, models.QualityRevision)
     revision = qualrev.revision
+    assert isinstance(revision, models.Revision)
     assert revision.version == 1
     assert revision.real == 0
 
@@ -220,7 +236,10 @@ def test_quality_value() -> None:
     assert len(want.records) == 2
     ep0, ep1 = want.records
 
-    qual0 = ep0.series.qualityProfile
+    series = ep0.series
+    assert isinstance(series, models.Series)
+    qual0 = series.qualityProfile
+    assert isinstance(qual0, models.QualityProfile)
     qval0 = qual0.value
     assert qval0.name == "SD"
     allowed = qval0.allowed
@@ -231,7 +250,10 @@ def test_quality_value() -> None:
     assert isinstance(cutoff, models.Quality)  # tested by test_quality()
     assert qval0.id == 1
 
-    qual1 = ep1.series.qualityProfile
+    series = ep1.series
+    assert isinstance(series, models.Series)
+    qual1 = series.qualityProfile
+    assert isinstance(qual1, models.QualityProfile)
     qval1 = qual1.value
     assert qval1.name == "SD"
     allowed = qval1.allowed
@@ -253,12 +275,18 @@ def test_quality_profile() -> None:
     assert len(want.records) == 2
     ep0, ep1 = want.records
 
-    qual0 = ep0.series.qualityProfile
+    series = ep0.series
+    assert isinstance(series, models.Series)
+    qual0 = series.qualityProfile
+    assert isinstance(qual0, models.QualityProfile)
     qval0 = qual0.value
     assert isinstance(qval0, models.QualityValue)  # tested by test_quality_value()
     assert qual0.isLoaded is True
 
-    qual1 = ep1.series.qualityProfile
+    series = ep1.series
+    assert isinstance(series, models.Series)
+    qual1 = series.qualityProfile
+    assert isinstance(qual1, models.QualityProfile)
     qval1 = qual1.value
     assert isinstance(qval1, models.QualityValue)  # tested by test_quality_value()
     assert qual1.isLoaded is True
