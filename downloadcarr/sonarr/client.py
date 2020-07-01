@@ -42,13 +42,12 @@ from downloadcarr.utils import BOOL2JSON
 
 class SonarrClient(Client):
     """Main class for handling connections with Sonarr API."""
+
     port_default = 8989
 
     #  https://github.com/Sonarr/Sonarr/wiki/Calendar
     def get_calendar(
-        self,
-        start: Optional[date] = None,
-        end: Optional[date] = None
+        self, start: Optional[date] = None, end: Optional[date] = None
     ) -> Tuple[Episode, ...]:
         """Get upcoming episodes.
 
@@ -297,9 +296,7 @@ class SonarrClient(Client):
             raise ArrClientError(msg)
 
     def update_episode_file(
-        self,
-        episodeFileId: int,
-        qualityRevision: QualityRevision
+        self, episodeFileId: int, qualityRevision: QualityRevision
     ) -> EpisodeFile:
         """ Updates the quality of the episode file and returns the episode file.
 
@@ -392,7 +389,9 @@ class SonarrClient(Client):
         LIVETESTME
         """
         query = {"blacklist": BOOL2JSON[blacklist]}
-        result = self._request(f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query)
+        result = self._request(
+            f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query
+        )
         if result != {}:
             msg = f"delete_queue_item() returned {result}"
             raise ArrClientError(msg)
@@ -475,11 +474,7 @@ class SonarrClient(Client):
 
     #  https://github.com/Sonarr/Sonarr/wiki/Release-Push
     def push_release(
-        self,
-        title: str,
-        downloadUrl: str,
-        protocol: Protocol,
-        publishDate: date
+        self, title: str, downloadUrl: str, protocol: Protocol, publishDate: date
     ) -> Tuple[Release, ...]:
         """If the title is wanted, Sonarr will grab it.
 
@@ -602,7 +597,9 @@ class SonarrClient(Client):
         DELETE http://$HOST:8989/api/series/345?deleteFiles=false
         """
         query = {"deleteFiles": json.dumps(deleteFiles)}
-        result = self._request(f"series/{seriesId}", method=HttpMethod.DELETE, query=query)
+        result = self._request(
+            f"series/{seriesId}", method=HttpMethod.DELETE, query=query
+        )
         if result != {}:
             msg = f"delete_series() returned {result}"
             raise ArrClientError(msg)

@@ -89,7 +89,7 @@ def make_mock_server(
         else:
             if self.echo:
                 # Read HTTP request body; stash in class attribute for echo
-                length = int(self.headers.get('content-length'))
+                length = int(self.headers.get("content-length"))
                 body = self.rfile.read(length)
                 if body:
                     assert self.__class__.echo_body == b"{}"
@@ -112,7 +112,7 @@ def make_mock_server(
 
     MockRequestHandler = type(
         "MockRequestHandler",
-        (http.server.BaseHTTPRequestHandler, ),
+        (http.server.BaseHTTPRequestHandler,),
         {
             # Make function args available in class namespace.
             "uri": uri,
@@ -120,7 +120,6 @@ def make_mock_server(
             "method": method,
             "match_query": match_query,
             "echo": echo,
-
             # Alternate echo handler for HTTP GET
             "do_GET": do_GET,
             # Unified handler for all other HTTP request methods
@@ -128,11 +127,10 @@ def make_mock_server(
             "do_POST": lambda self: self._do(),
             "do_PUT": lambda self: self._do(),
             "do_DELETE": lambda self: self._do(),
-
             # Class attribute allowing different RequestHandler instances
             # (instantiated from different HTTP requests) to pass data
             "echo_body": b"{}",
-        }
+        },
     )
 
     server = http.server.HTTPServer((host, port), MockRequestHandler)
@@ -202,7 +200,7 @@ def make_mock_error_server(
 
     MockRequestHandler = type(
         "MockRequestHandler",
-        (http.server.BaseHTTPRequestHandler, ),
+        (http.server.BaseHTTPRequestHandler,),
         {
             # Make function args available in class namespace.
             "uri": uri,
@@ -210,14 +208,13 @@ def make_mock_error_server(
             "err_code": err_code,
             "err_msg": err_msg,
             "err_explain": err_explain,
-
             # Unified handler for all HTTP request methods
             "_do": do_http_response,
             "do_GET": lambda self: self._do(),
             "do_POST": lambda self: self._do(),
             "do_PUT": lambda self: self._do(),
             "do_DELETE": lambda self: self._do(),
-        }
+        },
     )
 
     server = http.server.HTTPServer((host, port), MockRequestHandler)

@@ -31,7 +31,9 @@ def test_queue_item() -> None:
     assert item.title == "The.Andy.Griffith.Show.S01E01.x264-GROUP"
     assert item.sizeleft == 0
     assert item.timeleft == timedelta(0)
-    assert item.estimatedCompletionTime == datetime(2016, 2, 5, 22, 46, 52, 440104, tzinfo=UTC)
+    assert item.estimatedCompletionTime == datetime(
+        2016, 2, 5, 22, 46, 52, 440104, tzinfo=UTC
+    )
     assert item.status == "Downloading"
     assert item.trackedDownloadStatus == "Ok"
     assert item.statusMessages == ()
@@ -43,8 +45,7 @@ def test_queue_item() -> None:
 @pytest.fixture
 def queue_server():
     yield from mock_server(
-        uri="/api/queue",
-        body=QUEUE,
+        uri="/api/queue", body=QUEUE,
     )
 
 
@@ -64,9 +65,7 @@ def test_get_queue(queue_server):
 @pytest.fixture
 def queueitem_delete_server():
     yield from mock_server(
-        uri="/api/queue/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/queue/1", body="{}", method=HttpMethod.DELETE,
     )
 
 

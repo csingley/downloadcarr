@@ -18,6 +18,7 @@ class StatusMessage(Base):
 
     Attribute of QueueItem
     """
+
     title: str
     messages: Tuple[str, ...] = ()
 

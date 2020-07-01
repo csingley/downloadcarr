@@ -35,8 +35,7 @@ CLIENT = SonarrClient("localhost", "MYKEY")
 @pytest.fixture
 def diskspace_server():
     yield from mock_server(
-        uri="/api/diskspace",
-        body=DISKSPACE,
+        uri="/api/diskspace", body=DISKSPACE,
     )
 
 
@@ -70,8 +69,7 @@ def test_root_folder() -> None:
 @pytest.fixture
 def rootfolder_server():
     yield from mock_server(
-        uri="/api/rootfolder",
-        body=ROOTFOLDER,
+        uri="/api/rootfolder", body=ROOTFOLDER,
     )
 
 
@@ -91,8 +89,7 @@ def test_get_rootfolders(rootfolder_server):
 @pytest.fixture
 def system_status_server():
     yield from mock_server(
-        uri="/api/system/status",
-        body=SYSTEMSTATUS,
+        uri="/api/system/status", body=SYSTEMSTATUS,
     )
 
 
@@ -120,8 +117,7 @@ def test_system_backup() -> None:
 @pytest.fixture
 def system_backup_server():
     yield from mock_server(
-        uri="/api/system/backup",
-        body=SYSTEMBACKUP,
+        uri="/api/system/backup", body=SYSTEMBACKUP,
     )
 
 

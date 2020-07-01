@@ -9,6 +9,7 @@ from downloadcarr import enums
 class PageMixin:
     """Mixin implementing interface for paginated records.
     """
+
     page: int
     pageSize: int
     sortKey: enums.SortKey

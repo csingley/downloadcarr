@@ -52,10 +52,7 @@ def test_get_command_status(command_server):
 @pytest.fixture
 def command_echo_server():
     yield from mock_server(
-        uri="/api/command",
-        body=COMMAND,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/command", body=COMMAND, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -161,9 +158,7 @@ def test_scan_downloaded_episodes(command_echo_server):
 
     CLIENT.port = command_echo_server.server_port
     response = CLIENT.scan_downloaded_episodes(
-        "/path/to/downloads/",
-        downloadClientId="drone",
-        importMode=ImportMode.MOVE,
+        "/path/to/downloads/", downloadClientId="drone", importMode=ImportMode.MOVE,
     )
     assert isinstance(response, CommandStatus)
 

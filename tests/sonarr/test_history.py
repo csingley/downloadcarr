@@ -25,8 +25,14 @@ def test_download_data() -> None:
     dl0, dl1 = hist.records
 
     dldata0 = dl0.data
-    assert dldata0.droppedPath == "d:\\tvshows\\Blindspot S01E11 1080p WEB-DL DD5 1 H 264-NTB\\160223_06.mkv"
-    assert dldata0.importedPath == "F:\\TV_Shows\\Blindspot\\Season 01\\Blindspot.S01E11.Cease.Forcing.Enemy.WEBDL-1080p.mkv"
+    assert (
+        dldata0.droppedPath
+        == "d:\\tvshows\\Blindspot S01E11 1080p WEB-DL DD5 1 H 264-NTB\\160223_06.mkv"
+    )
+    assert (
+        dldata0.importedPath
+        == "F:\\TV_Shows\\Blindspot\\Season 01\\Blindspot.S01E11.Cease.Forcing.Enemy.WEBDL-1080p.mkv"
+    )
     assert dldata0.downloadClient == "Sabnzbd"
     assert dldata0.reason is None
     assert dldata0.indexer is None
@@ -81,13 +87,20 @@ def test_download() -> None:
     assert dl0.downloadId == "SABnzbd_nzo_tlsnni"
     assert dl0.eventType == "downloadFolderImported"
     assert isinstance(dl0.data, models.DownloadData)  # tested in test_download_data()
-    assert isinstance(dl0.episode, models.Episode)  # tested in test_models_episode.test_episode()
-    assert isinstance(dl0.series, models.Series)  # tested in test_models_series.test_series()
+    assert isinstance(
+        dl0.episode, models.Episode
+    )  # tested in test_models_episode.test_episode()
+    assert isinstance(
+        dl0.series, models.Series
+    )  # tested in test_models_series.test_series()
     assert dl0.id == 11915
 
     assert dl1.episodeId == 5276
     assert dl1.seriesId == 60
-    assert dl1.sourceTitle == "F:\\TV_Shows\\Blindspot\\Season 01\\Blindspot.S01E11.Cease.Forcing.Enemy.HDTV-1080p.Proper.mkv"
+    assert (
+        dl1.sourceTitle
+        == "F:\\TV_Shows\\Blindspot\\Season 01\\Blindspot.S01E11.Cease.Forcing.Enemy.HDTV-1080p.Proper.mkv"
+    )
     # Tested in test_models_quality.test_quality_revision()
     assert isinstance(dl1.quality, models.QualityRevision)
     assert dl1.qualityCutoffNotMet is True
@@ -96,8 +109,12 @@ def test_download() -> None:
     assert dl1.date == datetime(2016, 9, 10, 20, 26, 27, 905591, tzinfo=UTC)
     assert dl1.eventType == "episodeFileDeleted"
     assert isinstance(dl1.data, models.DownloadData)  # tested in test_download_data()
-    assert isinstance(dl1.episode, models.Episode)  # tested in test_models_episode.test_episode()
-    assert isinstance(dl1.series, models.Series)  # tested in test_models_series.test_series()
+    assert isinstance(
+        dl1.episode, models.Episode
+    )  # tested in test_models_episode.test_episode()
+    assert isinstance(
+        dl1.series, models.Series
+    )  # tested in test_models_series.test_series()
     assert dl1.id == 11914
 
 

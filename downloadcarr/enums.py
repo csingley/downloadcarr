@@ -35,5 +35,6 @@ class Protocol(enum.Enum):
 class ImportMode(enum.Enum):
     """Handling instructions for *arr /command Downloaded*Scan
     """
+
     MOVE = "Move"
     COPY = "Copy"

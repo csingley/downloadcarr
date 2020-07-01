@@ -17,6 +17,7 @@ from .quality import QualityRevision
 class MediaInfo(Base):
     """Attribute of EpisodeFile
     """
+
     audioChannels: float
     audioCodec: str
     videoCodec: str
@@ -81,4 +82,5 @@ class WantedMissing(Base, PageMixin):
 
     Returned by /wanted/missing.
     """
+
     records: Tuple[Episode, ...]

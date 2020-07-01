@@ -30,8 +30,7 @@ CLIENT = RadarrClient("localhost", "MYKEY")
 @pytest.fixture
 def diskspace_server():
     yield from mock_server(
-        uri="/api/diskspace",
-        body=DISKSPACE,
+        uri="/api/diskspace", body=DISKSPACE,
     )
 
 
@@ -50,8 +49,7 @@ def test_get_diskspace(diskspace_server):
 @pytest.fixture
 def system_status_server():
     yield from mock_server(
-        uri="/api/system/status",
-        body=SYSTEMSTATUS,
+        uri="/api/system/status", body=SYSTEMSTATUS,
     )
 
 

@@ -37,10 +37,10 @@ def test_release() -> None:
     assert rel.seasonNumber == 3
     assert rel.language == "english"
     assert rel.seriesTitle == "devilsride"
-    assert rel.episodeNumbers == (1, )
+    assert rel.episodeNumbers == (1,)
     assert rel.approved is False
     assert rel.tvRageId == 0
-    assert rel.rejections == ("Unknown Series", )
+    assert rel.rejections == ("Unknown Series",)
     assert rel.publishDate == datetime(2014, 2, 10, tzinfo=UTC)
     assert rel.downloadUrl == (
         "http://www.newshost.co.za/nzb/5a6/"
@@ -52,9 +52,7 @@ def test_release() -> None:
 @pytest.fixture
 def release_server():
     yield from mock_server(
-        uri="/api/release?episodeId=1",
-        body=RELEASE,
-        match_query=True,
+        uri="/api/release?episodeId=1", body=RELEASE, match_query=True,
     )
 
 
@@ -74,10 +72,7 @@ def test_get_release(release_server):
 @pytest.fixture
 def add_release_echo_server():
     yield from mock_server(
-        uri="/api/release",
-        body=RELEASE,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/release", body=RELEASE, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -89,25 +84,21 @@ def test_add_release(add_release_echo_server):
 
     CLIENT.port = add_release_echo_server.server_port
     response = CLIENT.add_release(
-        guid="a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b",
-        indexerId=5,
+        guid="a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", indexerId=5,
     )
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Release)
 
     echo = CLIENT._request("echo")
-    assert echo == {'guid': 'a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b', 'indexerId': 5}
+    assert echo == {"guid": "a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", "indexerId": 5}
 
 
 #  https://github.com/Sonarr/Sonarr/wiki/Release-Push
 @pytest.fixture
 def push_release_echo_server():
     yield from mock_server(
-        uri="/api/release/push",
-        body=RELEASE,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/release/push", body=RELEASE, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -122,7 +113,7 @@ def test_push_release(push_release_echo_server):
         title="The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV",
         downloadUrl="http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb",
         protocol=Protocol.USENET,
-        publishDate=datetime(2014, 2, 10, tzinfo=UTC)
+        publishDate=datetime(2014, 2, 10, tzinfo=UTC),
     )
     assert isinstance(response, tuple)
     assert len(response) == 1
@@ -130,8 +121,8 @@ def test_push_release(push_release_echo_server):
 
     echo = CLIENT._request("echo")
     assert echo == {
-        'title': 'The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV',
-        'downloadUrl': 'http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb',
-        'protocol': 'usenet',
-        'publishDate': '2014-02-10T00:00:00Z',
+        "title": "The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV",
+        "downloadUrl": "http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb",
+        "protocol": "usenet",
+        "publishDate": "2014-02-10T00:00:00Z",
     }

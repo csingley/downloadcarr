@@ -110,7 +110,9 @@ def test_quality() -> None:
     assert cutoff.weight == 1
 
     # instance returned by /profile
-    profiles = [models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)]
+    profiles = [
+        models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)
+    ]
     assert len(profiles) == 4
 
     # Quality items in each profile are all identical; the differences between
@@ -188,24 +190,24 @@ def test_quality_revision() -> None:
 
     qualrev0 = dl0.quality
     assert isinstance(qualrev0.quality, models.Quality)  # tested by test_quality()
-    assert isinstance(qualrev0.revision, models.Revision)   # tested by test_revision()
+    assert isinstance(qualrev0.revision, models.Revision)  # tested by test_revision()
 
     qualrev1 = dl1.quality
     assert isinstance(qualrev1.quality, models.Quality)  # tested by test_quality()
-    assert isinstance(qualrev1.revision, models.Revision)   # tested by test_revision()
+    assert isinstance(qualrev1.revision, models.Revision)  # tested by test_revision()
 
     # instance returned by /parse
     parsed = models.ParseResult.from_dict(json.loads(PARSE))
     info = parsed.parsedEpisodeInfo
     qualrev = info.quality
     assert isinstance(qualrev.quality, models.Quality)  # tested by test_quality()
-    assert isinstance(qualrev.revision, models.Revision)   # tested by test_revision()
+    assert isinstance(qualrev.revision, models.Revision)  # tested by test_revision()
 
     # instance returned by /queue
     item = models.QueueItem.from_dict(json.loads(QUEUE)[0])
     qualrev = item.quality
     assert isinstance(qualrev.quality, models.Quality)  # tested by test_quality()
-    assert isinstance(qualrev.revision, models.Revision)   # tested by test_revision()
+    assert isinstance(qualrev.revision, models.Revision)  # tested by test_revision()
 
 
 def test_quality_value() -> None:
@@ -281,7 +283,9 @@ def test_quality_profile() -> None:
 def test_quality_allowed() -> None:
     """Test the QualityAllowed model."""
     # instance returned by /profile
-    profiles = [models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)]
+    profiles = [
+        models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)
+    ]
     assert len(profiles) == 4
     prof0, prof1, prof2, prof3 = profiles
 
@@ -291,7 +295,16 @@ def test_quality_allowed() -> None:
         assert isinstance(item.quality, models.Quality)  # Tested in test_quality()
     assert len(items0) == 10
     assert [i.allowed for i in items0] == [
-        True, True, True, False, False, False, False, False, False, False,
+        True,
+        True,
+        True,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
     ]
 
     items1 = prof1.items
@@ -300,7 +313,16 @@ def test_quality_allowed() -> None:
         assert isinstance(item.quality, models.Quality)  # Tested in test_quality()
     assert len(items1) == 10
     assert [i.allowed for i in items1] == [
-        False, False, False, True, False, False, True, True, False, False,
+        False,
+        False,
+        False,
+        True,
+        False,
+        False,
+        True,
+        True,
+        False,
+        False,
     ]
 
     items2 = prof2.items
@@ -309,7 +331,16 @@ def test_quality_allowed() -> None:
         assert isinstance(item.quality, models.Quality)  # Tested in test_quality()
     assert len(items2) == 10
     assert [i.allowed for i in items2] == [
-        False, False, False, False, True, False, False, False, True, True,
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+        False,
+        False,
+        True,
+        True,
     ]
 
     items3 = prof3.items
@@ -318,14 +349,25 @@ def test_quality_allowed() -> None:
         assert isinstance(item.quality, models.Quality)  # Tested in test_quality()
     assert len(items3) == 10
     assert [i.allowed for i in items3] == [
-        False, False, False, True, True, False, True, True, True, True,
+        False,
+        False,
+        False,
+        True,
+        True,
+        False,
+        True,
+        True,
+        True,
+        True,
     ]
 
 
 def test_quality_allowed_profile() -> None:
     """Test the QualityAllowedProfile model."""
     # instance returned by /profile
-    profiles = [models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)]
+    profiles = [
+        models.QualityAllowedProfile.from_dict(prof) for prof in json.loads(PROFILE)
+    ]
     assert len(profiles) == 4
     prof0, prof1, prof2, prof3 = profiles
 
@@ -349,8 +391,7 @@ def test_quality_allowed_profile() -> None:
 @pytest.fixture
 def profile_server():
     yield from mock_server(
-        uri="/api/profile",
-        body=PROFILE,
+        uri="/api/profile", body=PROFILE,
     )
 
 

@@ -59,33 +59,23 @@ def test_base():
 def test_encode_datetime():
     """Test encode_datetime()."""
     # "Zulu time" for UTC
-    encoded = models.base.encode_datetime(
-        datetime(2020, 6, 5, 13, 38, 55, tzinfo=UTC)
-    )
+    encoded = models.base.encode_datetime(datetime(2020, 6, 5, 13, 38, 55, tzinfo=UTC))
     assert encoded == "2020-06-05T13:38:55Z"
 
     # TZ naive
-    encoded = models.base.encode_datetime(
-        datetime(2020, 6, 5, 13, 38, 55)
-    )
+    encoded = models.base.encode_datetime(datetime(2020, 6, 5, 13, 38, 55))
     assert encoded == "2020-06-05T13:38:55Z"
 
     # zero hours
-    encoded = models.base.encode_datetime(
-        datetime(2020, 6, 5)
-    )
+    encoded = models.base.encode_datetime(datetime(2020, 6, 5))
     assert encoded == "2020-06-05T00:00:00Z"
 
     # zero minutes
-    encoded = models.base.encode_datetime(
-        datetime(2020, 6, 5, 13)
-    )
+    encoded = models.base.encode_datetime(datetime(2020, 6, 5, 13))
     assert encoded == "2020-06-05T13:00:00Z"
 
     # zero seconds
-    encoded = models.base.encode_datetime(
-        datetime(2020, 6, 5, 13, 38)
-    )
+    encoded = models.base.encode_datetime(datetime(2020, 6, 5, 13, 38))
     assert encoded == "2020-06-05T13:38:00Z"
 
     # milliseconds - truncate final zeros
@@ -135,9 +125,7 @@ def test_encode_time():
 def test_encode_timedelta():
     """Test encode_timedelta()."""
     # Whole seconds
-    encoded = models.base.encode_timedelta(
-        timedelta(hours=13, minutes=38, seconds=55)
-    )
+    encoded = models.base.encode_timedelta(timedelta(hours=13, minutes=38, seconds=55))
     assert encoded == "13:38:55"
 
     # milliseconds
@@ -280,11 +268,12 @@ def test_decode_list_to_tuple():
 
     # List[JSON datetime] -> Tuple[Python datetime]
     decoded = models.base.decode_list_to_tuple(
-        datetime, [
+        datetime,
+        [
             "1960-02-15T06:00:00Z",
             "2016-02-05T16:40:11.614176Z",
             "2008-02-04T13:44:24.204583Z",
-        ]
+        ],
     )
 
     assert decoded == (
@@ -309,30 +298,27 @@ def test_decode_optional():
     decoded = models.base.decode_optional(MockModel, None)
     assert decoded is None
 
-    decoded = models.base.decode_optional(MockModel, {'foo': 1, 'bar': 'one'})
+    decoded = models.base.decode_optional(MockModel, {"foo": 1, "bar": "one"})
     assert decoded == MockModel(foo=1, bar="one")
 
 
 def test_decode_model():
     """Test decode_model()."""
-    decoded = models.base.decode_model(MockModel, {'foo': 123, 'bar': 'baz'})
-    assert decoded == MockModel(foo=123, bar='baz')
+    decoded = models.base.decode_model(MockModel, {"foo": 123, "bar": "baz"})
+    assert decoded == MockModel(foo=123, bar="baz")
 
     # Missing optional attribute
-    decoded = models.base.decode_model(MockModel, {'foo': 123})
+    decoded = models.base.decode_model(MockModel, {"foo": 123})
     assert decoded == MockModel(foo=123, bar=None)
 
     # Nested model
     decoded = models.base.decode_model(
         NestedModel,
         {
-            'foo': {'foo': 1, 'bar': 'one'},
-            'bar': {'foo': 2, 'bar': 'two'},
-            'baz': [
-                {'foo': 3, 'bar': 'three'},
-                {'foo': 4, 'bar': 'four'},
-            ]
-        }
+            "foo": {"foo": 1, "bar": "one"},
+            "bar": {"foo": 2, "bar": "two"},
+            "baz": [{"foo": 3, "bar": "three"}, {"foo": 4, "bar": "four"},],
+        },
     )
     inner1 = MockModel(foo=1, bar="one")
     inner2 = MockModel(foo=2, bar="two")
@@ -439,18 +425,12 @@ def test_decode_timedelta():
 
     # milliseconds
     decoded = models.base.decode_timedelta(timedelta, "13:38:55.123")
-    assert decoded == timedelta(
-        hours=13, minutes=38, seconds=55, milliseconds=123
-    )
+    assert decoded == timedelta(hours=13, minutes=38, seconds=55, milliseconds=123)
 
     # microseconds
     decoded = models.base.decode_timedelta(timedelta, "13:38:55.123456")
-    assert decoded == timedelta(
-        hours=13, minutes=38, seconds=55, microseconds=123456
-    )
+    assert decoded == timedelta(hours=13, minutes=38, seconds=55, microseconds=123456)
 
     # weird fractional seconds
     decoded = models.base.decode_timedelta(timedelta, "13:38:55.1234")
-    assert decoded == timedelta(
-        hours=13, minutes=38, seconds=55, microseconds=123400
-    )
+    assert decoded == timedelta(hours=13, minutes=38, seconds=55, microseconds=123400)

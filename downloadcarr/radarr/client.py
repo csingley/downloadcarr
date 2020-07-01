@@ -30,13 +30,12 @@ from downloadcarr.utils import BOOL2JSON
 
 class RadarrClient(Client):
     """Main class for handling connections with Radarr API."""
+
     port_default = 7878
 
     #  https://github.com/Radarr/Radarr/wiki/API:Calendar
     def get_calendar(
-        self,
-        start: Optional[date] = None,
-        end: Optional[date] = None
+        self, start: Optional[date] = None, end: Optional[date] = None
     ) -> Tuple[Movie, ...]:
         """Get upcoming movies.
 
@@ -143,8 +142,7 @@ class RadarrClient(Client):
         return results
 
     def search_cutoff_unmet_movies(
-        self,
-        filterBy: MovieStatus = MovieStatus.MONITORED
+        self, filterBy: MovieStatus = MovieStatus.MONITORED
     ) -> CommandStatus:
         """Instructs Radarr to search all cutoff unmet movies.
         """
@@ -159,8 +157,7 @@ class RadarrClient(Client):
         return results
 
     def search_missing_movies(
-        self,
-        filterBy: MovieStatus = MovieStatus.MONITORED
+        self, filterBy: MovieStatus = MovieStatus.MONITORED
     ) -> CommandStatus:
         """Instructs Radarr to search all missing movies.
         This functionality is similar to what CouchPotato does and runs a
@@ -249,10 +246,7 @@ class RadarrClient(Client):
         return Movie.from_dict(result)
 
     def delete_movie(
-        self,
-        movieId: int,
-        deleteFiles: bool = False,
-        addExclusion: bool = False,
+        self, movieId: int, deleteFiles: bool = False, addExclusion: bool = False,
     ) -> bool:
         """Delete the movie with the given ID.
         """
@@ -260,7 +254,9 @@ class RadarrClient(Client):
             "deleteFiles": json.dumps(deleteFiles),
             "addExclusion": json.dumps(addExclusion),
         }
-        result = self._request(f"movie/{movieId}", method=HttpMethod.DELETE, query=query)
+        result = self._request(
+            f"movie/{movieId}", method=HttpMethod.DELETE, query=query
+        )
         if result != {}:
             msg = f"delete_movie() returned {result}"
             raise ArrClientError(msg)
@@ -300,7 +296,9 @@ class RadarrClient(Client):
         Optionally blacklist item after deletion.
         """
         query = {"blacklist": BOOL2JSON[blacklist]}
-        result = self._request(f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query)
+        result = self._request(
+            f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query
+        )
         if result != {}:
             msg = f"delete_queue_item() returned {result}"
             raise ArrClientError(msg)

@@ -251,7 +251,9 @@ def test_image() -> None:
     img0, img1, img2 = images
 
     assert img0.coverType == "fanart"
-    assert img0.url == "https://artworks.thetvdb.com/banners/fanart/original/77754-5.jpg"
+    assert (
+        img0.url == "https://artworks.thetvdb.com/banners/fanart/original/77754-5.jpg"
+    )
     assert img1.coverType == "banner"
     assert img1.url == "https://artworks.thetvdb.com/banners/graphical/77754-g.jpg"
     assert img2.coverType == "poster"
@@ -327,7 +329,7 @@ def test_series() -> None:
     assert series.seasonCount == 4
     assert series.status == "continuing"
     assert series.overview == (
-        '''Raymond "Red" Reddington, one of the FBI's most wanted fugitives, '''
+        """Raymond "Red" Reddington, one of the FBI's most wanted fugitives, """
         "surrenders in person at FBI Headquarters in Washington, D.C. He "
         "claims that he and the FBI have the same interests: bringing down "
         "dangerous criminals and terrorists. In the last two decades, he's "
@@ -385,7 +387,7 @@ def test_series() -> None:
         "Bob and his quirky family have big ideas about burgers, but fall "
         "short on service and sophistication. Despite the greasy counters, "
         "lousy location and a dearth of customers, Bob and his family are "
-        "determined to make Bob's Burgers \"grand re-re-re-opening\" a success."
+        'determined to make Bob\'s Burgers "grand re-re-re-opening" a success.'
     )
     assert ser0.airTime == time(17, 30)
     assert ser0.monitored is True
@@ -457,7 +459,7 @@ def test_series() -> None:
     assert ser1.path == "F:\\The Andy Griffith Show"
     assert ser1.year == 1960
     assert ser1.firstAired == datetime(1960, 2, 15, 6, tzinfo=UTC)
-    assert ser1.genres == ("Comedy", )
+    assert ser1.genres == ("Comedy",)
     assert ser1.tags == ()
     assert ser1.added == datetime(2008, 2, 4, 13, 44, 24, 204583, tzinfo=UTC)
     # tested in test_models_quality.test_quality_profile()
@@ -512,7 +514,7 @@ def test_series() -> None:
     assert ser0.titleSlug == "blindspot"
     assert ser0.certification == "TV-14"
     assert ser0.genres == ()
-    assert ser0.tags == (2, )
+    assert ser0.tags == (2,)
     # "added": "2015-08-13T01:36:54.4303036Z"
     # Round to milliseconds
     assert ser0.added == datetime(2015, 8, 13, 1, 36, 54, 430304, tzinfo=UTC)
@@ -559,7 +561,7 @@ def test_series() -> None:
     assert ser1.titleSlug == "blindspot"
     assert ser1.certification == "TV-14"
     assert ser1.genres == ()
-    assert ser1.tags == (2, )
+    assert ser1.tags == (2,)
     # "added": "2015-08-13T01:36:54.4303036Z"
     # Round to microseconds
     assert ser1.added == datetime(2015, 8, 13, 1, 36, 54, 430304, tzinfo=UTC)
@@ -613,7 +615,7 @@ def test_series() -> None:
     assert series.imdbId == ""
     assert series.titleSlug == "the-andy-griffith-show"
     assert series.certification == "TV-G"
-    assert series.genres == ("Comedy", )
+    assert series.genres == ("Comedy",)
     assert series.tags == ()
     assert series.added == datetime(2008, 2, 4, 13, 44, 24, 204583, tzinfo=UTC)
     assert isinstance(series.ratings, models.Rating)  # tested in test_rating()
@@ -624,8 +626,7 @@ def test_series() -> None:
 @pytest.fixture
 def all_series_server():
     yield from mock_server(
-        uri="/api/series",
-        body=ALLSERIES,
+        uri="/api/series", body=ALLSERIES,
     )
 
 
@@ -649,8 +650,7 @@ def test_get_all_series(all_series_server):
 @pytest.fixture
 def series_server():
     yield from mock_server(
-        uri="/api/series/3",
-        body=SERIES,
+        uri="/api/series/3", body=SERIES,
     )
 
 
@@ -673,10 +673,7 @@ def test_get_series(series_server):
 @pytest.fixture
 def add_series_echo_server():
     yield from mock_server(
-        uri="/api/series",
-        body=SERIESPOST,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/series", body=SERIESPOST, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -709,26 +706,26 @@ def test_add_series(add_series_echo_server):
 
     echo = CLIENT._request("echo")
     assert echo == {
-        'tvdbId': 110381,
-        'title': 'Archer (2009)',
-        'profileId': 1,
-        'titleSlug': 'archer-2009',
-        'seasons': [
-            {'monitored': True, 'seasonNumber': 5, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 4, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 3, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 2, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 1, 'statistics': None},
-            {'monitored': False, 'seasonNumber': 0, 'statistics': None}
+        "tvdbId": 110381,
+        "title": "Archer (2009)",
+        "profileId": 1,
+        "titleSlug": "archer-2009",
+        "seasons": [
+            {"monitored": True, "seasonNumber": 5, "statistics": None},
+            {"monitored": True, "seasonNumber": 4, "statistics": None},
+            {"monitored": True, "seasonNumber": 3, "statistics": None},
+            {"monitored": True, "seasonNumber": 2, "statistics": None},
+            {"monitored": True, "seasonNumber": 1, "statistics": None},
+            {"monitored": False, "seasonNumber": 0, "statistics": None},
         ],
-        'path': 'T:\\Archer (2009)',
-        'images': [],
-        'monitored': True,
-        'seasonFolder': True,
-        'addOptions': {
-            'ignoreEpisodesWithFiles': False,
-            'ignoreEpisodesWithoutFiles': False,
-            'searchForMissingEpisodes': False,
+        "path": "T:\\Archer (2009)",
+        "images": [],
+        "monitored": True,
+        "seasonFolder": True,
+        "addOptions": {
+            "ignoreEpisodesWithFiles": False,
+            "ignoreEpisodesWithoutFiles": False,
+            "searchForMissingEpisodes": False,
         },
     }
 
@@ -736,10 +733,7 @@ def test_add_series(add_series_echo_server):
 @pytest.fixture
 def update_series_echo_server():
     yield from mock_server(
-        uri="/api/series/1",
-        body=SERIESPOST,
-        method=HttpMethod.PUT,
-        echo=True,
+        uri="/api/series/1", body=SERIESPOST, method=HttpMethod.PUT, echo=True,
     )
 
 
@@ -779,65 +773,62 @@ def test_update_series(update_series_echo_server):
 
     echo = CLIENT._request("echo")
     assert echo == {
-        'addOptions': None,
-        'added': None,
-        'airTime': None,
-        'alternateTitles': [],
-        'certification': None,
-        'cleanTitle': 'archer2009',
-        'episodeCount': None,
-        'episodeFileCount': None,
-        'firstAired': None,
-        'genres': [],
-        'id': 1,
-        'images': [],
-        'imdbId': None,
-        'lastInfoSync': None,
-        'monitored': True,
-        'network': None,
-        'nextAiring': None,
-        'overview': None,
-        'path': 'T:\\Archer (2009)',
-        'previousAiring': None,
-        'profileId': 1,
-        'qualityProfile': None,
-        'qualityProfileId': None,
-        'ratings': None,
-        'remotePoster': None,
-        'runtime': None,
-        'seasonCount': None,
-        'seasonFolder': True,
-        'seasons': [
-            {'monitored': True, 'seasonNumber': 5, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 4, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 3, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 2, 'statistics': None},
-            {'monitored': True, 'seasonNumber': 1, 'statistics': None},
-            {'monitored': False, 'seasonNumber': 0, 'statistics': None}
+        "addOptions": None,
+        "added": None,
+        "airTime": None,
+        "alternateTitles": [],
+        "certification": None,
+        "cleanTitle": "archer2009",
+        "episodeCount": None,
+        "episodeFileCount": None,
+        "firstAired": None,
+        "genres": [],
+        "id": 1,
+        "images": [],
+        "imdbId": None,
+        "lastInfoSync": None,
+        "monitored": True,
+        "network": None,
+        "nextAiring": None,
+        "overview": None,
+        "path": "T:\\Archer (2009)",
+        "previousAiring": None,
+        "profileId": 1,
+        "qualityProfile": None,
+        "qualityProfileId": None,
+        "ratings": None,
+        "remotePoster": None,
+        "runtime": None,
+        "seasonCount": None,
+        "seasonFolder": True,
+        "seasons": [
+            {"monitored": True, "seasonNumber": 5, "statistics": None},
+            {"monitored": True, "seasonNumber": 4, "statistics": None},
+            {"monitored": True, "seasonNumber": 3, "statistics": None},
+            {"monitored": True, "seasonNumber": 2, "statistics": None},
+            {"monitored": True, "seasonNumber": 1, "statistics": None},
+            {"monitored": False, "seasonNumber": 0, "statistics": None},
         ],
-        'seriesType': None,
-        'sizeOnDisk': None,
-        'sortTitle': None,
-        'status': None,
-        'tags': [],
-        'title': 'Archer (2009)',
-        'titleSlug': 'archer-2009',
-        'totalEpisodeCount': None,
-        'tvMazeId': None,
-        'tvRageId': None,
-        'tvdbId': 110381,
-        'useSceneNumbering': None,
-        'year': None,
-
+        "seriesType": None,
+        "sizeOnDisk": None,
+        "sortTitle": None,
+        "status": None,
+        "tags": [],
+        "title": "Archer (2009)",
+        "titleSlug": "archer-2009",
+        "totalEpisodeCount": None,
+        "tvMazeId": None,
+        "tvRageId": None,
+        "tvdbId": 110381,
+        "useSceneNumbering": None,
+        "year": None,
     }
 
 
 @pytest.fixture
 def delete_series_server():
     yield from mock_server(
-        uri="/api/series/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/series/1", body="{}", method=HttpMethod.DELETE,
     )
 
 

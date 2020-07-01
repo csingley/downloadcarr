@@ -29,7 +29,10 @@ def test_status_message() -> None:
     assert msg.title == "Mowgli (2018) Web-Dl 1080p x264 AC3-NoTag.mkv"
     assert isinstance(msg.messages, tuple)
     assert len(msg.messages) == 1
-    assert msg.messages[0] == "No files found are eligible for import in /home/usr/download/movies/Mowgli (2018) Web-Dl 1080p x264 AC3-NoTag.mkv"
+    assert (
+        msg.messages[0]
+        == "No files found are eligible for import in /home/usr/download/movies/Mowgli (2018) Web-Dl 1080p x264 AC3-NoTag.mkv"
+    )
 
 
 def test_queue_item() -> None:
@@ -43,7 +46,9 @@ def test_queue_item() -> None:
     assert queue.title == "Mowgli (2018) Web-Dl 1080p x264 AC3-NoTag.mkv"
     assert queue.sizeleft == 0.0
     assert queue.timeleft == timedelta(0)
-    assert queue.estimatedCompletionTime == datetime(2019, 8, 16, 9, 10, 12, 721926, tzinfo=UTC)
+    assert queue.estimatedCompletionTime == datetime(
+        2019, 8, 16, 9, 10, 12, 721926, tzinfo=UTC
+    )
     assert queue.status == "Completed"
     assert queue.trackedDownloadStatus == "Warning"
     assert isinstance(queue.statusMessages, tuple)
@@ -57,8 +62,7 @@ def test_queue_item() -> None:
 @pytest.fixture
 def get_queue_server():
     yield from mock_server(
-        uri="/api/queue",
-        body=QUEUE,
+        uri="/api/queue", body=QUEUE,
     )
 
 
@@ -76,9 +80,7 @@ def test_get_queue(get_queue_server):
 @pytest.fixture
 def queueitem_delete_server():
     yield from mock_server(
-        uri="/api/queue/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/queue/1", body="{}", method=HttpMethod.DELETE,
     )
 
 

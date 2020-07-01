@@ -21,10 +21,7 @@ CLIENT = Client("localhost", "MYKEY")
 
 @pytest.fixture
 def alt_base_path_server():
-    yield from mock_server(
-        uri="/sonarr/api/system/status",
-        body="123"
-    )
+    yield from mock_server(uri="/sonarr/api/system/status", body="123")
 
 
 def test_alt_base_path(alt_base_path_server):
@@ -62,10 +59,7 @@ def timeout_server():
 
 def test_timeout(timeout_server):
     client = Client(
-        "localhost",
-        "MYKEY",
-        port=timeout_server.server_port,
-        request_timeout=2,
+        "localhost", "MYKEY", port=timeout_server.server_port, request_timeout=2,
     )
     with pytest.raises(ArrConnectionError):
         client._request("system/status")

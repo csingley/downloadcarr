@@ -119,7 +119,9 @@ def test_movie():
     assert isinstance(movie.images, tuple)
     assert len(movie.images) == 2
     for image in movie.images:
-        assert isinstance(image, Image)  # Image tested in downloadcarr.tests.models-common
+        assert isinstance(
+            image, Image
+        )  # Image tested in downloadcarr.tests.models-common
     assert movie.website == "https://www.ubisoft.com/en-US/"
     assert movie.downloaded is False
     assert movie.year == 2016
@@ -145,7 +147,9 @@ def test_movie():
     assert isinstance(movie.tags, tuple)
     assert len(movie.tags) == 0
     assert movie.added == datetime(2017, 1, 14, 20, 18, 52, 938244, tzinfo=UTC)
-    assert isinstance(movie.ratings, Rating)  # Rating tested in downloadcarr.tests.models-common
+    assert isinstance(
+        movie.ratings, Rating
+    )  # Rating tested in downloadcarr.tests.models-common
     assert isinstance(movie.alternativeTitles, tuple)
     assert len(movie.alternativeTitles) == 1
     assert isinstance(movie.alternativeTitles[0], models.AlternativeTitle)
@@ -162,7 +166,9 @@ def test_movie():
     assert isinstance(movie.images, tuple)
     assert len(movie.images) == 2
     for image in movie.images:
-        assert isinstance(image, Image)  # Image tested in downloadcarr.tests.models-common
+        assert isinstance(
+            image, Image
+        )  # Image tested in downloadcarr.tests.models-common
     assert movie.downloaded is False
     assert movie.year == 0
     assert movie.hasFile is False
@@ -204,9 +210,14 @@ def test_movie():
     assert movie.inCinemas == datetime(1977, 5, 25, tzinfo=UTC)
     assert isinstance(movie.images, tuple)
     assert len(movie.images) == 1
-    assert isinstance(movie.images[0], Image)  # Image tested in downloadcarr.tests.models-common
+    assert isinstance(
+        movie.images[0], Image
+    )  # Image tested in downloadcarr.tests.models-common
     assert movie.downloaded is False
-    assert movie.remotePoster == "http://image.tmdb.org/t/p/original/btTdmkgIvOi0FFip1sPuZI2oQG6.jpg"
+    assert (
+        movie.remotePoster
+        == "http://image.tmdb.org/t/p/original/btTdmkgIvOi0FFip1sPuZI2oQG6.jpg"
+    )
     assert movie.year == 1977
     assert movie.hasFile is False
     assert movie.profileId == 0
@@ -223,7 +234,9 @@ def test_movie():
     assert isinstance(movie.tags, tuple)
     assert len(movie.tags) == 0
     assert movie.added == datetime(1, 1, 1, tzinfo=UTC)
-    assert isinstance(movie.ratings, Rating)  # Rating tested in downloadcarr.tests.models-common
+    assert isinstance(
+        movie.ratings, Rating
+    )  # Rating tested in downloadcarr.tests.models-common
     assert movie.qualityProfileId == 0
 
     #  #  instance from /history
@@ -238,11 +251,16 @@ def test_movie():
     assert movie.sortTitle == "minions"
     assert movie.sizeOnDisk == 0
     assert movie.status == "released"
-    assert movie.overview == "Minions Stuart, Kevin and Bob are recruited by Scarlet Overkill, a super-villain who, alongside her inventor husband Herb, hatches a plot to take over the world."
+    assert (
+        movie.overview
+        == "Minions Stuart, Kevin and Bob are recruited by Scarlet Overkill, a super-villain who, alongside her inventor husband Herb, hatches a plot to take over the world."
+    )
     assert movie.inCinemas == datetime(2015, 6, 17, tzinfo=UTC)
     assert len(movie.images) == 2
     for image in movie.images:
-        assert isinstance(image, Image)  # Image tested in downloadcarr.tests.models-common
+        assert isinstance(
+            image, Image
+        )  # Image tested in downloadcarr.tests.models-common
     assert movie.website == "http://www.minionsmovie.com/"
     assert movie.downloaded is False
     assert movie.year == 2015
@@ -266,8 +284,12 @@ def test_movie():
     assert movie.genres[3] == "Comedy"
     assert isinstance(movie.tags, tuple)
     assert len(movie.tags) == 0
-    assert movie.added == datetime(2017, 1, 24, 14, 57, 0, 425430, tzinfo=UTC)  # right-pad zeros
-    assert isinstance(movie.ratings, Rating)  # Rating tested in downloadcarr.tests.models_common
+    assert movie.added == datetime(
+        2017, 1, 24, 14, 57, 0, 425430, tzinfo=UTC
+    )  # right-pad zeros
+    assert isinstance(
+        movie.ratings, Rating
+    )  # Rating tested in downloadcarr.tests.models_common
     assert isinstance(movie.alternativeTitles, tuple)
     assert len(movie.alternativeTitles) == 0
     assert movie.qualityProfileId == 3
@@ -281,7 +303,9 @@ def test_movie():
     assert movie.title == "Mowgli"
     assert isinstance(movie.alternativeTitles, tuple)
     assert len(movie.alternativeTitles) == 1
-    assert isinstance(movie.alternativeTitles[0], models.AlternativeTitle)  # tested in test_alternative_title()
+    assert isinstance(
+        movie.alternativeTitles[0], models.AlternativeTitle
+    )  # tested in test_alternative_title()
     assert movie.secondaryYearSourceId == 0
     assert movie.sortTitle == "mowgli"
     assert movie.sizeOnDisk == 2948099499
@@ -372,11 +396,11 @@ def test_movie():
     assert movie.qualityProfileId == 3
     assert movie.id == 12
 
+
 @pytest.fixture
 def movies_server():
     yield from mock_server(
-        uri="/api/movie",
-        body=MOVIES,
+        uri="/api/movie", body=MOVIES,
     )
 
 
@@ -394,8 +418,7 @@ def test_get_movies(movies_server):
 @pytest.fixture
 def movie_server():
     yield from mock_server(
-        uri="/api/movie/1",
-        body=MOVIE,
+        uri="/api/movie/1", body=MOVIE,
     )
 
 
@@ -411,10 +434,7 @@ def test_get_movie(movie_server):
 @pytest.fixture
 def add_movie_server():
     yield from mock_server(
-        uri="/api/movie",
-        body=MOVIEPOST,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/movie", body=MOVIEPOST, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -428,14 +448,8 @@ def test_add_movie(add_movie_server):
         qualityProfileId=6,
         titleSlug="minions-211672",
         images=(
-            Image(
-                coverType="poster",
-                url="/radarr/MediaCover/11/poster.jpg",
-            ),
-            Image(
-                coverType="banner",
-                url="/radarr/MediaCover/11/banner.jpg",
-            ),
+            Image(coverType="poster", url="/radarr/MediaCover/11/poster.jpg",),
+            Image(coverType="banner", url="/radarr/MediaCover/11/banner.jpg",),
         ),
         tmdbId=211672,
         profileId=6,
@@ -448,14 +462,8 @@ def test_add_movie(add_movie_server):
     assert echo == {
         "title": "Minions (2015)",
         "images": [
-            {
-                "coverType": "poster",
-                "url": "/radarr/MediaCover/11/poster.jpg"
-            },
-            {
-                "coverType": "banner",
-                "url": "/radarr/MediaCover/11/banner.jpg"
-            }
+            {"coverType": "poster", "url": "/radarr/MediaCover/11/poster.jpg"},
+            {"coverType": "banner", "url": "/radarr/MediaCover/11/banner.jpg"},
         ],
         "year": 0,
         "path": "/path/to/Minions (2015)",
@@ -471,10 +479,7 @@ def test_add_movie(add_movie_server):
 @pytest.fixture
 def update_movie_echo_server():
     yield from mock_server(
-        uri="/api/movie/1",
-        body=MOVIE,
-        method=HttpMethod.PUT,
-        echo=True,
+        uri="/api/movie/1", body=MOVIE, method=HttpMethod.PUT, echo=True,
     )
 
 
@@ -497,7 +502,7 @@ def test_update_movie(update_movie_echo_server):
             Image(
                 coverType="banner",
                 url="/radarr/MediaCover/1/banner.jpg?lastWrite=636200219340000000",
-            )
+            ),
         ),
         website="https://www.ubisoft.com/en-US/",
         downloaded=False,
@@ -515,12 +520,7 @@ def test_update_movie(update_movie_echo_server):
         imdbId="tt2094766",
         tmdbId=121856,
         titleSlug="assassins-creed-121856",
-        genres=(
-            "Action",
-            "Adventure",
-            "Fantasy",
-            "Science Fiction"
-        ),
+        genres=("Action", "Adventure", "Fantasy", "Science Fiction"),
         added=datetime(2017, 1, 14, 20, 18, 52, 938244, tzinfo=UTC),
         ratings=Rating(votes=711, value=5.2),
         #  alternativeTitles=("Assassin's Creed: The IMAX Experience", ),
@@ -553,13 +553,13 @@ def test_update_movie(update_movie_echo_server):
         "inCinemas": "2016-12-21T00:00:00Z",
         "images": [
             {
-            "coverType": "poster",
-            "url": "/radarr/MediaCover/1/poster.jpg?lastWrite=636200219330000000"
+                "coverType": "poster",
+                "url": "/radarr/MediaCover/1/poster.jpg?lastWrite=636200219330000000",
             },
             {
-            "coverType": "banner",
-            "url": "/radarr/MediaCover/1/banner.jpg?lastWrite=636200219340000000"
-            }
+                "coverType": "banner",
+                "url": "/radarr/MediaCover/1/banner.jpg?lastWrite=636200219340000000",
+            },
         ],
         "website": "https://www.ubisoft.com/en-US/",
         "downloaded": False,
@@ -577,18 +577,10 @@ def test_update_movie(update_movie_echo_server):
         "imdbId": "tt2094766",
         "tmdbId": 121856,
         "titleSlug": "assassins-creed-121856",
-        "genres": [
-            "Action",
-            "Adventure",
-            "Fantasy",
-            "Science Fiction"
-        ],
+        "genres": ["Action", "Adventure", "Fantasy", "Science Fiction"],
         "tags": [],
         "added": "2017-01-14T20:18:52.938244Z",
-        "ratings": {
-            "votes": 711,
-            "value": 5.2
-        },
+        "ratings": {"votes": 711, "value": 5.2},
         "alternativeTitles": [
             {
                 "sourceType": "tmdb",
@@ -598,7 +590,7 @@ def test_update_movie(update_movie_echo_server):
                 "votes": 0,
                 "voteCount": 0,
                 "language": "english",
-                "id": 1
+                "id": 1,
             },
         ],
         "qualityProfileId": 6,
@@ -618,9 +610,7 @@ def test_update_movie(update_movie_echo_server):
 @pytest.fixture
 def delete_movie_server():
     yield from mock_server(
-        uri="/api/movie/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/movie/1", body="{}", method=HttpMethod.DELETE,
     )
 
 
@@ -636,9 +626,7 @@ def test_delete_movie(delete_movie_server):
 @pytest.fixture
 def lookup_movie_server():
     yield from mock_server(
-        uri="/api/movie/lookup?term=Star%20Wars",
-        body=MOVIELOOKUP,
-        match_query=True,
+        uri="/api/movie/lookup?term=Star%20Wars", body=MOVIELOOKUP, match_query=True,
     )
 
 
@@ -656,9 +644,7 @@ def test_lookup_movie(lookup_movie_server):
 @pytest.fixture
 def lookup_movie_tmdb_server():
     yield from mock_server(
-        uri="/api/movie/lookup?tmdbId=348350",
-        body=MOVIELOOKUP,
-        match_query=True,
+        uri="/api/movie/lookup?tmdbId=348350", body=MOVIELOOKUP, match_query=True,
     )
 
 
@@ -676,9 +662,7 @@ def test_lookup_movie_tmdb(lookup_movie_tmdb_server):
 @pytest.fixture
 def lookup_movie_imdb_server():
     yield from mock_server(
-        uri="/api/movie/lookup?imdbId=tt3778644",
-        body=MOVIELOOKUP,
-        match_query=True,
+        uri="/api/movie/lookup?imdbId=tt3778644", body=MOVIELOOKUP, match_query=True,
     )
 
 

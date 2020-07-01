@@ -15,6 +15,7 @@ class MediaInfo(Base):
 
     Attribute of MovieFile
     """
+
     containerFormat: str
     videoFormat: str
     videoCodecID: str
@@ -49,6 +50,7 @@ class MediaInfo(Base):
 class AlternativeTitle(Base):
     """Attribute of Movie
     """
+
     sourceType: str
     movieId: int
     title: str
@@ -79,6 +81,7 @@ class Movie(Base):
 
     Returned by /movie, /calendar, /history
     """
+
     title: str
     sortTitle: str
     sizeOnDisk: int

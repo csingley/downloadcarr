@@ -36,10 +36,12 @@ __all__ = [
 # /diskspace classes in .system
 from .episode import MediaInfo, EpisodeFile, Episode, WantedMissing
 from .history import DownloadData, Download, History
+
 # TODO Images
 # /wanted/missing classes in .episode
 from .queue import QueueItem
 from .parse import SeriesTitleInfo, ParsedEpisodeInfo, ParseResult
+
 # /profile classes in .quality
 from .quality import (
     Revision,
@@ -51,6 +53,7 @@ from .quality import (
     QualityAllowedProfile,
 )
 from .release import Release
+
 # /release/push classes in .release
 # /rootfolder classes in .system
 from .series import (
@@ -63,8 +66,10 @@ from .series import (
     AddOptions,
     Series,
 )
+
 # /series/lookup classes in .series
 from .system import RootFolder, SystemBackup
+
 # rest of /system classes in downloadcarr.models
 # /system/backup classes in .system
 # /tag classes in .series

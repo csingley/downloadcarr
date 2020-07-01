@@ -36,8 +36,7 @@ def test_tag() -> None:
 @pytest.fixture
 def tags_server():
     yield from mock_server(
-        uri="/api/tag",
-        body=TAGS,
+        uri="/api/tag", body=TAGS,
     )
 
 
@@ -58,8 +57,7 @@ def test_get_tags(tags_server):
 @pytest.fixture
 def tag_server():
     yield from mock_server(
-        uri="/api/tag/1",
-        body=TAG,
+        uri="/api/tag/1", body=TAG,
     )
 
 
@@ -77,10 +75,7 @@ def test_get_tag(tag_server):
 @pytest.fixture
 def add_tag_echo_server():
     yield from mock_server(
-        uri="/api/tag",
-        body=TAG,
-        method=HttpMethod.POST,
-        echo=True,
+        uri="/api/tag", body=TAG, method=HttpMethod.POST, echo=True,
     )
 
 
@@ -101,10 +96,7 @@ def test_add_tag(add_tag_echo_server):
 @pytest.fixture
 def update_tag_echo_server():
     yield from mock_server(
-        uri="/api/tag",
-        body=TAG,
-        method=HttpMethod.PUT,
-        echo=True,
+        uri="/api/tag", body=TAG, method=HttpMethod.PUT, echo=True,
     )
 
 
@@ -125,9 +117,7 @@ def test_update_tag(update_tag_echo_server):
 @pytest.fixture
 def delete_tag_server():
     yield from mock_server(
-        uri="/api/tag/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/tag/1", body="{}", method=HttpMethod.DELETE,
     )
 
 

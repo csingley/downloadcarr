@@ -12,6 +12,7 @@ from .base import Base
 @dataclass(frozen=True)
 class CommandStatusBody(Base):
     """Attribute of CommandStatus."""
+
     sendUpdatesToClient: bool
     updateScheduledTask: bool
     completionMessage: str
@@ -34,6 +35,7 @@ class CommandStatus(Base):
 
     Returned by /command.
     """
+
     name: str
     state: str
     startedOn: datetime
@@ -57,6 +59,7 @@ class CommandStatus(Base):
 class Rating(Base):
     """Review site rating metadata
     """
+
     votes: int
     value: float
 
@@ -65,6 +68,7 @@ class Rating(Base):
 class Image(Base):
     """Image metadata.
     """
+
     coverType: str
     url: str
 

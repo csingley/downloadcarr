@@ -35,7 +35,7 @@ def test_parsed_episode_info() -> None:
     # tested in test_models_quality.test_quality_revision()
     assert isinstance(info.quality, models.QualityRevision)
     assert info.seasonNumber == 1
-    assert info.episodeNumbers == (1, )
+    assert info.episodeNumbers == (1,)
     assert info.absoluteEpisodeNumbers == ()
     assert info.language == "english"
     assert info.fullSeason is False
@@ -59,9 +59,7 @@ def test_parse_result() -> None:
 @pytest.fixture
 def parse_title_server():
     yield from mock_server(
-        uri="/api/parse?title=Title",
-        body=PARSE,
-        match_query=True,
+        uri="/api/parse?title=Title", body=PARSE, match_query=True,
     )
 
 
@@ -79,9 +77,7 @@ def test_parse_title(parse_title_server):
 @pytest.fixture
 def parse_path_server():
     yield from mock_server(
-        uri="/api/parse?path=Path",
-        body=PARSE,
-        match_query=True,
+        uri="/api/parse?path=Path", body=PARSE, match_query=True,
     )
 
 

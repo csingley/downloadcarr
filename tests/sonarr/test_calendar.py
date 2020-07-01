@@ -15,8 +15,7 @@ CLIENT = SonarrClient("localhost", "MYKEY")
 @pytest.fixture
 def calendar_server():
     yield from mock_server(
-        uri="/api/calendar",
-        body=CALENDAR,
+        uri="/api/calendar", body=CALENDAR,
     )
 
 

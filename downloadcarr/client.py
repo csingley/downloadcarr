@@ -15,6 +15,7 @@ from .models import CommandStatus
 
 class ArrClientError(Exception):
     """Base class for errors in this module."""
+
     pass
 
 
@@ -28,6 +29,7 @@ class ArrHttpError(ArrClientError):
 
 class Client:
     """Main class for handling connections with *arr API."""
+
     port_default: int = 0  # Define in subclass
 
     def __init__(
@@ -83,7 +85,7 @@ class Client:
             url,
             data=json.dumps(data).encode() if data else None,
             headers=headers,
-            method=method.name
+            method=method.name,
         )
 
         if self.verify_ssl is False:
@@ -93,9 +95,7 @@ class Client:
 
         try:
             with urllib.request.urlopen(
-                request,
-                timeout=self.request_timeout,
-                context=ssl_context
+                request, timeout=self.request_timeout, context=ssl_context
             ) as f:
                 response_info = f.info()
                 content_type = response_info["Content-Type"]

@@ -61,8 +61,7 @@ def test_history() -> None:
 @pytest.fixture
 def history_server():
     yield from mock_server(
-        uri="/api/history",
-        body=HISTORY,
+        uri="/api/history", body=HISTORY,
     )
 
 

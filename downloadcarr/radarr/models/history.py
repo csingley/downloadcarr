@@ -38,4 +38,5 @@ class History(Base, PageMixin):
 
     Returned by /history.
     """
+
     records: Tuple[Download, ...]

@@ -195,9 +195,7 @@ def test_episode() -> None:
 @pytest.fixture
 def episodes_server():
     yield from mock_server(
-        uri="/api/episode?seriesId=1",
-        body=EPISODES,
-        match_query=True
+        uri="/api/episode?seriesId=1", body=EPISODES, match_query=True
     )
 
 
@@ -217,8 +215,7 @@ def test_get_episodes(episodes_server):
 @pytest.fixture
 def episode_server():
     yield from mock_server(
-        uri="/api/episode/1",
-        body=EPISODE,
+        uri="/api/episode/1", body=EPISODE,
     )
 
 
@@ -236,10 +233,7 @@ def test_get_episode(episode_server):
 @pytest.fixture
 def episode_echo_server():
     yield from mock_server(
-        uri="/api/episode",
-        body=EPISODE,
-        method=HttpMethod.PUT,
-        echo=True,
+        uri="/api/episode", body=EPISODE, method=HttpMethod.PUT, echo=True,
     )
 
 
@@ -279,31 +273,31 @@ def test_update_episode(episode_echo_server):
 
     echo = CLIENT._request("echo")
     assert echo == {
-        'absoluteEpisodeNumber': 1,
-        'airDate': '2009-09-17',
-        'airDateUtc': '2009-09-18T02:00:00Z',
-        'downloading': None,
-        'episodeFile': None,
-        'episodeFileId': 0,
-        'episodeNumber': 1,
-        'hasFile': False,
-        'id': 1,
-        'lastSearchTime': None,
-        'monitored': True,
-        'overview': 'Archer is in trouble with his Mother and the Comptroller because '
-                    'his expense account is way out of proportion to his actual '
-                    'expenses. So he creates the idea that a Mole has breached ISIS '
-                    'and he needs to get into the mainframe to hunt him down (so he '
-                    'can cover his tracks!). All this leads to a surprising ending.',
-        'sceneAbsoluteEpisodeNumber': None,
-        'sceneEpisodeNumber': 0,
-        'sceneSeasonNumber': 0,
-        'seasonNumber': 1,
-        'series': None,
-        'seriesId': 1,
-        'title': 'Mole Hunt',
-        'tvDbEpisodeId': 0,
-        'unverifiedSceneNumbering': None
+        "absoluteEpisodeNumber": 1,
+        "airDate": "2009-09-17",
+        "airDateUtc": "2009-09-18T02:00:00Z",
+        "downloading": None,
+        "episodeFile": None,
+        "episodeFileId": 0,
+        "episodeNumber": 1,
+        "hasFile": False,
+        "id": 1,
+        "lastSearchTime": None,
+        "monitored": True,
+        "overview": "Archer is in trouble with his Mother and the Comptroller because "
+        "his expense account is way out of proportion to his actual "
+        "expenses. So he creates the idea that a Mole has breached ISIS "
+        "and he needs to get into the mainframe to hunt him down (so he "
+        "can cover his tracks!). All this leads to a surprising ending.",
+        "sceneAbsoluteEpisodeNumber": None,
+        "sceneEpisodeNumber": 0,
+        "sceneSeasonNumber": 0,
+        "seasonNumber": 1,
+        "series": None,
+        "seriesId": 1,
+        "title": "Mole Hunt",
+        "tvDbEpisodeId": 0,
+        "unverifiedSceneNumbering": None,
     }
 
 
@@ -386,9 +380,7 @@ def test_wanted_missing() -> None:
 @pytest.fixture
 def episodefiles_server():
     yield from mock_server(
-        uri="/api/episodefile?seriesId=1",
-        body=EPISODEFILES,
-        match_query=True
+        uri="/api/episodefile?seriesId=1", body=EPISODEFILES, match_query=True
     )
 
 
@@ -408,8 +400,7 @@ def test_get_episodefiles(episodefiles_server):
 @pytest.fixture
 def episodefile_server():
     yield from mock_server(
-        uri="/api/episodefile/1",
-        body=EPISODEFILE,
+        uri="/api/episodefile/1", body=EPISODEFILE,
     )
 
 
@@ -427,9 +418,7 @@ def test_get_episodefile(episodefile_server):
 @pytest.fixture
 def episodefile_delete_server():
     yield from mock_server(
-        uri="/api/episodefile/1",
-        body="{}",
-        method=HttpMethod.DELETE,
+        uri="/api/episodefile/1", body="{}", method=HttpMethod.DELETE,
     )
 
 
@@ -447,10 +436,7 @@ def test_delete_episode_file(episodefile_delete_server):
 @pytest.fixture
 def episodefile_echo_server():
     yield from mock_server(
-        uri="/api/episodefile/1",
-        body=EPISODEFILE,
-        method=HttpMethod.PUT,
-        echo=True,
+        uri="/api/episodefile/1", body=EPISODEFILE, method=HttpMethod.PUT, echo=True,
     )
 
 
@@ -462,8 +448,7 @@ def test_update_episode_file(episodefile_echo_server):
 
     CLIENT.port = episodefile_echo_server.server_port
     quality = models.QualityRevision(
-        quality=models.Quality(id=8),
-        revision=models.Revision(version=1, real=0)
+        quality=models.Quality(id=8), revision=models.Revision(version=1, real=0)
     )
     response = CLIENT.update_episode_file(1, quality)
     assert isinstance(response, models.EpisodeFile)
@@ -471,7 +456,13 @@ def test_update_episode_file(episodefile_echo_server):
     echo = CLIENT._request("echo")
     assert echo == {
         "quality": {
-            "quality": {"id": 8, "name": None, "resolution": None, "source": None, "weight": None},
+            "quality": {
+                "id": 8,
+                "name": None,
+                "resolution": None,
+                "source": None,
+                "weight": None,
+            },
             "revision": {"version": 1, "real": 0},
             "proper": None,
         },

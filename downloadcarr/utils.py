@@ -18,7 +18,7 @@ def _parse_usec(dt_str: str) -> Tuple[str, int]:
     if "." in dt_str:
         dt_str, frac_sec = dt_str.split(".")
         num_digits = len(frac_sec)
-        microsecond = round(int(frac_sec) / 10**(num_digits - 6))
+        microsecond = round(int(frac_sec) / 10 ** (num_digits - 6))
     else:
         microsecond = 0
 

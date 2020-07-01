@@ -11,6 +11,7 @@ from downloadcarr.models import (
     DiskSpace,
     SystemStatus,
 )
+
 #  from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.client import Client
 from downloadcarr.utils import UTC
@@ -42,7 +43,9 @@ def test_command_status() -> None:
     item0 = CommandStatus.from_dict(json.loads(COMMANDS)[0])
     assert item0
     assert item0.name == "RefreshSeries"
-    assert isinstance(item0.body, CommandStatusBody)  # tested in test_command_status_body()
+    assert isinstance(
+        item0.body, CommandStatusBody
+    )  # tested in test_command_status_body()
     assert item0.priority == "normal"
     assert item0.status == "started"
     assert item0.queued == datetime(2020, 4, 6, 16, 54, 6, 419450, tzinfo=UTC)
@@ -72,7 +75,6 @@ def test_command_status() -> None:
     assert item1.sendUpdatesToClient is True
     assert item1.updateScheduledTask is None
     assert item1.id == 368629
-
 
 
 def test_disk_space() -> None:

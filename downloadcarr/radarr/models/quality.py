@@ -12,6 +12,7 @@ class Quality(Base):
 
     Attribute of QualityRevision
     """
+
     id: int
     name: Optional[str] = None
     source: Optional[str] = None
@@ -24,6 +25,7 @@ class Quality(Base):
 class Revision(Base):
     """Attribute of QualityRevision
     """
+
     version: int
     real: int
 
@@ -32,6 +34,7 @@ class Revision(Base):
 class QualityRevision(Base):
     """Attribute of Download, QueueItem, EpisodeFile, Release.
     """
+
     quality: Quality
     customFormats: Tuple[str, ...] = ()
     revision: Optional[Revision] = None

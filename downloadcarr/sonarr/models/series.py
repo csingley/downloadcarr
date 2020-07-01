@@ -15,6 +15,7 @@ from .quality import QualityProfile
 class SeasonStatistics(Base):
     """Attribute of Season.
     """
+
     episodeFileCount: int
     episodeCount: int
     totalEpisodeCount: int
@@ -30,6 +31,7 @@ class Season(Base):
 
     Attribute of Series.
     """
+
     seasonNumber: int
     monitored: bool
     statistics: Optional[SeasonStatistics] = None
@@ -38,6 +40,7 @@ class Season(Base):
 @dataclass(frozen=True)
 class AlternateTitle(Base):
     """Attribute of Series"""
+
     title: str
     seasonNumber: Optional[int] = None
     sceneSeasonNumber: Optional[int] = None
@@ -60,6 +63,7 @@ class AddOptions(Base):
 
     Attribute of Series.
     """
+
     searchForMissingEpisodes: bool = False
     ignoreEpisodesWithFiles: bool = True
     ignoreEpisodesWithoutFiles: bool = False

@@ -71,8 +71,10 @@ class Base:
         decoded = {}
         for attr, val in data.items():
             if attr not in classtypes:
-                msg = (f"{cls.__name__}.from_dict() got an unexpected keyword "
-                       f"argument {attr}={val}")
+                msg = (
+                    f"{cls.__name__}.from_dict() got an unexpected keyword "
+                    f"argument {attr}={val}"
+                )
                 raise TypeError(msg)
 
             attr_type = classtypes[attr]
@@ -249,10 +251,7 @@ def decode_timedelta(attr_type, val) -> timedelta:
     #  tm = time.fromisoformat(val)
     tm = utils.time_fromisoformat(val)
     return timedelta(
-        hours=tm.hour,
-        minutes=tm.minute,
-        seconds=tm.second,
-        microseconds=tm.microsecond
+        hours=tm.hour, minutes=tm.minute, seconds=tm.second, microseconds=tm.microsecond
     )
 
 
