@@ -1,0 +1,39 @@
+[
+    {
+    "title": "Star Wars",
+    "alternativeTitles": [],
+    "secondaryYearSourceId": 0,
+    "sortTitle": "star wars",
+    "sizeOnDisk": 0,
+    "status": "released",
+    "overview": "Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.",
+    "inCinemas": "1977-05-25T00:00:00Z",
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "http://image.tmdb.org/t/p/original/btTdmkgIvOi0FFip1sPuZI2oQG6.jpg"
+      }
+    ],
+    "downloaded": false,
+    "remotePoster": "http://image.tmdb.org/t/p/original/btTdmkgIvOi0FFip1sPuZI2oQG6.jpg",
+    "year": 1977,
+    "hasFile": false,
+    "profileId": 0,
+    "pathState": "dynamic",
+    "monitored": false,
+    "minimumAvailability": "tba",
+    "isAvailable": true,
+    "folderName": "",
+    "runtime": 0,
+    "tmdbId": 11,
+    "titleSlug": "star-wars-11",
+    "genres": [],
+    "tags": [],
+    "added": "0001-01-01T00:00:00Z",
+    "ratings": {
+      "votes": 8854,
+      "value": 8.1
+    },
+    "qualityProfileId": 0
+  }
+]

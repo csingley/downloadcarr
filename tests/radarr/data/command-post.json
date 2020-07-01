@@ -1,0 +1,20 @@
+{
+  "name": "RescanMovie",
+  "body": {
+    "sendUpdatesToClient": true,
+    "updateScheduledTask": true,
+    "completionMessage": "Completed",
+    "name": "RescanMovie",
+    "trigger": "manual"
+  },
+  "priority": "normal",
+  "status": "queued",
+  "queued": "2017-01-31T20:36:32.296558Z",
+  "trigger": "manual",
+  "state": "queued",
+  "manual": true,
+  "startedOn": "2017-01-31T20:36:32.296558Z",
+  "sendUpdatesToClient": true,
+  "updateScheduledTask": true,
+  "id": 26618
+}

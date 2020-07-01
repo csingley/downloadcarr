@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Resident Evil: The Final Chapter",
+    "sortTitle": "resident evil final chapter",
+    "sizeOnDisk": 0,
+    "status": "announced",
+    "overview": "Alice, Jill, Claire, Chris, Leon, Ada, and Wesker rush to The Hive, where The Red Queen plots total destruction over the human race.",
+    "inCinemas": "2017-01-25T00:00:00Z",
+    "physicalRelease": "2017-01-27T00:00:00Z",
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "/radarr/MediaCover/12/poster.jpg?lastWrite=636208663600000000"
+      },
+      {
+        "coverType": "banner",
+        "url": "/radarr/MediaCover/12/banner.jpg?lastWrite=636208663600000000"
+      }
+    ],
+    "website": "",
+    "downloaded": false,
+    "year": 2017,
+    "hasFile": false,
+    "youTubeTrailerId": "B5yxr7lmxhg",
+    "studio": "Impact Pictures",
+    "path": "/path/to/Resident Evil The Final Chapter (2017)",
+    "profileId": 3,
+    "monitored": false,
+    "runtime": 106,
+    "lastInfoSync": "2017-01-24T14:52:40.315434Z",
+    "cleanTitle": "residentevilfinalchapter",
+    "imdbId": "tt2592614",
+    "tmdbId": 173897,
+    "titleSlug": "resident-evil-the-final-chapter-2017",
+    "genres": [
+      "Action",
+      "Horror",
+      "Science Fiction"
+    ],
+    "tags": [],
+    "added": "2017-01-24T14:52:39.989964Z",
+    "ratings": {
+      "votes": 363,
+      "value": 4.3
+    },
+    "alternativeTitles": [
+      "Resident Evil: Rising"
+    ],
+    "qualityProfileId": 3,
+    "id": 12
+  }
+]

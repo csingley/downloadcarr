@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/",
+    "label": "/",
+    "freeSpace": 11059175424,
+    "totalSpace": 15614754816
+  },
+  {
+    "path": "/home",
+    "label": "/home",
+    "freeSpace": 88775757824,
+    "totalSpace": 98325770240
+  }
+]

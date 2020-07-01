@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0.210",
+  "buildTime": "2017-01-22T23:12:49Z",
+  "isDebug": false,
+  "isProduction": true,
+  "isAdmin": false,
+  "isUserInteractive": false,
+  "startupPath": "/path/to/radarr",
+  "appData": "/path/to/radarr/data",
+  "osVersion": "4.8.13.1",
+  "isMonoRuntime": true,
+  "isMono": true,
+  "isLinux": true,
+  "isOsx": false,
+  "isWindows": false,
+  "branch": "develop",
+  "authentication": "forms",
+  "sqliteVersion": "3.16.2",
+  "urlBase": "",
+  "runtimeVersion": "4.6.1 (Stable 4.6.1.3/abb06f1 Mon Oct  3 07:57:59 UTC 2016)"
+}
