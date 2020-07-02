@@ -9,8 +9,9 @@ import pytest
 import downloadcarr.sonarr.models as models
 from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.enums import HttpMethod
+from downloadcarr.client import ArrClientError
 
-from . import TAGS, TAG, mock_server
+from . import TAGS, TAG, mock_server, mock_error_server
 
 
 CLIENT = SonarrClient("localhost", "MYKEY")
@@ -73,6 +74,20 @@ def test_get_tag(tag_server):
 
 
 @pytest.fixture
+def tag_missing_server():
+    yield from mock_error_server(uri="/api/tag/1", err_code=404)
+
+
+def test_get_tag_missing(tag_missing_server):
+    """Empty result for SonarrClient.get_stag()
+    """
+
+    CLIENT.port = tag_missing_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.get_tag(1)
+
+
+@pytest.fixture
 def add_tag_echo_server():
     yield from mock_server(
         uri="/api/tag", body=TAG, method=HttpMethod.POST, echo=True,
@@ -130,3 +145,19 @@ def test_delete_tag(delete_tag_server):
     CLIENT.port = delete_tag_server.server_port
     response = CLIENT.delete_tag(1)
     assert response is None
+
+
+@pytest.fixture
+def delete_tag_bad_server():
+    yield from mock_server(
+        uri="/api/tag/1", body="[1, 2, 3]", method=HttpMethod.DELETE,
+    )
+
+
+def test_delete_tag_bad(delete_tag_bad_server):
+    """SonarrClient.delete_tag() for missing tagId
+    """
+
+    CLIENT.port = delete_tag_bad_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.delete_tag(1)

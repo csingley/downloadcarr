@@ -135,7 +135,7 @@ def test_history() -> None:
 @pytest.fixture
 def history_server():
     yield from mock_server(
-        uri="/api/history?sortKey=series.title&page=1&pageSize=10&sortDir=asc",
+        uri="/api/history?sortKey=date&page=1&pageSize=10&sortDir=asc",
         body=HISTORY,
         match_query=True,
     )
@@ -148,7 +148,8 @@ def test_get_history(history_server):
     GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&episodeId=35
     """
     CLIENT.port = history_server.server_port
-    response = CLIENT.get_history(sortKey=SortKey.SERIESTITLE)
+    #  response = CLIENT.get_history(sortKey=SortKey.SERIESTITLE)
+    response = CLIENT.get_history()
     assert isinstance(response, models.History)
 
     assert response.pageSize == 10
@@ -161,3 +162,20 @@ def test_get_history(history_server):
 
     for record in response.records:
         assert isinstance(record, models.Download)
+
+
+@pytest.fixture
+def history_args_server():
+    yield from mock_server(
+        uri="/api/history?sortKey=series.title&page=1&pageSize=10&sortDir=asc&episodeId=1",
+        body=HISTORY,
+        match_query=True,
+    )
+
+
+def test_get_history_args(history_args_server):
+    """Test API call for SonarrClient.get_history() with nondefault query args
+    """
+    CLIENT.port = history_args_server.server_port
+    response = CLIENT.get_history(sortKey=SortKey.SERIESTITLE, episodeId=1)
+    assert isinstance(response, models.History)

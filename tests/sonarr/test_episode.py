@@ -15,7 +15,7 @@ import json
 import pytest
 
 import downloadcarr.sonarr.models as models
-from downloadcarr.client import ArrHttpError
+from downloadcarr.client import ArrClientError, ArrHttpError
 from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.enums import SortKey, SortDirection, HttpMethod
 from downloadcarr.utils import UTC
@@ -431,6 +431,23 @@ def test_delete_episode_file(episodefile_delete_server):
     CLIENT.port = episodefile_delete_server.server_port
     response = CLIENT.delete_episode_file(1)
     assert response is None
+
+
+@pytest.fixture
+def episodefile_delete_bad_server():
+    yield from mock_server(
+        uri="/api/episodefile/1", body="[1, 2, 3]", method=HttpMethod.DELETE,
+    )
+
+
+def test_bad_delete_episode_file(episodefile_delete_bad_server):
+    """SonarrClient.delete_episode_file() raises error if return value
+    isn't empty JSON array.
+    """
+
+    CLIENT.port = episodefile_delete_bad_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.delete_episode_file(1)
 
 
 @pytest.fixture

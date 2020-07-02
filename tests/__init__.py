@@ -224,8 +224,8 @@ def make_mock_error_server(
 def mock_error_server(
     uri: str,
     err_code: int,
-    err_msg: str,
-    err_explain,
+    err_msg: str = None,
+    err_explain: str = None,
     host: str = "localhost",
     port: int = get_free_port(),
     method: HttpMethod = HttpMethod.GET,

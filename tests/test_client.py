@@ -65,6 +65,14 @@ def test_timeout(timeout_server):
         client._request("system/status")
 
 
+def test_nobody_home():
+    client = Client(
+        "localhost", "MYKEY", port=get_free_port(), request_timeout=1,
+    )
+    with pytest.raises(ArrConnectionError):
+        client._request("system/status")
+
+
 @pytest.fixture
 def err_403_server():
     yield from mock_error_server(

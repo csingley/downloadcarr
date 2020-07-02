@@ -64,7 +64,7 @@ def parse_title_server():
 
 
 def test_parse_title(parse_title_server):
-    """Test API call for SonarrClient.parse_title()
+    """Test API call for SonarrClient.parse_title().
 
     NEEDS EXAMPLE
     """
@@ -72,6 +72,22 @@ def test_parse_title(parse_title_server):
     CLIENT.port = parse_title_server.server_port
     response = CLIENT.parse_title("Title")
     assert isinstance(response, models.ParseResult)
+
+
+@pytest.fixture
+def parse_title_empty_server():
+    yield from mock_server(
+        uri="/api/parse?title=Title", body="", match_query=True,
+    )
+
+
+def test_parse_title_empty(parse_title_empty_server):
+    """Test no result for SonarrClient.parse_title().
+    """
+
+    CLIENT.port = parse_title_empty_server.server_port
+    response = CLIENT.parse_title("Title")
+    assert response is None
 
 
 @pytest.fixture
@@ -90,3 +106,19 @@ def test_parse_path(parse_path_server):
     CLIENT.port = parse_path_server.server_port
     response = CLIENT.parse_path("Path")
     assert isinstance(response, models.ParseResult)
+
+
+@pytest.fixture
+def parse_path_empty_server():
+    yield from mock_server(
+        uri="/api/parse?path=Path", body="", match_query=True,
+    )
+
+
+def test_parse_path_empty(parse_path_empty_server):
+    """Test no result for SonarrClient.parse_title().
+    """
+
+    CLIENT.port = parse_path_empty_server.server_port
+    response = CLIENT.parse_path("Path")
+    assert response is None

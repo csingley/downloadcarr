@@ -38,6 +38,11 @@ class ParsedEpisodeInfo(Base):
     isDaily: bool
     isAbsoluteNumbering: bool
     isPossibleSpecialEpisode: bool
+    isPartialSeason: Optional[bool] = None
+    isSeasonExtra: Optional[bool] = None
+    seasonPart: Optional[int] = None
+    isPossibleSceneSeasonSpecial: Optional[bool] = None
+    specialAbsoluteEpisodeNumbers: Tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)

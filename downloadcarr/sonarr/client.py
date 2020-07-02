@@ -408,10 +408,11 @@ class SonarrClient(Client):
         LIVETESTME
         """
         query = {"title": title}
-        result = self._request("parse", query=query)
-        if result is not None:
+        try:
+            result = self._request("parse", query=query)
             return ParseResult.from_dict(result)
-        return None
+        except json.JSONDecodeError:
+            return None
 
     def parse_path(self, path: str) -> Optional[ParseResult]:
         """Returns the result of parsing a path.
@@ -424,10 +425,11 @@ class SonarrClient(Client):
         LIVETESTME
         """
         query = {"path": path}
-        result = self._request("parse", query=query)
-        if result is not None:
+        try:
+            result = self._request("parse", query=query)
             return ParseResult.from_dict(result)
-        return None
+        except json.JSONDecodeError:
+            return None
 
     #  https://github.com/Sonarr/Sonarr/wiki/Profile
     def get_quality_profiles(self) -> Tuple[QualityAllowedProfile, ...]:

@@ -2,7 +2,14 @@
 """
 from pathlib import Path
 
-from .. import mock_server, COMMANDS, COMMAND, DISKSPACE, SYSTEMSTATUS
+from .. import (
+    mock_server,
+    mock_error_server,
+    COMMANDS,
+    COMMAND,
+    DISKSPACE,
+    SYSTEMSTATUS,
+)
 
 
 def load(filename):

@@ -13,6 +13,7 @@ import downloadcarr.sonarr.models as models
 from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.enums import HttpMethod
 from downloadcarr.utils import UTC
+from downloadcarr.client import ArrClientError
 
 from . import (
     ALLSERIES,
@@ -24,6 +25,7 @@ from . import (
     WANTEDMISSING,
     TAG,
     mock_server,
+    mock_error_server,
 )
 
 
@@ -689,6 +691,20 @@ def test_get_series(series_server):
 
 
 @pytest.fixture
+def series_missing_server():
+    yield from mock_error_server(uri="/api/series/3", err_code=404)
+
+
+def test_get_series_missing(series_missing_server):
+    """Empty result for SonarrClient.get_series()
+    """
+
+    CLIENT.port = series_missing_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.get_series(3)
+
+
+@pytest.fixture
 def add_series_echo_server():
     yield from mock_server(
         uri="/api/series", body=SERIESPOST, method=HttpMethod.POST, echo=True,
@@ -746,6 +762,29 @@ def test_add_series(add_series_echo_server):
             "searchForMissingEpisodes": False,
         },
     }
+
+
+def test_add_series_bad_path():
+    """SonarrClient.add_series() called with bad path args
+    """
+
+    with pytest.raises(ValueError):
+        CLIENT.add_series(
+            tvdbId=110381,
+            title="Archer (2009)",
+            profileId=1,
+            titleSlug="archer-2009",
+            seasons=(
+                models.Season(seasonNumber=5, monitored=True),
+                models.Season(seasonNumber=4, monitored=True),
+                models.Season(seasonNumber=3, monitored=True),
+                models.Season(seasonNumber=2, monitored=True),
+                models.Season(seasonNumber=1, monitored=True),
+                models.Season(seasonNumber=0, monitored=False),
+            ),
+            path="T:\\Archer (2009)",
+            rootFolderPath="/path/to/root/folder/",
+        )
 
 
 @pytest.fixture
@@ -859,6 +898,22 @@ def test_delete_series(delete_series_server):
     CLIENT.port = delete_series_server.server_port
     response = CLIENT.delete_series(1)
     assert response is None
+
+
+@pytest.fixture
+def delete_series_bad_server():
+    yield from mock_server(
+        uri="/api/series/1", body="[1, 2, 3]", method=HttpMethod.DELETE,
+    )
+
+
+def test_delete_series_bad(delete_series_bad_server):
+    """SonarrClient.delete_series() for missing seriesId
+    """
+
+    CLIENT.port = delete_series_bad_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.delete_series(1)
 
 
 @pytest.fixture

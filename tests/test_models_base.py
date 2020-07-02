@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from datetime import datetime, date, time, timedelta, timezone
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import pytest
 
@@ -49,6 +49,40 @@ def test_base():
     with pytest.raises(NotImplementedError):
         attrs = {"foo": 1, "bar": 2}
         models.Base.from_dict(attrs)
+
+    # from_dict() raises TypeError if subclass isn't a dataclass
+    class BadModel(models.Base):
+        foo: int
+        bar: Optional[str] = None
+
+    with pytest.raises(TypeError):
+        BadModel.from_dict({"foo": 1, "bar": "one"})
+
+    # from_dict() raises TypeError if arg isn't a dict
+    with pytest.raises(TypeError):
+        MockModel.from_dict([("foo", 1), ("bar", "one")])
+
+    # from_dict() raises TypeError for unknown keys
+    with pytest.raises(TypeError):
+        MockModel.from_dict({"foo": 1, "bar": "one", "baz": True})
+
+    # from_dict() decoder error handling - reraise as ValueError
+    @dataclass
+    class BadTypeModel(models.Base):
+        foo: Tuple[int]
+
+    with pytest.raises(ValueError):
+        BadTypeModel.from_dict({"foo": [1, 2, 3]})
+
+    @dataclass
+    class BadTypeModel2(models.Base):
+        foo: Union[int, str]
+
+    with pytest.raises(ValueError):
+        BadTypeModel2.from_dict({"foo": 1})
+
+    # from_dict() - failed call to __init__() raises ValueError
+    pass  # FIXME
 
     # to_dict() doesn't work on base class, only subclasses.
     with pytest.raises(NotImplementedError):

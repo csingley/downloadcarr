@@ -13,6 +13,7 @@ import downloadcarr.radarr.models as models
 from downloadcarr.radarr.client import RadarrClient
 from downloadcarr.enums import HttpMethod
 from downloadcarr.utils import UTC
+from downloadcarr.client import ArrClientError
 
 from . import (
     CALENDAR,
@@ -621,6 +622,23 @@ def test_delete_movie(delete_movie_server):
     CLIENT.port = delete_movie_server.server_port
     response = CLIENT.delete_movie(1)
     assert response is None
+
+
+@pytest.fixture
+def delete_movie_bad_server():
+    yield from mock_server(
+        uri="/api/movie/1", body="[1, 2, 3]", method=HttpMethod.DELETE,
+    )
+
+
+def test_delete_movie_bad(delete_movie_bad_server):
+    """RadarrClient.delete_movie() raises error if return value
+    isn't empty JSON array.
+    """
+
+    CLIENT.port = delete_movie_bad_server.server_port
+    with pytest.raises(ArrClientError):
+         CLIENT.delete_movie(1)
 
 
 @pytest.fixture

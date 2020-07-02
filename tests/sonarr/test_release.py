@@ -12,8 +12,9 @@ import downloadcarr.sonarr.models as models
 from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.utils import UTC
 from downloadcarr.enums import HttpMethod, Protocol
+from downloadcarr.client import ArrClientError
 
-from . import RELEASE, mock_server
+from . import RELEASE, mock_server, mock_error_server
 
 
 CLIENT = SonarrClient("localhost", "MYKEY")
@@ -94,6 +95,24 @@ def test_add_release(add_release_echo_server):
     assert echo == {"guid": "a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", "indexerId": 5}
 
 
+@pytest.fixture
+def add_release_miss_server():
+    yield from mock_error_server(
+        uri="/api/release", err_code=404, method=HttpMethod.POST
+    )
+
+
+def test_add_release_miss(add_release_miss_server):
+    """Release not found in cache for SonarrClient.add_release()
+    """
+
+    CLIENT.port = add_release_miss_server.server_port
+    with pytest.raises(ArrClientError):
+        CLIENT.add_release(
+            guid="a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", indexerId=5,
+        )
+
+
 #  https://github.com/Sonarr/Sonarr/wiki/Release-Push
 @pytest.fixture
 def push_release_echo_server():
@@ -126,3 +145,4 @@ def test_push_release(push_release_echo_server):
         "protocol": "usenet",
         "publishDate": "2014-02-10T00:00:00Z",
     }
+

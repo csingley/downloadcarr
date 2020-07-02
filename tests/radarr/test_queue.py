@@ -11,6 +11,7 @@ import downloadcarr.radarr.models as models
 from downloadcarr.radarr.client import RadarrClient
 from downloadcarr.utils import UTC
 from downloadcarr.enums import Protocol, HttpMethod
+from downloadcarr.client import ArrClientError
 
 from . import QUEUE, mock_server
 
@@ -91,3 +92,20 @@ def test_delete_queue_item(queueitem_delete_server):
     CLIENT.port = queueitem_delete_server.server_port
     response = CLIENT.delete_queue_item(1)
     assert response is None
+
+
+@pytest.fixture
+def queueitem_delete_bad_server():
+    yield from mock_server(
+        uri="/api/queue/1", body="[1, 2, 3]", method=HttpMethod.DELETE,
+    )
+
+
+def test_bad_delete_queue_item(queueitem_delete_bad_server):
+    """RadarrClient.delete_queue_item() raises error if return value
+    isn't empty JSON array.
+    """
+
+    CLIENT.port = queueitem_delete_bad_server.server_port
+    with pytest.raises(ArrClientError):
+         CLIENT.delete_queue_item(1)

@@ -100,8 +100,8 @@ class Base:
 
         try:
             instance = cls(**decoded)  # type: ignore
-        except Exception as e:
-            msg = f"{cls.__name__}.from_dict() failed: " + e.args[0]
+        except Exception as err:
+            msg = f"{cls.__name__}.from_dict() failed: " + err.args[0]
             raise ValueError(msg)
         return instance
 
