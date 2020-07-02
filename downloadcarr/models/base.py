@@ -31,6 +31,7 @@ from downloadcarr import utils
 
 T = TypeVar("T")
 B = TypeVar("B", bound="Base")
+E = TypeVar("E", bound="enum.Enum")
 
 
 class Base:
@@ -225,7 +226,7 @@ def decode_model(attr_type: Base, val: dict) -> Base:
     return attr_type.from_dict(val)
 
 
-def decode_enum(attr_type: enum.Enum, val) -> enum.Enum:
+def decode_enum(attr_type: Type[E], val) -> E:
     """Accept a liberal range of input to determine the enum, i.e.
     either name or value.
     """

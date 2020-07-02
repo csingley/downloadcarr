@@ -1,3 +1,5 @@
 mypy
+black
 pytest
+coverage
 pytest-cov
