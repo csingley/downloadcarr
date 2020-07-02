@@ -638,7 +638,7 @@ def test_delete_movie_bad(delete_movie_bad_server):
 
     CLIENT.port = delete_movie_bad_server.server_port
     with pytest.raises(ArrClientError):
-         CLIENT.delete_movie(1)
+        CLIENT.delete_movie(1)
 
 
 @pytest.fixture

@@ -16,9 +16,7 @@ CLIENT = RadarrClient("localhost", "MYKEY")
 
 @pytest.fixture
 def calendar_server():
-    yield from mock_server(
-        uri="/api/calendar", body=CALENDAR, match_query=True
-    )
+    yield from mock_server(uri="/api/calendar", body=CALENDAR, match_query=True)
 
 
 def test_get_calendar(calendar_server):
@@ -37,7 +35,7 @@ def calendar_server_params():
     yield from mock_server(
         uri="/api/calendar?start=2020-01-01&end=2020-01-31",
         body=CALENDAR,
-        match_query=True
+        match_query=True,
     )
 
 

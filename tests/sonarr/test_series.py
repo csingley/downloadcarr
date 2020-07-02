@@ -817,7 +817,6 @@ def test_add_series_basepath(add_series_echo_server):
     }
 
 
-
 def test_add_series_bad_path():
     """SonarrClient.add_series() called with bad path args
     """

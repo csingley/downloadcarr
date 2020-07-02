@@ -95,4 +95,4 @@ def test_bad_delete_queue_item(queueitem_delete_bad_server):
 
     CLIENT.port = queueitem_delete_bad_server.server_port
     with pytest.raises(ArrClientError):
-         CLIENT.delete_queue_item(1)
+        CLIENT.delete_queue_item(1)

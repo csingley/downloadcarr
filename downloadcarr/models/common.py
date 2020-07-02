@@ -26,10 +26,15 @@ class CommandStatusBody(Base):
     seriesIds: Tuple[int, ...] = ()
     episodeId: Optional[int] = None
     episodeIds: Tuple[int, ...] = ()
+    movieId: Optional[int] = None
+    movieIds: Tuple[int, ...] = ()
+    listId: Optional[int] = None
     seasonNumber: Optional[int] = None
     sendUpdates: Optional[bool] = None
     importMode: Optional[str] = None
     type: Optional[str] = None
+    filterValue: Optional[bool] = None
+    filterKey: Optional[str] = None
 
 
 @dataclass(frozen=True)

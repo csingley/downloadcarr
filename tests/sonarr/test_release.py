@@ -145,4 +145,3 @@ def test_push_release(push_release_echo_server):
         "protocol": "1",
         "publishDate": "2014-02-10T00:00:00Z",
     }
-

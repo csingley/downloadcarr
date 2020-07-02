@@ -18,8 +18,6 @@ class Download(Base):
     Attribute of History.
     """
 
-    episodeId: int
-    seriesId: int
     movieId: int
     sourceTitle: str
     quality: QualityRevision
@@ -29,6 +27,8 @@ class Download(Base):
     data: DownloadData
     movie: Movie
     id: int
+    episodeId: Optional[int] = None
+    seriesId: Optional[int] = None
     downloadId: Optional[str] = None
 
 
