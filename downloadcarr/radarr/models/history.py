@@ -3,10 +3,9 @@ https://github.com/Radarr/Radarr/wiki/API:History
 """
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Tuple, Optional, Literal
+from typing import Tuple, Optional
 
 from downloadcarr.models import Base, PageMixin, DownloadData
-from downloadcarr import enums
 from .movie import Movie
 from .quality import QualityRevision
 
