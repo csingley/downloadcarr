@@ -74,6 +74,8 @@ class RadarrClient(Client):
 
     def refresh_movie(self, movieId: int) -> CommandStatus:
         """Refresh single movie information from TMDb and rescan disk.
+
+        POST http://bythos:7878/radarr/api/command {"name":"refreshMovie","movieId":604}
         """
         results = self._post_command("RefreshMovie", movieId=movieId)
         return results
@@ -137,6 +139,8 @@ class RadarrClient(Client):
 
     def rename_movies(self, *movieIds: int) -> CommandStatus:
         """Instruct Radarr to rename all files in the provided movies.
+
+        http://bythos:7878/radarr/api/renameMovie?movieId=604
         """
         results = self._post_command("RenameMovie", movieIds=list(movieIds))
         return results
@@ -183,12 +187,14 @@ class RadarrClient(Client):
         sortDir: SortDirection = SortDirection.ASCENDING,
     ) -> History:
         """Gets history (grabs/failures/completed).
+
+        GET http://bythos:7878/radarr/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&filterType=equal
         """
         query = {
             "page": str(page),
             "pageSize": str(pageSize),
             "sortKey": sortKey.value,
-            "sortDir": sortDir.value.replace("ending", ""),  # "asc"/"desc"
+            "sortDir": sortDir.value,
         }
         result = self._request("history", query=query)
         return History.from_dict(result)
@@ -286,6 +292,8 @@ class RadarrClient(Client):
     #  https://github.com/Radarr/Radarr/wiki/API:Queue
     def get_queue(self) -> Tuple[QueueItem, ...]:
         """Get currently downloading info.
+
+        http://bythos:7878/radarr/api/queue?sort_by=timeleft&order=asc
         """
         results = self._request("queue")
 
@@ -306,8 +314,30 @@ class RadarrClient(Client):
     #  https://github.com/Radarr/Radarr/wiki/API:System-Status
     def get_system_status(self) -> SystemStatus:
         """Return system status.
-
-        GET http://$HOST:8989/api/system/status
         """
         result = self._request("system/status")
         return SystemStatus.from_dict(result)
+
+    #  UNDOCUMENTED API
+    #  http://bythos:7878/radarr/api/config/mediamanagement
+    #  http://bythos:7878/radarr/api/config/naming
+    #  http://bythos:7878/radarr/api/config/host
+    #  http://bythos:7878/radarr/api/notification
+    #  http://bythos:7878/radarr/api/config/downloadclient
+    #  http://bythos:7878/radarr/api/config/indexer
+    #  http://bythos:7878/radarr/api/config/netimport
+    #  http://bythos:7878/radarr/api/config/ui
+    #  http://bythos:7878/radarr/api/config/naming/samples?renameEpisodes=false&replaceIllegalCharacters=true&colonReplacementFormat=delete&standardMovieFormat=%7BMovie+Title%7D+(%7BRelease+Year%7D)+%7BQuality+Full%7D&movieFolderFormat=%7BMovie+Title%7D+(%7BRelease+Year%7D)&multiEpisodeStyle=0&includeSeriesTitle=false&includeEpisodeTitle=false&includeQuality=false&replaceSpaces=false&id=1
+    #  http://bythos:7878/radarr/api/delayprofile
+    #  http://bythos:7878/radarr/api/profile
+    #  http://bythos:7878/radarr/api/qualitydefinition
+    #  http://bythos:7878/radarr/api/customformat
+    #  http://bythos:7878/radarr/api/Restriction
+    #  http://bythos:7878/radarr/api/customformat/test?title=A.Movie.2018.Directors.Cut.2160p.UHD.BluRay.REMUX.HDR.HEVC.Atmos-EPSiLON&sort_by=matches&order=desc
+    #  http://bythos:7878/radarr/api/remotePathMapping
+    #  http://bythos:7878/radarr/api/metadata
+    #  http://bythos:7878/radarr/api/exclusions
+    #  http://bythos:7878/radarr/api/rootfolder
+    #  http://bythos:7878/radarr/api/wanted/missing?page=1&pageSize=50&sortKey=title&sortDir=asc&filterKey=monitored&filterValue=true&filterType=equal
+    #  http://bythos:7878/radarr/api/wanted/cutoff?page=1&pageSize=50&sortKey=title&sortDir=asc&filterKey=monitored&filterValue=true&filterType=equal
+    #  http://bythos:7878/radarr/api/extrafile?movieId=604&sort_by=relativePath&order=asc

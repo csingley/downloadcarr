@@ -38,7 +38,7 @@
         "guid": "xxxxxxxxxx",
         "tvdbId": "0",
         "tvRageId": "0",
-        "protocol": "torrent",
+        "protocol": "2",
         "torrentInfoHash": null
       },
       "movie": {

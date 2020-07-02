@@ -764,6 +764,60 @@ def test_add_series(add_series_echo_server):
     }
 
 
+def test_add_series_basepath(add_series_echo_server):
+    """Test API call for SonarrClient.add_series() with alternate args.
+    """
+
+    CLIENT.port = add_series_echo_server.server_port
+    response = CLIENT.add_series(
+        tvdbId=110381,
+        title="Archer (2009)",
+        profileId=1,
+        titleSlug="archer-2009",
+        seasons=(
+            models.Season(seasonNumber=5, monitored=True),
+            models.Season(seasonNumber=4, monitored=True),
+            models.Season(seasonNumber=3, monitored=True),
+            models.Season(seasonNumber=2, monitored=True),
+            models.Season(seasonNumber=1, monitored=True),
+            models.Season(seasonNumber=0, monitored=False),
+        ),
+        rootFolderPath="/path/to/root/folder/",
+        tvRageId=38796,
+    )
+    assert isinstance(response, models.Series)
+    assert len(response.seasons) == 6
+    for season in response.seasons:
+        assert isinstance(season, models.Season)
+
+    echo = CLIENT._request("echo")
+    assert echo == {
+        "tvdbId": 110381,
+        "title": "Archer (2009)",
+        "profileId": 1,
+        "titleSlug": "archer-2009",
+        "seasons": [
+            {"monitored": True, "seasonNumber": 5, "statistics": None},
+            {"monitored": True, "seasonNumber": 4, "statistics": None},
+            {"monitored": True, "seasonNumber": 3, "statistics": None},
+            {"monitored": True, "seasonNumber": 2, "statistics": None},
+            {"monitored": True, "seasonNumber": 1, "statistics": None},
+            {"monitored": False, "seasonNumber": 0, "statistics": None},
+        ],
+        "rootFolderPath": "/path/to/root/folder/",
+        "tvRageId": 38796,
+        "images": [],
+        "monitored": True,
+        "seasonFolder": True,
+        "addOptions": {
+            "ignoreEpisodesWithFiles": False,
+            "ignoreEpisodesWithoutFiles": False,
+            "searchForMissingEpisodes": False,
+        },
+    }
+
+
+
 def test_add_series_bad_path():
     """SonarrClient.add_series() called with bad path args
     """

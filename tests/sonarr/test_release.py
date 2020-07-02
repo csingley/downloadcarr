@@ -142,7 +142,7 @@ def test_push_release(push_release_echo_server):
     assert echo == {
         "title": "The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV",
         "downloadUrl": "http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb",
-        "protocol": "usenet",
+        "protocol": "1",
         "publishDate": "2014-02-10T00:00:00Z",
     }
 

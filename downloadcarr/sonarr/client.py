@@ -121,8 +121,6 @@ class SonarrClient(Client):
         """Search for one or more episodes.
 
         POST http://$HOST:8989/api/command {"name":"episodeSearch","episodeIds":[19223]}
-
-        LIVETESTME
         """
         results = self._post_command("EpisodeSearch", episodeIds=list(episodeIds))
         return results
@@ -190,8 +188,6 @@ class SonarrClient(Client):
         """Instruct Sonarr to rename all files in the provided series.
 
         GET http://$HOST:8989/api/rename?seriesId=205
-
-        LIVETESTME
         """
         results = self._post_command("RenameSeries", seriesIds=list(seriesIds))
         return results
@@ -211,8 +207,6 @@ class SonarrClient(Client):
         (Similar functionality to Sickbeard).
 
         POST http://$HOST:8989/api/command {"name":"missingEpisodeSearch"}
-
-        LIVETESTME
         """
         results = self._post_command("missingEpisodeSearch")
         return results
@@ -257,8 +251,6 @@ class SonarrClient(Client):
         Currently only monitored is changed, all other modifications are ignored.
 
         PUT http://$HOST:8989/api/episode {"seriesId":205,"episodeFileId":46445,"seasonNumber":1,"episodeNumber":1,"title":"The Bone Orchard","airDate":"2017-04-30","airDateUtc":"2017-05-01T01:00:00Z","overview":"When Shadow Moon is released from prison early after the death of his wife, he meets Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that this may be more than he bargained for.","episodeFile":{"seriesId":205,"seasonNumber":1,"relativePath":"Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","path":"/tank/video/TV/American Gods/Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","size":2352322048,"dateAdded":"2017-04-30T22:01:17.4243Z","quality":{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"revision":{"version":1,"real":0}},"mediaInfo":{"audioChannels":2,"audioCodec":"AAC","videoCodec":"x264"},"qualityCutoffNotMet":false,"id":46445},"hasFile":true,"monitored":false,"absoluteEpisodeNumber":1,"unverifiedSceneNumbering":false,"id":11937,"status":0}
-
-        LIVETESTME
         """
         data = episode.to_dict()
         result = self._request("episode", method=HttpMethod.PUT, data=data)
@@ -331,7 +323,7 @@ class SonarrClient(Client):
             "page": str(page),
             "pageSize": str(pageSize),
             "sortKey": sortKey.value,
-            "sortDir": sortDir.value.replace("ending", ""),  # "asc"/"desc"
+            "sortDir": sortDir.value,
         }
         if episodeId is not None:
             query["episodeId"] = episodeId

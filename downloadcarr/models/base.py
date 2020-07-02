@@ -22,7 +22,7 @@ the basic serialization/deserialization provided by stdlib json, i.e.
 """
 
 import dataclasses
-from typing import Tuple, Optional, Union, TypeVar, Type, Callable, Any, Generic
+from typing import Tuple, Optional, Union, TypeVar, Type
 from datetime import date, datetime, time, timedelta
 import enum
 
@@ -226,7 +226,16 @@ def decode_model(attr_type: Base, val: dict) -> Base:
 
 
 def decode_enum(attr_type: enum.Enum, val) -> enum.Enum:
-    members = {member.value: member for member in attr_type}  # type: ignore
+    """Accept a liberal range of input to determine the enum, i.e.
+    either name or value.
+    """
+    members = {}
+    for member in attr_type:
+        # Accept enum values as input
+        members[member.value] = member
+        # Accept enum names as input
+        members[member.name] = member  # Should be upper case
+        members[member.name.lower()] = member  # Also accept lower case
     return members[val]
 
 

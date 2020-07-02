@@ -21,14 +21,14 @@ class SortKey(enum.Enum):
 
 @enum.unique
 class SortDirection(enum.Enum):
-    ASCENDING = "ascending"
-    DESCENDING = "descending"
+    ASCENDING = "asc"
+    DESCENDING = "desc"
 
 
 @enum.unique
 class Protocol(enum.Enum):
-    USENET = "usenet"
-    TORRENT = "torrent"
+    USENET = "1"
+    TORRENT = "2"
 
 
 @enum.unique

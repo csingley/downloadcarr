@@ -1,7 +1,7 @@
 """
 """
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Tuple
 from datetime import datetime, timedelta
 
 from downloadcarr import enums
@@ -23,6 +23,9 @@ class CommandStatusBody(Base):
     isExclusive: Optional[bool] = None
     suppressMessages: Optional[bool] = None
     seriesId: Optional[int] = None
+    seriesIds: Tuple[int, ...] = ()
+    episodeId: Optional[int] = None
+    episodeIds: Tuple[int, ...] = ()
     seasonNumber: Optional[int] = None
     sendUpdates: Optional[bool] = None
     importMode: Optional[str] = None
