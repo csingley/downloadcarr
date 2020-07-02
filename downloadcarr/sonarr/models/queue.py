@@ -3,7 +3,7 @@ https://github.com/Sonarr/Sonarr/wiki/Queue
 """
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Tuple, Literal
+from typing import Tuple, Optional
 
 from downloadcarr.models import Base
 from downloadcarr import enums
@@ -25,11 +25,11 @@ class QueueItem(Base):
     size: int
     title: str
     sizeleft: int
-    timeleft: timedelta
-    estimatedCompletionTime: datetime
     status: str
     trackedDownloadStatus: str
     statusMessages: Tuple[str, ...]
     downloadId: str
     protocol: enums.Protocol
     id: int
+    timeleft: Optional[timedelta] = None
+    estimatedCompletionTime: Optional[datetime] = None

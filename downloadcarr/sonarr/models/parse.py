@@ -33,11 +33,11 @@ class ParsedEpisodeInfo(Base):
     language: str
     fullSeason: bool
     special: bool
-    releaseGroup: str
     releaseHash: str
     isDaily: bool
     isAbsoluteNumbering: bool
     isPossibleSpecialEpisode: bool
+    releaseGroup: Optional[str] = None
     isPartialSeason: Optional[bool] = None
     isSeasonExtra: Optional[bool] = None
     seasonPart: Optional[int] = None
@@ -54,7 +54,7 @@ class ParseResult(Base):
     Returned by /parse.
     """
 
-    title: str
     parsedEpisodeInfo: ParsedEpisodeInfo
     episodes: Tuple[Episode, ...]
+    title: Optional[str] = None
     series: Optional[Series] = None

@@ -99,6 +99,7 @@ class DownloadData(Base):
     tvRageId: Optional[str] = None
     protocol: Optional[enums.Protocol] = None
     torrentInfoHash: Optional[str] = None
+    message: Optional[str] = None
 
 
 @dataclass(frozen=True)
