@@ -1,5 +1,16 @@
 Python Client for Sonarr, Radarr, etc.
 ======================================
+
+.. image:: https://travis-ci.org/csingley/downloadcarr.svg?branch=master
+    :target: https://travis-ci.org/csingley/downloadcarr
+
+.. image:: https://img.shields.io/badge/dependencies-None-green.svg
+    :target: https://github.com/csingley/downloadcarr/blob/master/requirements.txt 
+
+.. image:: https://img.shields.io/badge/python-3.7-brightgreen.svg
+    :target: https://www.python.org/dev/peps/pep-0373/
+
+
 Python client for JSON API provided by Sonarr and its derivatives (Radarr, etc.)
 
 This package targets 100% coverage of the API (GET, POST, PUT, DELETE), with
