@@ -121,6 +121,25 @@ class DiskSpace(Base):
 
 
 @dataclass(frozen=True)
+class UnmappedFolder(Base):
+    """Attribute of RootFolder"""
+
+    name: str
+    path: str
+
+
+@dataclass(frozen=True)
+class RootFolder(Base):
+    """Returned by /rootfolder."""
+
+    path: str
+    freeSpace: int
+    unmappedFolders: Tuple[UnmappedFolder, ...]
+    id: int
+    totalSpace: Optional[int] = None
+
+
+@dataclass(frozen=True)
 class SystemStatus(Base):
     """Returned by /system/status."""
 
@@ -146,3 +165,14 @@ class SystemStatus(Base):
     isMonoRuntime: Optional[bool] = None
     isOsx: Optional[bool] = None
     sqliteVersion: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class SystemBackup(Base):
+    """Returned by /system/backup."""
+
+    name: str
+    path: str
+    type: str
+    time: datetime
+    id: int

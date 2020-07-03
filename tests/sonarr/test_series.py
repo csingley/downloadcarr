@@ -652,9 +652,8 @@ def all_series_server():
 
 def test_get_all_series(all_series_server):
     """Test API call for SonarrClient.get_all_series()
-
-    GET http://$HOST:8989/api/series?sort_by=sortTitle&order=asc
     """
+    #  GET http://$HOST:8989/api/series?sort_by=sortTitle&order=asc
 
     CLIENT.port = all_series_server.server_port
     response = CLIENT.get_all_series()
@@ -676,9 +675,8 @@ def series_server():
 
 def test_get_series(series_server):
     """Test API call for SonarrClient.get_series()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
     CLIENT.port = series_server.server_port
     response = CLIENT.get_series(3)
@@ -711,26 +709,72 @@ def add_series_echo_server():
     )
 
 
-def test_add_series(add_series_echo_server):
-    """Test API call for SonarrClient.add_series()
+#  def test_add_series(add_series_echo_server):
+#      """Test API call for SonarrClient.add_series() with default args.
 
-    NEEDS EXAMPLE
+#      FIXME - need to mock the call to /rootfolder
+#      """
+
+#      CLIENT.port = add_series_echo_server.server_port
+#      response = CLIENT.add_series(
+#          tvdbId=110381,
+#          title="Archer (2009)",
+#          profileId=1,
+#          titleSlug="archer-2009",
+#          seasons=(
+#              models.Season(seasonNumber=5, monitored=True),
+#              models.Season(seasonNumber=4, monitored=True),
+#              models.Season(seasonNumber=3, monitored=True),
+#              models.Season(seasonNumber=2, monitored=True),
+#              models.Season(seasonNumber=1, monitored=True),
+#              models.Season(seasonNumber=0, monitored=False),
+#          ),
+#          rootFolderPath="/path/to/root/folder/",
+#          tvRageId=38796,
+#      )
+#      assert isinstance(response, models.Series)
+#      assert len(response.seasons) == 6
+#      for season in response.seasons:
+#          assert isinstance(season, models.Season)
+
+#      echo = CLIENT._request("echo")
+#      assert echo == {
+#          "tvdbId": 110381,
+#          "title": "Archer (2009)",
+#          "profileId": 1,
+#          "titleSlug": "archer-2009",
+#          "seasons": [
+#              {"monitored": True, "seasonNumber": 5, "statistics": None},
+#              {"monitored": True, "seasonNumber": 4, "statistics": None},
+#              {"monitored": True, "seasonNumber": 3, "statistics": None},
+#              {"monitored": True, "seasonNumber": 2, "statistics": None},
+#              {"monitored": True, "seasonNumber": 1, "statistics": None},
+#              {"monitored": False, "seasonNumber": 0, "statistics": None},
+#          ],
+#          "rootFolderPath": "/path/to/root/folder/",
+#          "tvRageId": 38796,
+#          "images": [],
+#          "monitored": True,
+#          "seasonFolder": True,
+#          "addOptions": {
+#              "ignoreEpisodesWithFiles": False,
+#              "ignoreEpisodesWithoutFiles": False,
+#              "searchForMissingEpisodes": False,
+#          },
+#      }
+
+
+def test_add_series_path(add_series_echo_server):
+    """Test API call for SonarrClient.add_series() with path arg
     """
+    #  NEEDS EXAMPLE
 
     CLIENT.port = add_series_echo_server.server_port
+
+    series = models.Series.from_dict(json.loads(SERIESPOST))
     response = CLIENT.add_series(
-        tvdbId=110381,
-        title="Archer (2009)",
+        series=series,
         profileId=1,
-        titleSlug="archer-2009",
-        seasons=(
-            models.Season(seasonNumber=5, monitored=True),
-            models.Season(seasonNumber=4, monitored=True),
-            models.Season(seasonNumber=3, monitored=True),
-            models.Season(seasonNumber=2, monitored=True),
-            models.Season(seasonNumber=1, monitored=True),
-            models.Season(seasonNumber=0, monitored=False),
-        ),
         path="T:\\Archer (2009)",
     )
     assert isinstance(response, models.Series)
@@ -761,83 +805,8 @@ def test_add_series(add_series_echo_server):
             "ignoreEpisodesWithoutFiles": False,
             "searchForMissingEpisodes": False,
         },
+        'tvRageId': 23354,
     }
-
-
-def test_add_series_basepath(add_series_echo_server):
-    """Test API call for SonarrClient.add_series() with alternate args.
-    """
-
-    CLIENT.port = add_series_echo_server.server_port
-    response = CLIENT.add_series(
-        tvdbId=110381,
-        title="Archer (2009)",
-        profileId=1,
-        titleSlug="archer-2009",
-        seasons=(
-            models.Season(seasonNumber=5, monitored=True),
-            models.Season(seasonNumber=4, monitored=True),
-            models.Season(seasonNumber=3, monitored=True),
-            models.Season(seasonNumber=2, monitored=True),
-            models.Season(seasonNumber=1, monitored=True),
-            models.Season(seasonNumber=0, monitored=False),
-        ),
-        rootFolderPath="/path/to/root/folder/",
-        tvRageId=38796,
-    )
-    assert isinstance(response, models.Series)
-    assert len(response.seasons) == 6
-    for season in response.seasons:
-        assert isinstance(season, models.Season)
-
-    echo = CLIENT._request("echo")
-    assert echo == {
-        "tvdbId": 110381,
-        "title": "Archer (2009)",
-        "profileId": 1,
-        "titleSlug": "archer-2009",
-        "seasons": [
-            {"monitored": True, "seasonNumber": 5, "statistics": None},
-            {"monitored": True, "seasonNumber": 4, "statistics": None},
-            {"monitored": True, "seasonNumber": 3, "statistics": None},
-            {"monitored": True, "seasonNumber": 2, "statistics": None},
-            {"monitored": True, "seasonNumber": 1, "statistics": None},
-            {"monitored": False, "seasonNumber": 0, "statistics": None},
-        ],
-        "rootFolderPath": "/path/to/root/folder/",
-        "tvRageId": 38796,
-        "images": [],
-        "monitored": True,
-        "seasonFolder": True,
-        "addOptions": {
-            "ignoreEpisodesWithFiles": False,
-            "ignoreEpisodesWithoutFiles": False,
-            "searchForMissingEpisodes": False,
-        },
-    }
-
-
-def test_add_series_bad_path():
-    """SonarrClient.add_series() called with bad path args
-    """
-
-    with pytest.raises(ValueError):
-        CLIENT.add_series(
-            tvdbId=110381,
-            title="Archer (2009)",
-            profileId=1,
-            titleSlug="archer-2009",
-            seasons=(
-                models.Season(seasonNumber=5, monitored=True),
-                models.Season(seasonNumber=4, monitored=True),
-                models.Season(seasonNumber=3, monitored=True),
-                models.Season(seasonNumber=2, monitored=True),
-                models.Season(seasonNumber=1, monitored=True),
-                models.Season(seasonNumber=0, monitored=False),
-            ),
-            path="T:\\Archer (2009)",
-            rootFolderPath="/path/to/root/folder/",
-        )
 
 
 @pytest.fixture
@@ -849,9 +818,8 @@ def update_series_echo_server():
 
 def test_update_series(update_series_echo_server):
     """Test API call for SonarrClient.update_series()
-
-    PUT http://$HOST:8989/api/series/113 {"title":"The Corner","alternateTitles":[],"sortTitle":"corner","seasonCount":1,"totalEpisodeCount":6,"episodeCount":0,"episodeFileCount":0,"sizeOnDisk":0,"status":"ended","overview":"Based on the nonfiction book \"The Corner: A Year in the Life of an Inner-City Neighborhood\", by journalists David Simon and Edward Burns, The Corner presents the world of Fayette Street using real names and real events. The Corner tells the true story of men, women and children living amid the open-air drug markets of West Baltimore. It chronicles a year in the lives of 15-year old DeAndre McCullough (Sean Nelson, \"THE WOOD\"), his mother Fran Boyd (Khandi Alexander), and his father Gary McCullough (T.K. Carter), as well as other addicts and low-level drug dealers caught up in the twin-engine economy of heroin and cocaine.","network":"HBO","images":[{"coverType":"banner","url":"/sonarr/MediaCover/113/banner.jpg?lastWrite=637122344761424010"},{"coverType":"poster","url":"/sonarr/MediaCover/113/poster.jpg?lastWrite=636101576081466180"},{"coverType":"fanart","url":"/sonarr/MediaCover/113/fanart.jpg?lastWrite=636101576079066170"}],"seasons":[{"seasonNumber":1,"monitored":true,"statistics":{"episodeFileCount":0,"episodeCount":0,"totalEpisodeCount":6,"sizeOnDisk":0,"percentOfEpisodes":0}}],"year":2000,"path":"/tank/video/TV/The Corner","profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":60,"tvdbId":76897,"tvRageId":5696,"tvMazeId":5802,"firstAired":"2000-04-16T05:00:00Z","lastInfoSync":"2020-05-20T12:22:31.108946Z","seriesType":"standard","cleanTitle":"thecorner","imdbId":"tt0224853","titleSlug":"the-corner","genres":["Drama","Mini-Series"],"tags":[1],"added":"2016-09-22T16:13:27.620615Z","ratings":{"votes":315,"value":8.5},"qualityProfileId":1,"id":113,"isExisting":false,"statusWeight":3,"profiles":[{"id":1,"name":"Any","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":2,"name":"SD","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":3,"name":"HD-720p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":4,"name":"HD-1080p","cutoff":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":5,"name":"Ultra-HD","cutoff":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":true},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":true},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":true}],"language":"english"},{"id":6,"name":"HD - 720p/1080p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"}]}
     """
+    #  PUT http://$HOST:8989/api/series/113 {"title":"The Corner","alternateTitles":[],"sortTitle":"corner","seasonCount":1,"totalEpisodeCount":6,"episodeCount":0,"episodeFileCount":0,"sizeOnDisk":0,"status":"ended","overview":"Based on the nonfiction book \"The Corner: A Year in the Life of an Inner-City Neighborhood\", by journalists David Simon and Edward Burns, The Corner presents the world of Fayette Street using real names and real events. The Corner tells the true story of men, women and children living amid the open-air drug markets of West Baltimore. It chronicles a year in the lives of 15-year old DeAndre McCullough (Sean Nelson, \"THE WOOD\"), his mother Fran Boyd (Khandi Alexander), and his father Gary McCullough (T.K. Carter), as well as other addicts and low-level drug dealers caught up in the twin-engine economy of heroin and cocaine.","network":"HBO","images":[{"coverType":"banner","url":"/sonarr/MediaCover/113/banner.jpg?lastWrite=637122344761424010"},{"coverType":"poster","url":"/sonarr/MediaCover/113/poster.jpg?lastWrite=636101576081466180"},{"coverType":"fanart","url":"/sonarr/MediaCover/113/fanart.jpg?lastWrite=636101576079066170"}],"seasons":[{"seasonNumber":1,"monitored":true,"statistics":{"episodeFileCount":0,"episodeCount":0,"totalEpisodeCount":6,"sizeOnDisk":0,"percentOfEpisodes":0}}],"year":2000,"path":"/tank/video/TV/The Corner","profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":60,"tvdbId":76897,"tvRageId":5696,"tvMazeId":5802,"firstAired":"2000-04-16T05:00:00Z","lastInfoSync":"2020-05-20T12:22:31.108946Z","seriesType":"standard","cleanTitle":"thecorner","imdbId":"tt0224853","titleSlug":"the-corner","genres":["Drama","Mini-Series"],"tags":[1],"added":"2016-09-22T16:13:27.620615Z","ratings":{"votes":315,"value":8.5},"qualityProfileId":1,"id":113,"isExisting":false,"statusWeight":3,"profiles":[{"id":1,"name":"Any","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":2,"name":"SD","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":3,"name":"HD-720p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":4,"name":"HD-1080p","cutoff":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":5,"name":"Ultra-HD","cutoff":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":true},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":true},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":true}],"language":"english"},{"id":6,"name":"HD - 720p/1080p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"}]}
 
     CLIENT.port = update_series_echo_server.server_port
 
@@ -944,9 +912,8 @@ def delete_series_server():
 
 def test_delete_series(delete_series_server):
     """Test API call for SonarrClient.delete_series()
-
-    DELETE http://$HOST:8989/api/series/345?deleteFiles=false
     """
+    #  DELETE http://$HOST:8989/api/series/345?deleteFiles=false
 
     CLIENT.port = delete_series_server.server_port
     response = CLIENT.delete_series(1)
@@ -980,9 +947,8 @@ def lookup_series_server():
 
 def test_lookup_series(lookup_series_server):
     """Test API call for SonarrClient.lookup_series()
-
-    GET http://$HOST:8989/api/series/lookup?term=monty+python
     """
+    #  GET http://$HOST:8989/api/series/lookup?term=monty+python
 
     CLIENT.port = lookup_series_server.server_port
     response = CLIENT.lookup_series("The Blacklist")

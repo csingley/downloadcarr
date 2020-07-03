@@ -20,7 +20,9 @@ def load(filename):
 COMMANDS = load("commands.json")
 COMMAND = load("command.json")
 DISKSPACE = load("diskspace.json")
+ROOTFOLDER = load("rootfolder.json")
 SYSTEMSTATUS = load("system-status.json")
+SYSTEMBACKUP = load("system-backup.json")
 
 
 #  https://realpython.com/testing-third-party-apis-with-mock-servers/

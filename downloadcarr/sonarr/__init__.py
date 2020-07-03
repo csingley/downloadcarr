@@ -50,7 +50,6 @@ from .models import (
     QualityAllowed,
     QualityAllowedProfile,
     Release,
-    RootFolder,
     SeasonStatistics,
     Season,
     Rating,
@@ -58,7 +57,6 @@ from .models import (
     Image,
     Tag,
     Series,
-    SystemBackup,
 )
 from . import client
 from .client import SonarrClient

@@ -12,6 +12,7 @@ from downloadcarr.models import (
     DiskSpace,
     SystemStatus,
     Image,
+    RootFolder,
 )
 from downloadcarr.radarr.models import (
     History,
@@ -213,32 +214,49 @@ class RadarrClient(Client):
 
     def add_movie(
         self,
-        title: str,
+        movie,
+        #  title: str,
         qualityProfileId: int,
-        titleSlug: str,
-        tmdbId: int,
+        #  titleSlug: str,
+        #  tmdbId: int,
         profileId: int,
-        year: int,  # release year. Very important needed for the correct path!
-        path: str,  # full path to the movie on disk
-        images: Sequence[Image] = (),
-        monitored: bool = True,
+        #  year: int,  # release year. Very important needed for the correct path!
+        path: Optional[str] = None,  # full path to the movie on disk
+        #  images: Sequence[Image] = (),
+        #  monitored: bool = True,
         searchForMovie: bool = False,
     ) -> Movie:
         """Add a new movie to your collection.
         """
         #  LIVETESTME
+        #  NOTE: if you do not add the required params, then the movie addition
+        #  wont function. Some of these without the others can indeed make a
+        #  "movie". But it wont function properly in Radarr.
+        for attr in (
+            "title", "qualityProfileId", "titleSlug", "tmdbId", "profileId", "year", "images",
+        ):
+            if getattr(movie, attr) is None:
+                msg = f"add_movie(): Movie.{attr} is required"
+                raise ValueError(msg)
+
         data = {
-            "title": title,
+            "title": movie.title,
             "qualityProfileId": qualityProfileId,
-            "titleSlug": titleSlug,
-            "images": list(i.to_dict() for i in images),
-            "tmdbId": tmdbId,
+            "titleSlug": movie.titleSlug,
+            "images": list(i.to_dict() for i in movie.images),
+            "tmdbId": movie.tmdbId,
             "profileId": profileId,
-            "year": year,
-            "path": path,
-            "monitored": monitored,
+            "year": movie.year,
+            "monitored": movie.monitored,
             "addOptions": {"searchForMovie": searchForMovie},
         }
+
+        if path is not None:
+            data["path"] = path
+        else:
+            rootfolders = self.get_rootfolders()
+            assert len(rootfolders) == 1
+            data["rootFolderPath"] = rootfolders[0].path
 
         result = self._request("movie", method=HttpMethod.POST, data=data)
         return Movie.from_dict(result)
@@ -321,6 +339,13 @@ class RadarrClient(Client):
         return SystemStatus.from_dict(result)
 
     #  UNDOCUMENTED API
+    def get_rootfolders(self) -> Tuple[RootFolder, ...]:
+        """
+        """
+        #  GET http://$HOST:8989/api/rootfolder
+        results = self._request("rootfolder")
+        return tuple(RootFolder.from_dict(result) for result in results)
+
     #  http://$HOST:7878/api/config/mediamanagement
     #  http://$HOST:7878/api/config/naming
     #  http://$HOST:7878/api/config/host

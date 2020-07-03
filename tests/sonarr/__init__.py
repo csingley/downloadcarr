@@ -8,7 +8,9 @@ from .. import (
     COMMANDS,
     COMMAND,
     DISKSPACE,
+    ROOTFOLDER,
     SYSTEMSTATUS,
+    SYSTEMBACKUP,
 )
 
 
@@ -30,12 +32,10 @@ PARSE = load("parse.json")
 PROFILE = load("profile.json")
 QUEUE = load("queue.json")
 RELEASE = load("release.json")
-ROOTFOLDER = load("rootfolder.json")
 ALLSERIES = load("allseries.json")
 SERIES = load("series.json")
 SERIESPOST = load("series-post.json")
 SERIESLOOKUP = load("series-lookup.json")
-SYSTEMBACKUP = load("system-backup.json")
 TAGS = load("tags.json")
 TAG = load("tag.json")
 WANTEDMISSING = load("wanted-missing.json")

@@ -9,17 +9,26 @@ from downloadcarr.models import (
     CommandStatus,
     CommandStatusBody,
     DiskSpace,
+    UnmappedFolder,
+    RootFolder,
     SystemStatus,
+    SystemBackup
 )
 
-#  from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.client import Client
 from downloadcarr.utils import UTC
 
-from . import COMMANDS, COMMAND, DISKSPACE, SYSTEMSTATUS, mock_server
+from . import (
+    COMMANDS,
+    COMMAND,
+    DISKSPACE,
+    ROOTFOLDER,
+    SYSTEMSTATUS,
+    SYSTEMBACKUP,
+    mock_server,
+)
 
 
-#  CLIENT = SonarrClient("localhost", "MYKEY")
 CLIENT = Client("localhost", "MYKEY")
 
 
@@ -110,3 +119,27 @@ def test_system_status() -> None:
     assert status.authentication is False
     assert status.startOfWeek == 0
     assert status.urlBase == ""
+
+
+def test_unmapped_folder() -> None:
+    """Test the UnmappedFolder model."""
+    pass  # FIXME - need data
+
+
+def test_root_folder() -> None:
+    """Test the RootFolder model."""
+    rootfolder = RootFolder.from_dict(json.loads(ROOTFOLDER)[0])
+    assert rootfolder.path == "C:\\Downloads\\TV"
+    assert rootfolder.freeSpace == 282500063232
+    assert rootfolder.unmappedFolders == ()
+    assert rootfolder.id == 1
+
+
+def test_system_backup() -> None:
+    """Test the SystemBackup model."""
+    backup = SystemBackup.from_dict(json.loads(SYSTEMBACKUP)[0])
+    assert backup.name == "nzbdrone_backup_2017.08.17_22.00.00.zip"
+    assert backup.path == "/backup/update/nzbdrone_backup_2017.08.17_22.00.00.zip"
+    assert backup.type == "update"
+    assert backup.time == datetime(2017, 8, 18, 5, 00, 37, tzinfo=UTC)
+    assert backup.id == 1207435784

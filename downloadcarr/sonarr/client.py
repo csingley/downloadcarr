@@ -27,14 +27,14 @@ from .models import (
     QualityAllowedProfile,
     Release,
     Season,
-    RootFolder,
-    SystemBackup,
 )
 from downloadcarr.models import (
     CommandStatus,
     Image,
+    SystemBackup,
     DiskSpace,
     SystemStatus,
+    RootFolder,
     encode_dict,
 )
 from downloadcarr.utils import BOOL2JSON
@@ -474,17 +474,9 @@ class SonarrClient(Client):
 
     def add_series(
         self,
-        tvdbId: int,
-        title: str,
-        profileId: int,
-        titleSlug: str,
-        images: Tuple[Image, ...] = (),
-        seasons: Tuple[Season, ...] = (),
+        series: Series,
+        profileId: int,  # id of QualityAllowedProfile
         path: Optional[str] = None,
-        rootFolderPath: Optional[str] = None,
-        tvRageId: Optional[int] = None,
-        seasonFolder: bool = True,
-        monitored: bool = True,
         ignoreEpisodesWithFiles: bool = False,
         ignoreEpisodesWithoutFiles: bool = False,
         searchForMissingEpisodes: bool = False,
@@ -492,34 +484,39 @@ class SonarrClient(Client):
         """Add a new series to your collection.
         """
         #  POST http://$HOST:8989/api/series {"title":"Monty Python's Flying Circus","sortTitle":"monty pythons flying circus","seasonCount":4,"status":"ended","overview":"And now for something completely different: Monty Python's Flying Circus was simply the most influential comedy program television has ever seen. Five Englishmen, all working under the constraints of conventional TV shows such as The Frost Report (for which the five Englishmen wrote), gathered together with an expatriate American in the spring of 1969 to break the rules. The result, first airing on BBC-1 on October 5, 1969, has influenced countless future men and women in the media and comedy since.","network":"BBC Two","airTime":"22:00","images":[{"coverType":"banner","url":"https://artworks.thetvdb.com/banners/graphical/3412-g.jpg"},{"coverType":"poster","url":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg"},{"coverType":"fanart","url":"https://artworks.thetvdb.com/banners/fanart/original/75853-4.jpg"}],"remotePoster":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg","seasons":[{"seasonNumber":0,"monitored":false},{"seasonNumber":1,"monitored":true},{"seasonNumber":2,"monitored":true},{"seasonNumber":3,"monitored":true},{"seasonNumber":4,"monitored":true}],"year":1969,"profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":30,"tvdbId":75853,"tvRageId":4522,"tvMazeId":694,"firstAired":"1969-10-05T05:00:00Z","seriesType":"standard","cleanTitle":"montypythonsflyingcircus","imdbId":"tt0063929","titleSlug":"monty-pythons-flying-circus","certification":"TV-14","genres":["Comedy"],"tags":[],"added":"0001-01-01T00:00:00Z","ratings":{"votes":1879,"value":9.6},"qualityProfileId":0,"episodeFileCount":0,"episodeCount":0,"isExisting":false,"rootFolderPath":"/tank/video/TV/","addOptions":{"ignoreEpisodesWithFiles":true,"ignoreEpisodesWithoutFiles":false,"searchForMissingEpisodes":false}}
-        if (path or rootFolderPath) is None or (path and rootFolderPath):
-            msg = "add_series(): must set exactly one of {path,rootFolderPath}"
-            raise ValueError(msg)
+
+        #  NOTE: if you do not add the required params, then the series wont
+        #  function. Some of these without the others can indeed make a
+        #  "series", but it wont function properly in nzbdrone.
+        for attr in ("tvdbId", "title", "titleSlug", "images", "seasons"):
+            if getattr(series, attr) is None:
+                msg = f"add_series(): Series.{attr} is required"
+                raise ValueError(msg)
+
         addOptions = {
             "ignoreEpisodesWithFiles": ignoreEpisodesWithFiles,
             "ignoreEpisodesWithoutFiles": ignoreEpisodesWithoutFiles,
             "searchForMissingEpisodes": searchForMissingEpisodes,
         }
         data = {
-            "tvdbId": tvdbId,
-            "title": title,
-            "profileId": profileId,
-            "titleSlug": titleSlug,
-            "images": list(i.to_dict() for i in images),
-            "seasons": list(s.to_dict() for s in seasons),
-            "seasonFolder": seasonFolder,
-            "monitored": monitored,
+            "tvdbId": series.tvdbId,
+            "title": series.title,
+            "titleSlug": series.titleSlug,
+            "images": list(i.to_dict() for i in series.images),
+            "seasons": list(s.to_dict() for s in series.seasons),
+            "tvRageId": series.tvRageId,
+            "seasonFolder": series.seasonFolder,
+            "monitored": series.monitored,
             "addOptions": addOptions,
+            "profileId": profileId,
         }
 
         if path is not None:
             data["path"] = path
-
-        if rootFolderPath is not None:
-            data["rootFolderPath"] = rootFolderPath
-
-        if tvRageId is not None:
-            data["tvRageId"] = tvRageId
+        else:
+            rootfolders = self.get_rootfolders()
+            assert len(rootfolders) == 1
+            data["rootFolderPath"] = rootfolders[0].path
 
         result = self._request("series", method=HttpMethod.POST, data=data)
         return Series.from_dict(result)

@@ -28,7 +28,6 @@ __all__ = [
     "Image",
     "Tag",
     "Series",
-    "SystemBackup",
 ]
 
 # /calendar classes in .episode
@@ -68,8 +67,6 @@ from .series import (
 )
 
 # /series/lookup classes in .series
-from .system import RootFolder, SystemBackup
-
-# rest of /system classes in downloadcarr.models
+# /system classes in downloadcarr.models
 # /system/backup classes in .system
 # /tag classes in .series

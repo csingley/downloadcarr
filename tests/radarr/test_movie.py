@@ -444,17 +444,11 @@ def test_add_movie(add_movie_server):
     """
 
     CLIENT.port = add_movie_server.server_port
+    movie = models.Movie.from_dict(json.loads(MOVIEPOST))
     response = CLIENT.add_movie(
-        title="Minions (2015)",
+        movie=movie,
         qualityProfileId=6,
-        titleSlug="minions-211672",
-        images=(
-            Image(coverType="poster", url="/radarr/MediaCover/11/poster.jpg",),
-            Image(coverType="banner", url="/radarr/MediaCover/11/banner.jpg",),
-        ),
-        tmdbId=211672,
         profileId=6,
-        year=0,
         path="/path/to/Minions (2015)",
     )
     assert isinstance(response, models.Movie)
