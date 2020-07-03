@@ -74,9 +74,8 @@ class RadarrClient(Client):
 
     def refresh_movie(self, movieId: int) -> CommandStatus:
         """Refresh single movie information from TMDb and rescan disk.
-
-        POST http://$HOST:7878/api/command {"name":"refreshMovie","movieId":604}
         """
+        #  POST http://$HOST:7878/api/command {"name":"refreshMovie","movieId":604}
         results = self._post_command("RefreshMovie", movieId=movieId)
         return results
 
@@ -113,9 +112,8 @@ class RadarrClient(Client):
         The downloadClientId can be used to support this API endpoint in
         conjunction with Completed Download Handling, so Radarr knows that a
         particular download has already been imported.
-
-        LIVETESTME
         """
+        #  LIVETESTME
         params = {"path": path}
         if downloadClientId is not None:
             params["downloadClientId"] = downloadClientId
@@ -133,19 +131,16 @@ class RadarrClient(Client):
 
     def rename_files(self, *files: int) -> CommandStatus:
         """Instruct Radarr to rename the list of files provided.
-
-        LIVETESTME
         """
+        #  LIVETESTME
         results = self._post_command("RenameFiles", files=list(files))
         return results
 
     def rename_movies(self, *movieIds: int) -> CommandStatus:
         """Instruct Radarr to rename all files in the provided movies.
-
-        http://$HOST:7878/api/renameMovie?movieId=604
-
-        LIVETESTME
         """
+        #  http://$HOST:7878/api/renameMovie?movieId=604
+        #  LIVETESTME
         results = self._post_command("RenameMovie", movieIds=list(movieIds))
         return results
 
@@ -177,7 +172,7 @@ class RadarrClient(Client):
 
     #  https://github.com/Radarr/Radarr/wiki/API:Diskspace
     def get_diskspace(self) -> Tuple[DiskSpace, ...]:
-        """
+        """Gets information about Diskspace.
         """
         results = self._request("diskspace")
         return tuple(DiskSpace.from_dict(result) for result in results)
@@ -191,9 +186,8 @@ class RadarrClient(Client):
         sortDir: SortDirection = SortDirection.ASCENDING,
     ) -> History:
         """Gets history (grabs/failures/completed).
-
-        GET http://$HOST:7878/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&filterType=equal
         """
+        #  GET http://$HOST:7878/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&filterType=equal
         query = {
             "page": str(page),
             "pageSize": str(pageSize),
@@ -231,9 +225,8 @@ class RadarrClient(Client):
         searchForMovie: bool = False,
     ) -> Movie:
         """Add a new movie to your collection.
-
-        LIVETESTME
         """
+        #  LIVETESTME
         data = {
             "title": title,
             "qualityProfileId": qualityProfileId,
@@ -283,18 +276,16 @@ class RadarrClient(Client):
 
     def lookup_movie_tmdb(self, tmdbId: int) -> Tuple[Movie, ...]:
         """Searches for new movies on trakt
-
-        LIVETESTME
         """
+        #  LIVETESTME
         query = {"tmdbId": str(tmdbId)}
         results = self._request("movie/lookup", query=query)
         return tuple(Movie.from_dict(result) for result in results)
 
     def lookup_movie_imdb(self, imdbId: str) -> Tuple[Movie, ...]:
         """Searches for new movies on trakt
-
-        LIVETESTME
         """
+        #  LIVETESTME
         query = {"imdbId": imdbId}
         results = self._request("movie/lookup", query=query)
         return tuple(Movie.from_dict(result) for result in results)
@@ -302,11 +293,9 @@ class RadarrClient(Client):
     #  https://github.com/Radarr/Radarr/wiki/API:Queue
     def get_queue(self) -> Tuple[QueueItem, ...]:
         """Get currently downloading info.
-
-        http://$HOST:7878/api/queue?sort_by=timeleft&order=asc
-
-        LIVETESTME
         """
+        #  http://$HOST:7878/api/queue?sort_by=timeleft&order=asc
+        #  LIVETESTME
         results = self._request("queue")
 
         return tuple(QueueItem.from_dict(result) for result in results)
@@ -314,9 +303,8 @@ class RadarrClient(Client):
     def delete_queue_item(self, queueItemId, blacklist=False) -> None:
         """Deletes an item from the queue and download client.
         Optionally blacklist item after deletion.
-
-        LIVETESTME
         """
+        #  LIVETESTME
         query = {"blacklist": BOOL2JSON[blacklist]}
         result = self._request(
             f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query

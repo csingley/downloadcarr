@@ -53,9 +53,8 @@ class SonarrClient(Client):
 
         If start/end are not supplied, episodes airing today and tomorrow
         will be returned.
-
-        GET http://$HOST:8989/api/calendar?start=2020-06-13T00%3A00%3A00.000Z&end=2020-06-19T00%3A00%3A00.000Z&unmonitored=false
         """
+        #  GET http://$HOST:8989/api/calendar?start=2020-06-13T00%3A00%3A00.000Z&end=2020-06-19T00%3A00%3A00.000Z&unmonitored=false
         query = {}
 
         if start is not None:
@@ -70,66 +69,58 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/Command
     def get_all_commands_status(self) -> Tuple[CommandStatus, ...]:
         """Query the status of all currently started commands.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         results = self._request("command")
         return tuple(CommandStatus.from_dict(result) for result in results)
 
     def get_command_status(self, command_id: int) -> CommandStatus:
         """Query the status of a previously started command.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         result = self._request(f"command/{command_id}")
         return CommandStatus.from_dict(result)
 
     def refresh_all_series(self) -> CommandStatus:
         """Refresh all series information from trakt and rescan disk.
-
-        POST http://$HOST:8989/api/command {"name":"refreshseries"}
-        POST http://$HOST:8989/api/command {"name":"RefreshSeries"}
         """
+        #  POST http://$HOST:8989/api/command {"name":"refreshseries"}
+        #  POST http://$HOST:8989/api/command {"name":"RefreshSeries"}
         results = self._post_command("RefreshSeries")
         return results
 
     def refresh_series(self, seriesId: int) -> CommandStatus:
         """Refresh single series information from trakt and rescan disk.
-
-        POST http://$HOST:8989/api/command {"name":"refreshSeries","seriesId":307}
         """
+        #  POST http://$HOST:8989/api/command {"name":"refreshSeries","seriesId":307}
         results = self._post_command("RefreshSeries", seriesId=seriesId)
         return results
 
     def rescan_all_series(self) -> CommandStatus:
         """Refresh rescan disk for all series.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         results = self._post_command("RescanSeries")
         return results
 
     def rescan_series(self, seriesId: int) -> CommandStatus:
         """Refresh rescan disk for a single series.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         results = self._post_command("RescanSeries", seriesId=seriesId)
         return results
 
     def search_episodes(self, *episodeIds: int) -> CommandStatus:
         """Search for one or more episodes.
-
-        POST http://$HOST:8989/api/command {"name":"episodeSearch","episodeIds":[19223]}
         """
+        #  POST http://$HOST:8989/api/command {"name":"episodeSearch","episodeIds":[19223]}
         results = self._post_command("EpisodeSearch", episodeIds=list(episodeIds))
         return results
 
     def search_season(self, seriesId: int, seasonNumber: int) -> CommandStatus:
         """Search for all episodes of a particular season.
-
-        POST http://$HOST:8989/api/command {"name":"seasonSearch","seriesId":3,"seasonNumber":5}
         """
+        #  POST http://$HOST:8989/api/command {"name":"seasonSearch","seriesId":3,"seasonNumber":5}
         results = self._post_command(
             "SeasonSearch", seriesId=seriesId, seasonNumber=seasonNumber
         )
@@ -137,9 +128,8 @@ class SonarrClient(Client):
 
     def search_series(self, seriesId: int) -> CommandStatus:
         """Search for all episodes in a series.
-
-        POST http://$HOST:8989/api/command {"name":"seriesSearch","seriesId":3}
         """
+        #  POST http://$HOST:8989/api/command {"name":"seriesSearch","seriesId":3}
         results = self._post_command("SeriesSearch", seriesId=seriesId)
         return results
 
@@ -154,9 +144,8 @@ class SonarrClient(Client):
 
         A folder specified by the path variable is assumed to be a single
         download (job) and the folder name should be the release name.
-
-        POST http://$HOST:8989/api/command {"name":"DownloadedEpisodesScan"}
         """
+        #  POST http://$HOST:8989/api/command {"name":"DownloadedEpisodesScan"}
         params = {"path": path}
         if downloadClientId is not None:
             params["downloadClientId"] = downloadClientId
@@ -168,46 +157,40 @@ class SonarrClient(Client):
 
     def sync_rss(self) -> CommandStatus:
         """Instruct Sonarr to perform an RSS sync with all enabled indexers.
-
-        POST http://$HOST:8989/api/command {"name":"RssSync"}
         """
+        #  POST http://$HOST:8989/api/command {"name":"RssSync"}
         results = self._post_command("RssSync")
         return results
 
     def rename_files(self, *files: int) -> CommandStatus:
         """Instruct Sonarr to rename the list of files provided.
-
-        POST http://$HOST:8989/api/command {"name":"renameFiles","seriesId":205,"seasonNumber":-1,"files":[102036,101353,100458,50137,49744,49108,48545,47995,47549,47327,46445]}
-
-        LIVETESTME
         """
+        #  POST http://$HOST:8989/api/command {"name":"renameFiles","seriesId":205,"seasonNumber":-1,"files":[102036,101353,100458,50137,49744,49108,48545,47995,47549,47327,46445]}
+        #  LIVETESTME
         results = self._post_command("RenameFiles", files=list(files))
         return results
 
     def rename_series(self, *seriesIds: int) -> CommandStatus:
         """Instruct Sonarr to rename all files in the provided series.
-
-        GET http://$HOST:8989/api/rename?seriesId=205
         """
+        #  GET http://$HOST:8989/api/rename?seriesId=205
         results = self._post_command("RenameSeries", seriesIds=list(seriesIds))
         return results
 
     def backup(self) -> CommandStatus:
         """Instruct Sonarr to perform a backup of its database and config file
         (nzbdrone.db and config.xml).
-
-        POST http://$HOST:8989/api/command {"name":"backup","type":"manual"}
-        POST http://$HOST:8989/api/command {"name":"Backup"}
         """
+        #  POST http://$HOST:8989/api/command {"name":"backup","type":"manual"}
+        #  POST http://$HOST:8989/api/command {"name":"Backup"}
         results = self._post_command("Backup")
         return results
 
     def search_missing_episodes(self) -> CommandStatus:
         """Instruct Sonarr to perform a backlog search of missing episodes
         (Similar functionality to Sickbeard).
-
-        POST http://$HOST:8989/api/command {"name":"missingEpisodeSearch"}
         """
+        #  POST http://$HOST:8989/api/command {"name":"missingEpisodeSearch"}
         results = self._post_command("missingEpisodeSearch")
         return results
 
@@ -222,36 +205,33 @@ class SonarrClient(Client):
 
     #  https://github.com/Sonarr/Sonarr/wiki/Diskspace
     def get_diskspace(self) -> Tuple[DiskSpace, ...]:
+        """Gets information about Diskspace.
         """
-        GET http://$HOST:8989/api/diskspace
-        """
+        #  GET http://$HOST:8989/api/diskspace
         results = self._request("diskspace")
         return tuple(DiskSpace.from_dict(result) for result in results)
 
     #  https://github.com/Sonarr/Sonarr/wiki/Episode
     def get_episodes(self, seriesId) -> Tuple[Episode, ...]:
         """Returns all episodes for the given series.
-
-        GET http://$HOST:8989/api/episode?seriesId=3
         """
+        #  GET http://$HOST:8989/api/episode?seriesId=3
         query = {"seriesId": seriesId}
         results = self._request("episode", query=query)
         return tuple(Episode.from_dict(result) for result in results)
 
     def get_episode(self, episodeId: int) -> Episode:
         """Returns the episode with the matching id.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         result = self._request(f"episode/{episodeId}")
         return Episode.from_dict(result)
 
     def update_episode(self, episode: Episode) -> Episode:
         """Update the given episodes.
         Currently only monitored is changed, all other modifications are ignored.
-
-        PUT http://$HOST:8989/api/episode {"seriesId":205,"episodeFileId":46445,"seasonNumber":1,"episodeNumber":1,"title":"The Bone Orchard","airDate":"2017-04-30","airDateUtc":"2017-05-01T01:00:00Z","overview":"When Shadow Moon is released from prison early after the death of his wife, he meets Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that this may be more than he bargained for.","episodeFile":{"seriesId":205,"seasonNumber":1,"relativePath":"Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","path":"/tank/video/TV/American Gods/Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","size":2352322048,"dateAdded":"2017-04-30T22:01:17.4243Z","quality":{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"revision":{"version":1,"real":0}},"mediaInfo":{"audioChannels":2,"audioCodec":"AAC","videoCodec":"x264"},"qualityCutoffNotMet":false,"id":46445},"hasFile":true,"monitored":false,"absoluteEpisodeNumber":1,"unverifiedSceneNumbering":false,"id":11937,"status":0}
         """
+        #  PUT http://$HOST:8989/api/episode {"seriesId":205,"episodeFileId":46445,"seasonNumber":1,"episodeNumber":1,"title":"The Bone Orchard","airDate":"2017-04-30","airDateUtc":"2017-05-01T01:00:00Z","overview":"When Shadow Moon is released from prison early after the death of his wife, he meets Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that this may be more than he bargained for.","episodeFile":{"seriesId":205,"seasonNumber":1,"relativePath":"Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","path":"/tank/video/TV/American Gods/Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","size":2352322048,"dateAdded":"2017-04-30T22:01:17.4243Z","quality":{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"revision":{"version":1,"real":0}},"mediaInfo":{"audioChannels":2,"audioCodec":"AAC","videoCodec":"x264"},"qualityCutoffNotMet":false,"id":46445},"hasFile":true,"monitored":false,"absoluteEpisodeNumber":1,"unverifiedSceneNumbering":false,"id":11937,"status":0}
         data = episode.to_dict()
         result = self._request("episode", method=HttpMethod.PUT, data=data)
         return Episode.from_dict(result)
@@ -259,29 +239,25 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/EpisodeFile
     def get_episode_files(self, seriesId) -> Tuple[EpisodeFile, ...]:
         """Returns all downloaded episode files for the given series.
-
-        GET http://$HOST:8989/api/episodefile?seriesId=112
         """
+        #  GET http://$HOST:8989/api/episodefile?seriesId=112
         query = {"seriesId": seriesId}
         results = self._request("episodefile", query=query)
         return tuple(EpisodeFile.from_dict(result) for result in results)
 
     def get_episode_file(self, episodeFileId: int) -> EpisodeFile:
         """Returns the episode with the matching id.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         result = self._request(f"episodefile/{episodeFileId}")
 
         return EpisodeFile.from_dict(result)
 
     def delete_episode_file(self, episodeFileId: int) -> None:
         """Delete the given episode file.
-
-        NEEDS EXAMPLE
-
-        LIVETESTME
         """
+        #  NEEDS EXAMPLE
+        #  LIVETESTME
         result = self._request(f"episodefile/{episodeFileId}", method=HttpMethod.DELETE)
         if result != {}:
             msg = f"delete_episode_file() returned {result}"
@@ -291,11 +267,9 @@ class SonarrClient(Client):
         self, episodeFileId: int, qualityRevision: QualityRevision
     ) -> EpisodeFile:
         """ Updates the quality of the episode file and returns the episode file.
-
-        NEEDS EXAMPLE
-
-        LIVETESTME
         """
+        #  NEEDS EXAMPLE
+        #  LIVETESTME
         data = {"quality": qualityRevision.to_dict()}
         result = self._request(
             f"episodefile/{episodeFileId}", method=HttpMethod.PUT, data=data
@@ -313,10 +287,9 @@ class SonarrClient(Client):
     ) -> History:
         """Gets history (grabs/failures/completed).
         If provided, episodeId filters to a specific episode ID.
-
-        GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc
-        GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&episodeId=35
         """
+        #  GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc
+        #  GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&episodeId=35
         query = {
             "page": str(page),
             "pageSize": str(pageSize),
@@ -343,9 +316,8 @@ class SonarrClient(Client):
         sortDir: SortDirection = SortDirection.ASCENDING,
     ) -> WantedMissing:
         """Get wanted missing episodes.
-
-        GET http://$HOST:8989/api/wanted/missing?page=1&pageSize=15&sortKey=airDateUtc&sortDir=desc&filterKey=monitored&filterValue=true
         """
+        #  GET http://$HOST:8989/api/wanted/missing?page=1&pageSize=15&sortKey=airDateUtc&sortDir=desc&filterKey=monitored&filterValue=true
         query = {
             "page": str(page),
             "pageSize": str(pageSize),
@@ -359,9 +331,8 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/Queue
     def get_queue(self) -> Tuple[QueueItem, ...]:
         """Get currently downloading info.
-
-        GET http://$HOST:8989/api/queue?sort_by=timeleft&order=asc
         """
+        #  GET http://$HOST:8989/api/queue?sort_by=timeleft&order=asc
         results = self._request("queue")
 
         return tuple(QueueItem.from_dict(result) for result in results)
@@ -369,9 +340,8 @@ class SonarrClient(Client):
     def delete_queue_item(self, queueItemId, blacklist=False) -> None:
         """Deletes an item from the queue and download client.
         Optionally blacklist item after deletion.
-
-        DELETE http://$HOST:8989/api/queue/1242502863?blacklist=false
         """
+        #  DELETE http://$HOST:8989/api/queue/1242502863?blacklist=false
         query = {"blacklist": BOOL2JSON[blacklist]}
         result = self._request(
             f"queue/{queueItemId}", method=HttpMethod.DELETE, query=query
@@ -386,9 +356,8 @@ class SonarrClient(Client):
 
         Series and episodes will be returned only if the parsing matches to a
         specific series and one or more episodes.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         query = {"title": title}
         try:
             result = self._request("parse", query=query)
@@ -401,9 +370,8 @@ class SonarrClient(Client):
 
         Series and episodes will be returned only if the parsing matches to a
         specific series and one or more episodes.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         query = {"path": path}
         try:
             result = self._request("parse", query=query)
@@ -414,9 +382,8 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/Profile
     def get_quality_profiles(self) -> Tuple[QualityAllowedProfile, ...]:
         """Gets all quality profiles.
-
-        GET http://$HOST:8989/api/profile
         """
+        #  GET http://$HOST:8989/api/profile
         results = self._request("profile")
         return tuple(QualityAllowedProfile.from_dict(result) for result in results)
 
@@ -427,10 +394,9 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/Release
     def get_release(self, episodeId: int) -> Tuple[Release, ...]:
         """
-        GET http://$HOST:8989/api/release?episodeId=35&sort_by=releaseWeight&order=asc
-
-        LIVETESTME
         """
+        #  GET http://$HOST:8989/api/release?episodeId=35&sort_by=releaseWeight&order=asc
+        #  LIVETESTME
         query = {"episodeId": str(episodeId)}
         results = self._request("release", query=query)
         return tuple(Release.from_dict(result) for result in results)
@@ -439,11 +405,9 @@ class SonarrClient(Client):
         """Adds a previously searched release to the download client,
         if the release is still in Sonarr's search cache (30 minute cache).
         If the release is not found in the cache Sonarr will return a 404.
-
-        NEEDS EXAMPLE
-
-        LIVETESTME
         """
+        #  NEEDS EXAMPLE
+        #  LIVETESTME
         data = {"guid": guid, "indexerId": indexerId}
 
         try:
@@ -462,11 +426,9 @@ class SonarrClient(Client):
         self, title: str, downloadUrl: str, protocol: Protocol, publishDate: date
     ) -> Tuple[Release, ...]:
         """If the title is wanted, Sonarr will grab it.
-
-        NEEDS EXAMPLE
-
-        LIVETESTME
         """
+        #  NEEDS EXAMPLE
+        #  LIVETESTME
         data = encode_dict(
             {
                 "title": title,
@@ -481,26 +443,24 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/Rootfolder
     def get_rootfolders(self) -> Tuple[RootFolder, ...]:
         """
-        GET http://$HOST:8989/api/rootfolder
         """
+        #  GET http://$HOST:8989/api/rootfolder
         results = self._request("rootfolder")
         return tuple(RootFolder.from_dict(result) for result in results)
 
     #  https://github.com/Sonarr/Sonarr/wiki/Series
     def get_all_series(self) -> Tuple[Series, ...]:
         """Return all series.
-
-        GET http://$HOST:8989/api/series?sort_by=sortTitle&order=asc
         """
+        #  GET http://$HOST:8989/api/series?sort_by=sortTitle&order=asc
         results = self._request("series")
         return tuple(Series.from_dict(result) for result in results)
 
     def get_series(self, seriesId) -> Series:
         """Return the series with the matching ID
         or 404 if no matching series is found.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         try:
             result = self._request(f"series/{seriesId}")
         except ArrClientError as err:
@@ -530,9 +490,8 @@ class SonarrClient(Client):
         searchForMissingEpisodes: bool = False,
     ) -> Series:
         """Add a new series to your collection.
-
-        POST http://$HOST:8989/api/series {"title":"Monty Python's Flying Circus","sortTitle":"monty pythons flying circus","seasonCount":4,"status":"ended","overview":"And now for something completely different: Monty Python's Flying Circus was simply the most influential comedy program television has ever seen. Five Englishmen, all working under the constraints of conventional TV shows such as The Frost Report (for which the five Englishmen wrote), gathered together with an expatriate American in the spring of 1969 to break the rules. The result, first airing on BBC-1 on October 5, 1969, has influenced countless future men and women in the media and comedy since.","network":"BBC Two","airTime":"22:00","images":[{"coverType":"banner","url":"https://artworks.thetvdb.com/banners/graphical/3412-g.jpg"},{"coverType":"poster","url":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg"},{"coverType":"fanart","url":"https://artworks.thetvdb.com/banners/fanart/original/75853-4.jpg"}],"remotePoster":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg","seasons":[{"seasonNumber":0,"monitored":false},{"seasonNumber":1,"monitored":true},{"seasonNumber":2,"monitored":true},{"seasonNumber":3,"monitored":true},{"seasonNumber":4,"monitored":true}],"year":1969,"profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":30,"tvdbId":75853,"tvRageId":4522,"tvMazeId":694,"firstAired":"1969-10-05T05:00:00Z","seriesType":"standard","cleanTitle":"montypythonsflyingcircus","imdbId":"tt0063929","titleSlug":"monty-pythons-flying-circus","certification":"TV-14","genres":["Comedy"],"tags":[],"added":"0001-01-01T00:00:00Z","ratings":{"votes":1879,"value":9.6},"qualityProfileId":0,"episodeFileCount":0,"episodeCount":0,"isExisting":false,"rootFolderPath":"/tank/video/TV/","addOptions":{"ignoreEpisodesWithFiles":true,"ignoreEpisodesWithoutFiles":false,"searchForMissingEpisodes":false}}
         """
+        #  POST http://$HOST:8989/api/series {"title":"Monty Python's Flying Circus","sortTitle":"monty pythons flying circus","seasonCount":4,"status":"ended","overview":"And now for something completely different: Monty Python's Flying Circus was simply the most influential comedy program television has ever seen. Five Englishmen, all working under the constraints of conventional TV shows such as The Frost Report (for which the five Englishmen wrote), gathered together with an expatriate American in the spring of 1969 to break the rules. The result, first airing on BBC-1 on October 5, 1969, has influenced countless future men and women in the media and comedy since.","network":"BBC Two","airTime":"22:00","images":[{"coverType":"banner","url":"https://artworks.thetvdb.com/banners/graphical/3412-g.jpg"},{"coverType":"poster","url":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg"},{"coverType":"fanart","url":"https://artworks.thetvdb.com/banners/fanart/original/75853-4.jpg"}],"remotePoster":"https://artworks.thetvdb.com/banners/posters/75853-5.jpg","seasons":[{"seasonNumber":0,"monitored":false},{"seasonNumber":1,"monitored":true},{"seasonNumber":2,"monitored":true},{"seasonNumber":3,"monitored":true},{"seasonNumber":4,"monitored":true}],"year":1969,"profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":30,"tvdbId":75853,"tvRageId":4522,"tvMazeId":694,"firstAired":"1969-10-05T05:00:00Z","seriesType":"standard","cleanTitle":"montypythonsflyingcircus","imdbId":"tt0063929","titleSlug":"monty-pythons-flying-circus","certification":"TV-14","genres":["Comedy"],"tags":[],"added":"0001-01-01T00:00:00Z","ratings":{"votes":1879,"value":9.6},"qualityProfileId":0,"episodeFileCount":0,"episodeCount":0,"isExisting":false,"rootFolderPath":"/tank/video/TV/","addOptions":{"ignoreEpisodesWithFiles":true,"ignoreEpisodesWithoutFiles":false,"searchForMissingEpisodes":false}}
         if (path or rootFolderPath) is None or (path and rootFolderPath):
             msg = "add_series(): must set exactly one of {path,rootFolderPath}"
             raise ValueError(msg)
@@ -567,18 +526,16 @@ class SonarrClient(Client):
 
     def update_series(self, series: Series) -> Series:
         """Update an existing series.
-
-        PUT http://$HOST:8989/api/series/113 {"title":"The Corner","alternateTitles":[],"sortTitle":"corner","seasonCount":1,"totalEpisodeCount":6,"episodeCount":0,"episodeFileCount":0,"sizeOnDisk":0,"status":"ended","overview":"Based on the nonfiction book \"The Corner: A Year in the Life of an Inner-City Neighborhood\", by journalists David Simon and Edward Burns, The Corner presents the world of Fayette Street using real names and real events. The Corner tells the true story of men, women and children living amid the open-air drug markets of West Baltimore. It chronicles a year in the lives of 15-year old DeAndre McCullough (Sean Nelson, \"THE WOOD\"), his mother Fran Boyd (Khandi Alexander), and his father Gary McCullough (T.K. Carter), as well as other addicts and low-level drug dealers caught up in the twin-engine economy of heroin and cocaine.","network":"HBO","images":[{"coverType":"banner","url":"/sonarr/MediaCover/113/banner.jpg?lastWrite=637122344761424010"},{"coverType":"poster","url":"/sonarr/MediaCover/113/poster.jpg?lastWrite=636101576081466180"},{"coverType":"fanart","url":"/sonarr/MediaCover/113/fanart.jpg?lastWrite=636101576079066170"}],"seasons":[{"seasonNumber":1,"monitored":true,"statistics":{"episodeFileCount":0,"episodeCount":0,"totalEpisodeCount":6,"sizeOnDisk":0,"percentOfEpisodes":0}}],"year":2000,"path":"/tank/video/TV/The Corner","profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":60,"tvdbId":76897,"tvRageId":5696,"tvMazeId":5802,"firstAired":"2000-04-16T05:00:00Z","lastInfoSync":"2020-05-20T12:22:31.108946Z","seriesType":"standard","cleanTitle":"thecorner","imdbId":"tt0224853","titleSlug":"the-corner","genres":["Drama","Mini-Series"],"tags":[1],"added":"2016-09-22T16:13:27.620615Z","ratings":{"votes":315,"value":8.5},"qualityProfileId":1,"id":113,"isExisting":false,"statusWeight":3,"profiles":[{"id":1,"name":"Any","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":2,"name":"SD","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":3,"name":"HD-720p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":4,"name":"HD-1080p","cutoff":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":5,"name":"Ultra-HD","cutoff":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":true},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":true},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":true}],"language":"english"},{"id":6,"name":"HD - 720p/1080p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"}]}
         """
+        #  PUT http://$HOST:8989/api/series/113 {"title":"The Corner","alternateTitles":[],"sortTitle":"corner","seasonCount":1,"totalEpisodeCount":6,"episodeCount":0,"episodeFileCount":0,"sizeOnDisk":0,"status":"ended","overview":"Based on the nonfiction book \"The Corner: A Year in the Life of an Inner-City Neighborhood\", by journalists David Simon and Edward Burns, The Corner presents the world of Fayette Street using real names and real events. The Corner tells the true story of men, women and children living amid the open-air drug markets of West Baltimore. It chronicles a year in the lives of 15-year old DeAndre McCullough (Sean Nelson, \"THE WOOD\"), his mother Fran Boyd (Khandi Alexander), and his father Gary McCullough (T.K. Carter), as well as other addicts and low-level drug dealers caught up in the twin-engine economy of heroin and cocaine.","network":"HBO","images":[{"coverType":"banner","url":"/sonarr/MediaCover/113/banner.jpg?lastWrite=637122344761424010"},{"coverType":"poster","url":"/sonarr/MediaCover/113/poster.jpg?lastWrite=636101576081466180"},{"coverType":"fanart","url":"/sonarr/MediaCover/113/fanart.jpg?lastWrite=636101576079066170"}],"seasons":[{"seasonNumber":1,"monitored":true,"statistics":{"episodeFileCount":0,"episodeCount":0,"totalEpisodeCount":6,"sizeOnDisk":0,"percentOfEpisodes":0}}],"year":2000,"path":"/tank/video/TV/The Corner","profileId":"1","seasonFolder":true,"monitored":true,"useSceneNumbering":false,"runtime":60,"tvdbId":76897,"tvRageId":5696,"tvMazeId":5802,"firstAired":"2000-04-16T05:00:00Z","lastInfoSync":"2020-05-20T12:22:31.108946Z","seriesType":"standard","cleanTitle":"thecorner","imdbId":"tt0224853","titleSlug":"the-corner","genres":["Drama","Mini-Series"],"tags":[1],"added":"2016-09-22T16:13:27.620615Z","ratings":{"votes":315,"value":8.5},"qualityProfileId":1,"id":113,"isExisting":false,"statusWeight":3,"profiles":[{"id":1,"name":"Any","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":2,"name":"SD","cutoff":{"id":1,"name":"SDTV","source":"television","resolution":480},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":true},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":true},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":true},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":3,"name":"HD-720p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":4,"name":"HD-1080p","cutoff":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"},{"id":5,"name":"Ultra-HD","cutoff":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":false},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":false},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":false},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":false},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":false},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":false},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":true},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":true},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":true}],"language":"english"},{"id":6,"name":"HD - 720p/1080p","cutoff":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"items":[{"quality":{"id":0,"name":"Unknown","source":"unknown","resolution":0},"allowed":false},{"quality":{"id":1,"name":"SDTV","source":"television","resolution":480},"allowed":false},{"quality":{"id":8,"name":"WEBDL-480p","source":"web","resolution":480},"allowed":false},{"quality":{"id":2,"name":"DVD","source":"dvd","resolution":480},"allowed":false},{"quality":{"id":4,"name":"HDTV-720p","source":"television","resolution":720},"allowed":true},{"quality":{"id":9,"name":"HDTV-1080p","source":"television","resolution":1080},"allowed":true},{"quality":{"id":10,"name":"Raw-HD","source":"televisionRaw","resolution":1080},"allowed":false},{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"allowed":true},{"quality":{"id":6,"name":"Bluray-720p","source":"bluray","resolution":720},"allowed":true},{"quality":{"id":3,"name":"WEBDL-1080p","source":"web","resolution":1080},"allowed":true},{"quality":{"id":7,"name":"Bluray-1080p","source":"bluray","resolution":1080},"allowed":true},{"quality":{"id":16,"name":"HDTV-2160p","source":"television","resolution":2160},"allowed":false},{"quality":{"id":18,"name":"WEBDL-2160p","source":"web","resolution":2160},"allowed":false},{"quality":{"id":19,"name":"Bluray-2160p","source":"bluray","resolution":2160},"allowed":false}],"language":"english"}]}
         data = series.to_dict()
         result = self._request(f"series/{series.id}", method=HttpMethod.PUT, data=data)
         return Series.from_dict(result)
 
     def delete_series(self, seriesId: int, deleteFiles: bool = False) -> None:
         """Delete the series with the given ID.
-
-        DELETE http://$HOST:8989/api/series/345?deleteFiles=false
         """
+        #  DELETE http://$HOST:8989/api/series/345?deleteFiles=false
         query = {"deleteFiles": json.dumps(deleteFiles)}
         result = self._request(
             f"series/{seriesId}", method=HttpMethod.DELETE, query=query
@@ -591,9 +548,8 @@ class SonarrClient(Client):
     def lookup_series(self, term: str) -> Tuple[Series, ...]:
         """Searches for new shows on TheTVDB.com
         utilizing sonarr.tv's caching and augmentation proxy.
-
-        GET http://$HOST:8989/api/series/lookup?term=monty+python
         """
+        #  GET http://$HOST:8989/api/series/lookup?term=monty+python
         query = {"term": term.replace(" ", "+")}
         results = self._request("series/lookup", query=query)
         return tuple(Series.from_dict(result) for result in results)
@@ -601,36 +557,32 @@ class SonarrClient(Client):
     #  https://github.com/Sonarr/Sonarr/wiki/System-Status
     def get_system_status(self) -> SystemStatus:
         """Return system status.
-
-        GET http://$HOST:8989/api/system/status
         """
+        #  GET http://$HOST:8989/api/system/status
         result = self._request("system/status")
         return SystemStatus.from_dict(result)
 
     #  https://github.com/Sonarr/Sonarr/wiki/System-Backup
     def get_system_backups(self) -> Tuple[SystemBackup, ...]:
         """Return the list of available backups.
-
-        GET http://$HOST:8989/api/system/backup?sort_by=time&order=desc
         """
+        #  GET http://$HOST:8989/api/system/backup?sort_by=time&order=desc
         results = self._request("system/backup")
         return tuple(SystemBackup.from_dict(result) for result in results)
 
     #  https://github.com/Sonarr/Sonarr/wiki/Tag
     def get_tags(self) -> Tuple[Tag, ...]:
         """Return all tags.
-
-        GET http://$HOST:8989/api/tag
         """
+        #  GET http://$HOST:8989/api/tag
         results = self._request("tag")
         return tuple(Tag.from_dict(result) for result in results)
 
     def get_tag(self, tagId: int) -> Tag:
         """Return the tag with the matching ID
         or 404 if no matching tag is found.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         try:
             result = self._request(f"tag/{tagId}")
         except ArrClientError as err:
@@ -644,27 +596,24 @@ class SonarrClient(Client):
 
     def add_tag(self, label: str) -> Tag:
         """Add a new tag.
-
-        POST http://$HOST:8989/api/tag {"label":"test"}
         """
+        #  POST http://$HOST:8989/api/tag {"label":"test"}
         data = {"label": label.lower()}
         result = self._request("tag", method=HttpMethod.POST, data=data)
         return Tag.from_dict(result)
 
     def update_tag(self, tagId: int, label: str) -> Tag:
         """Update an existing tag.
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         data = {"label": label, "id": tagId}
         result = self._request("tag", method=HttpMethod.PUT, data=data)
         return Tag.from_dict(result)
 
     def delete_tag(self, tagId: int) -> None:
         """Delete the series with the given ID
-
-        NEEDS EXAMPLE
         """
+        #  NEEDS EXAMPLE
         result = self._request(f"tag/{tagId}", method=HttpMethod.DELETE)
         if result != {}:
             msg = f"delete_tag() returned {result}"

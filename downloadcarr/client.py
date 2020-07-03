@@ -44,7 +44,6 @@ class Client:
         verify_ssl: bool = True,
         user_agent: str = "",
     ) -> None:
-        """Initialize connection with receiver."""
         self.api_key = api_key
         self.base_path = base_path
         self.host = host
@@ -57,6 +56,20 @@ class Client:
         if user_agent == "":
             clsnm = self.__class__.__name__
             self.user_agent = f"{__title__}.{clsnm}/{__version__} (Python)"
+
+    def __repr__(self):
+        attrs = (
+            f"{attr}={repr(getattr(self, attr))}" for attr in [
+                "host", "port", "api_key", "base_path", "request_timeout",
+                "tls", "verify_ssl", "user_agent"
+            ]
+        )
+        rep = (
+            f"{self.__class__.__name__}("
+            f'{", ".join(attrs)}'
+            ")"
+        )
+        return rep
 
     def _request(
         self,
