@@ -5,12 +5,12 @@ https://github.com/Radarr/Radarr/wiki/API:Movie-Lookup
 """
 import json
 from datetime import datetime
+from dataclasses import replace
 
 import pytest
 
 from downloadcarr.models import Image, Rating
 import downloadcarr.radarr.models as models
-from downloadcarr.radarr.client import RadarrClient
 from downloadcarr.enums import HttpMethod
 from downloadcarr.utils import UTC
 from downloadcarr.client import ArrClientError
@@ -24,10 +24,8 @@ from . import (
     HISTORY,
     QUEUE,
     mock_server,
+    CLIENT,
 )
-
-
-CLIENT = RadarrClient("localhost", "MYKEY")
 
 
 def test_alternative_title():
@@ -409,8 +407,8 @@ def test_get_movies(movies_server):
     """Test API call for RadarrClient.get_movies()
     """
 
-    CLIENT.port = movies_server.server_port
-    response = CLIENT.get_movies()
+    client = replace(CLIENT, port=movies_server.server_port)
+    response = client.get_movies()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)
@@ -427,8 +425,8 @@ def test_get_movie(movie_server):
     """Test API call for RadarrClient.get_movie()
     """
 
-    CLIENT.port = movie_server.server_port
-    response = CLIENT.get_movie(1)
+    client = replace(CLIENT, port=movie_server.server_port)
+    response = client.get_movie(1)
     assert isinstance(response, models.Movie)
 
 
@@ -443,14 +441,14 @@ def test_add_movie(add_movie_server):
     """Test API call for RadarrClient.add_movie()
     """
 
-    CLIENT.port = add_movie_server.server_port
+    client = replace(CLIENT, port=add_movie_server.server_port)
     movie = models.Movie.from_dict(json.loads(MOVIEPOST))
-    response = CLIENT.add_movie(
+    response = client.add_movie(
         movie=movie, qualityProfileId=6, profileId=6, path="/path/to/Minions (2015)",
     )
     assert isinstance(response, models.Movie)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {
         "title": "Minions (2015)",
         "images": [
@@ -478,7 +476,7 @@ def update_movie_echo_server():
 def test_update_movie(update_movie_echo_server):
     """Test API call for RadarrClient.update_movie()
     """
-    CLIENT.port = update_movie_echo_server.server_port
+    client = replace(CLIENT, port=update_movie_echo_server.server_port)
     movie = models.Movie(
         title="Assassin's Creed",
         sortTitle="assassins creed",
@@ -532,10 +530,10 @@ def test_update_movie(update_movie_echo_server):
         id=1,
     )
 
-    response = CLIENT.update_movie(movie)
+    response = client.update_movie(movie)
     assert isinstance(response, models.Movie)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {
         "title": "Assassin's Creed",
         "sortTitle": "assassins creed",
@@ -610,8 +608,8 @@ def test_delete_movie(delete_movie_server):
     """Test API call for RadarrClient.delete_movie()
     """
 
-    CLIENT.port = delete_movie_server.server_port
-    response = CLIENT.delete_movie(1)
+    client = replace(CLIENT, port=delete_movie_server.server_port)
+    response = client.delete_movie(1)
     assert response is None
 
 
@@ -627,9 +625,9 @@ def test_delete_movie_bad(delete_movie_bad_server):
     isn't empty JSON array.
     """
 
-    CLIENT.port = delete_movie_bad_server.server_port
+    client = replace(CLIENT, port=delete_movie_bad_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.delete_movie(1)
+        client.delete_movie(1)
 
 
 @pytest.fixture
@@ -643,8 +641,8 @@ def test_lookup_movie(lookup_movie_server):
     """Test API call for RadarrClient.lookup_movie()
     """
 
-    CLIENT.port = lookup_movie_server.server_port
-    response = CLIENT.lookup_movie("Star Wars")
+    client = replace(CLIENT, port=lookup_movie_server.server_port)
+    response = client.lookup_movie("Star Wars")
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)
@@ -661,8 +659,8 @@ def test_lookup_movie_tmdb(lookup_movie_tmdb_server):
     """Test API call for RadarrClient.lookup_movie_tmdb()
     """
 
-    CLIENT.port = lookup_movie_tmdb_server.server_port
-    response = CLIENT.lookup_movie_tmdb("348350")
+    client = replace(CLIENT, port=lookup_movie_tmdb_server.server_port)
+    response = client.lookup_movie_tmdb("348350")
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)
@@ -679,8 +677,8 @@ def test_lookup_movie_imdb(lookup_movie_imdb_server):
     """Test API call for RadarrClient.lookup_movie_imdb()
     """
 
-    CLIENT.port = lookup_movie_imdb_server.server_port
-    response = CLIENT.lookup_movie_imdb("tt3778644")
+    client = replace(CLIENT, port=lookup_movie_imdb_server.server_port)
+    response = client.lookup_movie_imdb("tt3778644")
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)

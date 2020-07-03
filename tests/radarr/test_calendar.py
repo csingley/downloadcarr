@@ -3,15 +3,13 @@
 https://github.com/Radarr/Radarr/wiki/API:Calendar
 """
 from datetime import date
+from dataclasses import replace
 
 import pytest
 
-from . import CALENDAR, mock_server
 from downloadcarr.radarr import models
-from downloadcarr.radarr import RadarrClient
 
-
-CLIENT = RadarrClient("localhost", "MYKEY")
+from . import CALENDAR, mock_server, CLIENT
 
 
 @pytest.fixture
@@ -23,8 +21,8 @@ def test_get_calendar(calendar_server):
     """Test API call for RadarrClient.get_calendar() with default params
     """
 
-    CLIENT.port = calendar_server.server_port
-    response = CLIENT.get_calendar()
+    client = replace(CLIENT, port=calendar_server.server_port)
+    response = client.get_calendar()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)
@@ -43,8 +41,8 @@ def test_get_calendar_params(calendar_server_params):
     """Test API call for RadarrClient.get_calendar() with start/end args
     """
 
-    CLIENT.port = calendar_server_params.server_port
-    response = CLIENT.get_calendar(start=date(2020, 1, 1), end=date(2020, 1, 31))
+    client = replace(CLIENT, port=calendar_server_params.server_port)
+    response = client.get_calendar(start=date(2020, 1, 1), end=date(2020, 1, 31))
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Movie)

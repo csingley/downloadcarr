@@ -4,6 +4,7 @@ https://github.com/Radarr/Radarr/wiki/API:Queue
 """
 import json
 from datetime import datetime, timedelta
+from dataclasses import replace
 
 import pytest
 
@@ -13,10 +14,7 @@ from downloadcarr.utils import UTC
 from downloadcarr.enums import Protocol, HttpMethod
 from downloadcarr.client import ArrClientError
 
-from . import QUEUE, mock_server
-
-
-CLIENT = RadarrClient("localhost", "MYKEY")
+from . import QUEUE, mock_server, CLIENT
 
 
 def test_status_message() -> None:
@@ -71,8 +69,8 @@ def test_get_queue(get_queue_server):
     """Test API call for RadarrClient.get_queue()
     """
 
-    CLIENT.port = get_queue_server.server_port
-    response = CLIENT.get_queue()
+    client = replace(CLIENT, port=get_queue_server.server_port)
+    response = client.get_queue()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.QueueItem)
@@ -89,8 +87,8 @@ def test_delete_queue_item(queueitem_delete_server):
     """Test API call for RadarrClient.delete_queue_item()
     """
 
-    CLIENT.port = queueitem_delete_server.server_port
-    response = CLIENT.delete_queue_item(1)
+    client = replace(CLIENT, port=queueitem_delete_server.server_port)
+    response = client.delete_queue_item(1)
     assert response is None
 
 
@@ -106,6 +104,6 @@ def test_bad_delete_queue_item(queueitem_delete_bad_server):
     isn't empty JSON array.
     """
 
-    CLIENT.port = queueitem_delete_bad_server.server_port
+    client = replace(CLIENT, port=queueitem_delete_bad_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.delete_queue_item(1)
+        client.delete_queue_item(1)

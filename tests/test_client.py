@@ -3,6 +3,7 @@
 import http.server
 from time import sleep
 import threading
+from dataclasses import replace
 
 import pytest
 
@@ -84,12 +85,12 @@ def err_403_server():
 def test_http_error403(err_403_server):
     """Test HTTP 403 response handling."""
 
-    CLIENT.port = err_403_server.server_port
+    client = replace(CLIENT, port=err_403_server.server_port)
     with pytest.raises(ArrHttpError):
-        CLIENT._request("system/status")
+        client._request("system/status")
 
     # Other URI doesn't raise error
-    CLIENT._request("system/backup")
+    client._request("system/backup")
 
 
 @pytest.fixture
@@ -105,12 +106,12 @@ def err_404_server():
 def test_http_error404(err_404_server):
     """Test HTTP 404 response handling."""
 
-    CLIENT.port = err_404_server.server_port
+    client = replace(CLIENT, port=err_404_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT._request("system/status")
+        client._request("system/status")
 
     # Other URI doesn't raise error
-    CLIENT._request("system/backup")
+    client._request("system/backup")
 
 
 @pytest.fixture
@@ -126,9 +127,9 @@ def err_500_server():
 def test_http_error500(err_500_server):
     """Test HTTP 500 response handling."""
 
-    CLIENT.port = err_500_server.server_port
+    client = replace(CLIENT, port=err_500_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT._request("system/status")
+        client._request("system/status")
 
     # Other URI doesn't raise error
-    CLIENT._request("system/backup")
+    client._request("system/backup")

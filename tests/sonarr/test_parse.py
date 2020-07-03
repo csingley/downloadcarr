@@ -3,16 +3,14 @@
 https://github.com/Sonarr/Sonarr/wiki/Parse
 """
 import json
+from dataclasses import replace
 
 import pytest
 
 import downloadcarr.sonarr.models as models
 from downloadcarr.sonarr.client import SonarrClient
 
-from . import PARSE, mock_server
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
+from . import PARSE, mock_server, CLIENT
 
 
 def test_series_title_info() -> None:
@@ -65,12 +63,11 @@ def parse_title_server():
 
 def test_parse_title(parse_title_server):
     """Test API call for SonarrClient.parse_title().
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = parse_title_server.server_port
-    response = CLIENT.parse_title("Title")
+    client = replace(CLIENT, port=parse_title_server.server_port)
+    response = client.parse_title("Title")
     assert isinstance(response, models.ParseResult)
 
 
@@ -85,8 +82,8 @@ def test_parse_title_empty(parse_title_empty_server):
     """Test no result for SonarrClient.parse_title().
     """
 
-    CLIENT.port = parse_title_empty_server.server_port
-    response = CLIENT.parse_title("Title")
+    client = replace(CLIENT, port=parse_title_empty_server.server_port)
+    response = client.parse_title("Title")
     assert response is None
 
 
@@ -99,12 +96,11 @@ def parse_path_server():
 
 def test_parse_path(parse_path_server):
     """Test API call for SonarrClient.parse_path()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = parse_path_server.server_port
-    response = CLIENT.parse_path("Path")
+    client = replace(CLIENT, port=parse_path_server.server_port)
+    response = client.parse_path("Path")
     assert isinstance(response, models.ParseResult)
 
 
@@ -119,6 +115,6 @@ def test_parse_path_empty(parse_path_empty_server):
     """Test no result for SonarrClient.parse_title().
     """
 
-    CLIENT.port = parse_path_empty_server.server_port
-    response = CLIENT.parse_path("Path")
+    client = replace(CLIENT, port=parse_path_empty_server.server_port)
+    response = client.parse_path("Path")
     assert response is None

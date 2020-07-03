@@ -3,6 +3,7 @@
 https://github.com/Sonarr/Sonarr/wiki/Profile
 """
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -18,10 +19,8 @@ from . import (
     RELEASE,
     WANTEDMISSING,
     mock_server,
+    CLIENT,
 )
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
 
 
 def test_quality() -> None:
@@ -425,12 +424,11 @@ def profile_server():
 
 def test_get_quality_profiles(profile_server):
     """Test API call for SonarrClient.get_quality_profiles()
-
-    GET http://$HOST:8989/api/profile
     """
+    #  GET http://$HOST:8989/api/profile
 
-    CLIENT.port = profile_server.server_port
-    response = CLIENT.get_quality_profiles()
+    client = replace(CLIENT, port=profile_server.server_port)
+    response = client.get_quality_profiles()
     assert isinstance(response, tuple)
     assert len(response) == 4
     for profile in response:

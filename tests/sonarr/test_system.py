@@ -9,15 +9,16 @@ https://github.com/Sonarr/Sonarr/wiki/System-Backup
 
 DiskSpace, SystemStatus models tested in downloadcarr.tests.test_models-common
 """
-from datetime import datetime
-import json
+from dataclasses import replace
 
 import pytest
 
-from downloadcarr.models import DiskSpace, RootFolder, SystemStatus, SystemBackup
-import downloadcarr.sonarr.models as models
-from downloadcarr.sonarr.client import SonarrClient
-from downloadcarr.utils import UTC
+from downloadcarr.models import (
+    DiskSpace,
+    RootFolder,
+    SystemStatus,
+    SystemBackup,
+)
 
 from . import (
     DISKSPACE,
@@ -25,10 +26,8 @@ from . import (
     SYSTEMBACKUP,
     SYSTEMSTATUS,
     mock_server,
+    CLIENT,
 )
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
 
 
 @pytest.fixture
@@ -43,8 +42,8 @@ def test_get_diskspace(diskspace_server):
     """
     #  GET http://$HOST:8989/api/diskspace
 
-    CLIENT.port = diskspace_server.server_port
-    response = CLIENT.get_diskspace()
+    client = replace(CLIENT, port=diskspace_server.server_port)
+    response = client.get_diskspace()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], DiskSpace)
@@ -62,8 +61,8 @@ def test_get_rootfolders(rootfolder_server):
     """
     #  GET http://$HOST:8989/api/rootfolder
 
-    CLIENT.port = rootfolder_server.server_port
-    response = CLIENT.get_rootfolders()
+    client = replace(CLIENT, port=rootfolder_server.server_port)
+    response = client.get_rootfolders()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], RootFolder)
@@ -81,8 +80,8 @@ def test_get_system_status(system_status_server):
     """
     #  GET http://$HOST:8989/api/system/status
 
-    CLIENT.port = system_status_server.server_port
-    response = CLIENT.get_system_status()
+    client = replace(CLIENT, port=system_status_server.server_port)
+    response = client.get_system_status()
     assert isinstance(response, SystemStatus)
 
 
@@ -98,8 +97,8 @@ def test_get_system_backups(system_backup_server):
     """
     #  GET http://$HOST:8989/api/system/backup?sort_by=time&order=desc
 
-    CLIENT.port = system_backup_server.server_port
-    response = CLIENT.get_system_backups()
+    client = replace(CLIENT, port=system_backup_server.server_port)
+    response = client.get_system_backups()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], SystemBackup)

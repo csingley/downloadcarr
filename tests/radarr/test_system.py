@@ -9,6 +9,7 @@ DiskSpace, SystemStatus models tested in downloadcarr.tests.test_models-common
 """
 from datetime import datetime
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -21,10 +22,8 @@ from . import (
     DISKSPACE,
     SYSTEMSTATUS,
     mock_server,
+    CLIENT,
 )
-
-
-CLIENT = RadarrClient("localhost", "MYKEY")
 
 
 @pytest.fixture
@@ -38,8 +37,8 @@ def test_get_diskspace(diskspace_server):
     """Test API call for RadarrClient.get_diskspace()
     """
 
-    CLIENT.port = diskspace_server.server_port
-    response = CLIENT.get_diskspace()
+    client = replace(CLIENT, port=diskspace_server.server_port)
+    response = client.get_diskspace()
     assert isinstance(response, tuple)
     assert len(response) == 2
     for disk in response:
@@ -57,6 +56,6 @@ def test_get_system_status(system_status_server):
     """Test API call for RadarrClient.get_system_status()
     """
 
-    CLIENT.port = system_status_server.server_port
-    response = CLIENT.get_system_status()
+    client = replace(CLIENT, port=system_status_server.server_port)
+    response = client.get_system_status()
     assert isinstance(response, SystemStatus)

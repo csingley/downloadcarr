@@ -3,6 +3,7 @@
 https://github.com/Sonarr/Sonarr/wiki/Tag
 """
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -47,8 +48,8 @@ def test_get_tags(tags_server):
     GET http://$HOST:8989/api/tag
     """
 
-    CLIENT.port = tags_server.server_port
-    response = CLIENT.get_tags()
+    client = replace(CLIENT, port=tags_server.server_port)
+    response = client.get_tags()
     assert isinstance(response, tuple)
     assert len(response) == 2
     for tag in response:
@@ -68,8 +69,8 @@ def test_get_tag(tag_server):
     NEEDS EXAMPLE
     """
 
-    CLIENT.port = tag_server.server_port
-    response = CLIENT.get_tag(1)
+    client = replace(CLIENT, port=tag_server.server_port)
+    response = client.get_tag(1)
     assert isinstance(response, models.Tag)
 
 
@@ -82,9 +83,9 @@ def test_get_tag_missing(tag_missing_server):
     """Empty result for SonarrClient.get_stag()
     """
 
-    CLIENT.port = tag_missing_server.server_port
+    client = replace(CLIENT, port=tag_missing_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.get_tag(1)
+        client.get_tag(1)
 
 
 @pytest.fixture
@@ -100,11 +101,11 @@ def test_add_tag(add_tag_echo_server):
     POST http://$HOST:8989/api/tag {"label":"test"}
     """
 
-    CLIENT.port = add_tag_echo_server.server_port
-    response = CLIENT.add_tag("amzn")
+    client = replace(CLIENT, port=add_tag_echo_server.server_port)
+    response = client.add_tag("amzn")
     assert isinstance(response, models.Tag)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {"label": "amzn"}
 
 
@@ -121,11 +122,11 @@ def test_update_tag(update_tag_echo_server):
     NEEDS EXAMPLE
     """
 
-    CLIENT.port = update_tag_echo_server.server_port
-    response = CLIENT.update_tag(1, "amzn")
+    client = replace(CLIENT, port=update_tag_echo_server.server_port)
+    response = client.update_tag(1, "amzn")
     assert isinstance(response, models.Tag)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {"id": 1, "label": "amzn"}
 
 
@@ -142,8 +143,8 @@ def test_delete_tag(delete_tag_server):
     NEEDS EXAMPLE
     """
 
-    CLIENT.port = delete_tag_server.server_port
-    response = CLIENT.delete_tag(1)
+    client = replace(CLIENT, port=delete_tag_server.server_port)
+    response = client.delete_tag(1)
     assert response is None
 
 
@@ -158,6 +159,6 @@ def test_delete_tag_bad(delete_tag_bad_server):
     """SonarrClient.delete_tag() for missing tagId
     """
 
-    CLIENT.port = delete_tag_bad_server.server_port
+    client = replace(CLIENT, port=delete_tag_bad_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.delete_tag(1)
+        client.delete_tag(1)

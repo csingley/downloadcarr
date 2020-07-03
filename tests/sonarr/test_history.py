@@ -4,6 +4,7 @@ https://github.com/Sonarr/Sonarr/wiki/History
 """
 from datetime import datetime
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -12,10 +13,7 @@ from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.enums import SortDirection, SortKey
 from downloadcarr.utils import UTC
 
-from . import HISTORY, mock_server
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
+from . import HISTORY, mock_server, CLIENT
 
 
 def test_download_data() -> None:
@@ -143,13 +141,13 @@ def history_server():
 
 def test_get_history(history_server):
     """Test API call for SonarrClient.get_history() with default query args
-
-    GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc
-    GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&episodeId=35
     """
-    CLIENT.port = history_server.server_port
-    #  response = CLIENT.get_history(sortKey=SortKey.SERIESTITLE)
-    response = CLIENT.get_history()
+    #  GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc
+    #  GET http://$HOST:8989/api/history?page=1&pageSize=15&sortKey=date&sortDir=desc&episodeId=35
+
+    client = replace(CLIENT, port=history_server.server_port)
+    #  response = client.get_history(sortKey=SortKey.SERIESTITLE)
+    response = client.get_history()
     assert isinstance(response, models.History)
 
     assert response.pageSize == 10
@@ -176,6 +174,6 @@ def history_args_server():
 def test_get_history_args(history_args_server):
     """Test API call for SonarrClient.get_history() with nondefault query args
     """
-    CLIENT.port = history_args_server.server_port
-    response = CLIENT.get_history(sortKey=SortKey.SERIESTITLE, episodeId=1)
+    client = replace(CLIENT, port=history_args_server.server_port)
+    response = client.get_history(sortKey=SortKey.SERIESTITLE, episodeId=1)
     assert isinstance(response, models.History)

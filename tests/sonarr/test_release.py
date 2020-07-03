@@ -5,6 +5,7 @@ https://github.com/Sonarr/Sonarr/wiki/Release-Push
 """
 from datetime import datetime
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -14,10 +15,7 @@ from downloadcarr.utils import UTC
 from downloadcarr.enums import HttpMethod, Protocol
 from downloadcarr.client import ArrClientError
 
-from . import RELEASE, mock_server, mock_error_server
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
+from . import RELEASE, mock_server, mock_error_server, CLIENT
 
 
 def test_release() -> None:
@@ -59,12 +57,11 @@ def release_server():
 
 def test_get_release(release_server):
     """Test API call for SonarrClient.get_release()
-
-    GET http://$HOST:8989/api/release?episodeId=35&sort_by=releaseWeight&order=asc
     """
+    #  GET http://$HOST:8989/api/release?episodeId=35&sort_by=releaseWeight&order=asc
 
-    CLIENT.port = release_server.server_port
-    response = CLIENT.get_release(1)
+    client = replace(CLIENT, port=release_server.server_port)
+    response = client.get_release(1)
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Release)
@@ -79,19 +76,18 @@ def add_release_echo_server():
 
 def test_add_release(add_release_echo_server):
     """Test API call for SonarrClient.add_release()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = add_release_echo_server.server_port
-    response = CLIENT.add_release(
+    client = replace(CLIENT, port=add_release_echo_server.server_port)
+    response = client.add_release(
         guid="a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", indexerId=5,
     )
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Release)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {"guid": "a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", "indexerId": 5}
 
 
@@ -106,9 +102,9 @@ def test_add_release_miss(add_release_miss_server):
     """Release not found in cache for SonarrClient.add_release()
     """
 
-    CLIENT.port = add_release_miss_server.server_port
+    client = replace(CLIENT, port=add_release_miss_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.add_release(
+        client.add_release(
             guid="a5a4a6a7-f7c9-4ff0-b3c4-b8dea9ed965b", indexerId=5,
         )
 
@@ -123,12 +119,11 @@ def push_release_echo_server():
 
 def test_push_release(push_release_echo_server):
     """Test API call for SonarrClient.push_release()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = push_release_echo_server.server_port
-    response = CLIENT.push_release(
+    client = replace(CLIENT, port=push_release_echo_server.server_port)
+    response = client.push_release(
         title="The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV",
         downloadUrl="http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb",
         protocol=Protocol.USENET,
@@ -138,7 +133,7 @@ def test_push_release(push_release_echo_server):
     assert len(response) == 1
     assert isinstance(response[0], models.Release)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {
         "title": "The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV",
         "downloadUrl": "http://www.newshost.co.za/nzb/5a6/The.Devils.Ride.S03E01.720p.HDTV.x264-YesTV.nzb",

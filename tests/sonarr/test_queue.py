@@ -4,6 +4,7 @@ https://github.com/Sonarr/Sonarr/wiki/Queue
 """
 from datetime import datetime, timedelta
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -13,10 +14,7 @@ from downloadcarr.sonarr.client import SonarrClient
 from downloadcarr.enums import Protocol, HttpMethod
 from downloadcarr.utils import UTC
 
-from . import QUEUE, mock_server
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
+from . import QUEUE, mock_server, CLIENT
 
 
 def test_queue_item() -> None:
@@ -52,12 +50,11 @@ def queue_server():
 
 def test_get_queue(queue_server):
     """Test API call for SonarrClient.get_queue()
-
-    GET http://$HOST:8989/api/queue?sort_by=timeleft&order=asc
     """
+    #  GET http://$HOST:8989/api/queue?sort_by=timeleft&order=asc
 
-    CLIENT.port = queue_server.server_port
-    response = CLIENT.get_queue()
+    client = replace(CLIENT, port=queue_server.server_port)
+    response = client.get_queue()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.QueueItem)
@@ -72,12 +69,11 @@ def queueitem_delete_server():
 
 def test_delete_queue_item(queueitem_delete_server):
     """Test API call for SonarrClient.delete_queue_item()
-
-    DELETE http://$HOST:8989/api/queue/1242502863?blacklist=false
     """
+    #  DELETE http://$HOST:8989/api/queue/1242502863?blacklist=false
 
-    CLIENT.port = queueitem_delete_server.server_port
-    response = CLIENT.delete_queue_item(1)
+    client = replace(CLIENT, port=queueitem_delete_server.server_port)
+    response = client.delete_queue_item(1)
     assert response is None
 
 
@@ -93,6 +89,6 @@ def test_bad_delete_queue_item(queueitem_delete_bad_server):
     isn't empty JSON array.
     """
 
-    CLIENT.port = queueitem_delete_bad_server.server_port
+    client = replace(CLIENT, port=queueitem_delete_bad_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.delete_queue_item(1)
+        client.delete_queue_item(1)

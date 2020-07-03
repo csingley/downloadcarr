@@ -2,6 +2,8 @@
 """
 from pathlib import Path
 
+from downloadcarr.sonarr import SonarrClient
+
 from .. import (
     mock_server,
     mock_error_server,
@@ -12,6 +14,9 @@ from .. import (
     SYSTEMSTATUS,
     SYSTEMBACKUP,
 )
+
+
+CLIENT = SonarrClient("localhost", "MYKEY")
 
 
 def load(filename):

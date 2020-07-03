@@ -2,14 +2,12 @@
 
 https://github.com/Sonarr/Sonarr/wiki/Calendar
 """
+from dataclasses import replace
+
 import pytest
 
-from . import CALENDAR, mock_server
+from . import CALENDAR, mock_server, CLIENT
 from downloadcarr.sonarr import models
-from downloadcarr.sonarr import SonarrClient
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
 
 
 @pytest.fixture
@@ -23,8 +21,8 @@ def test_get_calendar(calendar_server):
     """Test API call for SonarrClient.get_calendar()
     """
 
-    CLIENT.port = calendar_server.server_port
-    response = CLIENT.get_calendar()
+    client = replace(CLIENT, port=calendar_server.server_port)
+    response = client.get_calendar()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Episode)

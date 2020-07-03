@@ -5,6 +5,7 @@ https://github.com/Sonarr/Sonarr/wiki/API
 import json
 from typing import Tuple, Optional
 from datetime import date
+from dataclasses import dataclass
 
 from downloadcarr.client import Client, ArrClientError
 from downloadcarr.enums import (
@@ -26,11 +27,9 @@ from .models import (
     ParseResult,
     QualityAllowedProfile,
     Release,
-    Season,
 )
 from downloadcarr.models import (
     CommandStatus,
-    Image,
     SystemBackup,
     DiskSpace,
     SystemStatus,
@@ -40,10 +39,11 @@ from downloadcarr.models import (
 from downloadcarr.utils import BOOL2JSON
 
 
+@dataclass(frozen=True)
 class SonarrClient(Client):
     """Main class for handling connections with Sonarr API."""
 
-    port_default = 8989
+    port: int = 8989
 
     #  https://github.com/Sonarr/Sonarr/wiki/Calendar
     def get_calendar(

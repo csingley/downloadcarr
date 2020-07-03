@@ -4,19 +4,16 @@ https://github.com/Radarr/Radarr/wiki/API:History
 """
 import json
 from datetime import datetime
+from dataclasses import replace
 
 import pytest
 
 from downloadcarr.models import DownloadData
 from downloadcarr.radarr import models
-from downloadcarr.radarr.client import RadarrClient
 from downloadcarr import enums
 from downloadcarr.utils import UTC
 
-from . import HISTORY, mock_server
-
-
-CLIENT = RadarrClient("localhost", "MYKEY")
+from . import HISTORY, mock_server, CLIENT
 
 
 def test_download() -> None:
@@ -69,6 +66,6 @@ def test_get_history(history_server):
     """Test API call for RadarrClient.get_history()
     """
 
-    CLIENT.port = history_server.server_port
-    response = CLIENT.get_history()
+    client = replace(CLIENT, port=history_server.server_port)
+    response = client.get_history()
     assert isinstance(response, models.History)

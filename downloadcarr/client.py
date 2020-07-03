@@ -8,6 +8,7 @@ import ssl
 import json
 import socket
 from typing import Any, Mapping, Optional
+from dataclasses import dataclass
 
 from .__version__ import __version__, __title__
 from .enums import HttpMethod
@@ -28,51 +29,61 @@ class ArrHttpError(ArrClientError):
     pass
 
 
+@dataclass(frozen=True)
 class Client:
     """Main class for handling connections with *arr API."""
 
-    port_default: int = 0  # Define in subclass
+    #  port_default: int = 0  # Define in subclass
 
-    def __init__(
-        self,
-        host: str,
-        api_key: str,
-        port: int = 0,
-        base_path: str = "api",
-        request_timeout: int = 8,
-        tls: bool = False,
-        verify_ssl: bool = True,
-        user_agent: str = "",
-    ) -> None:
-        self.api_key = api_key
-        self.base_path = base_path
-        self.host = host
-        self.port = port if port != 0 else self.port_default
-        self.request_timeout = request_timeout
-        self.tls = tls
-        self.verify_ssl = verify_ssl
-        self.user_agent = user_agent
+    host: str
+    api_key: str
+    port: int = 0
+    base_path: str = "api"
+    request_timeout: int = 8
+    tls: bool = False
+    verify_ssl: bool = True
+    user_agent: str = ""
 
-        if user_agent == "":
-            clsnm = self.__class__.__name__
-            self.user_agent = f"{__title__}.{clsnm}/{__version__} (Python)"
+    #  def __init__(
+    #      self,
+    #      host: str,
+    #      api_key: str,
+    #      port: int = 0,
+    #      base_path: str = "api",
+    #      request_timeout: int = 8,
+    #      tls: bool = False,
+    #      verify_ssl: bool = True,
+    #      user_agent: str = "",
+    #  ) -> None:
+    #      self.api_key = api_key
+    #      self.base_path = base_path
+    #      self.host = host
+    #      self.port = port if port != 0 else self.port_default
+    #      self.request_timeout = request_timeout
+    #      self.tls = tls
+    #      self.verify_ssl = verify_ssl
+    #      self.user_agent = user_agent
 
-    def __repr__(self):
-        attrs = (
-            f"{attr}={repr(getattr(self, attr))}"
-            for attr in [
-                "host",
-                "port",
-                "api_key",
-                "base_path",
-                "request_timeout",
-                "tls",
-                "verify_ssl",
-                "user_agent",
-            ]
-        )
-        rep = f"{self.__class__.__name__}(" f'{", ".join(attrs)}' ")"
-        return rep
+    #      if user_agent == "":
+    #          clsnm = self.__class__.__name__
+    #          self.user_agent = f"{__title__}.{clsnm}/{__version__} (Python)"
+
+    #  def __repr__(self):
+    #      attrs = (
+    #          f"{attr}={repr(getattr(self, attr))}"
+    #          for attr in [
+    #              "host",
+    #              "port",
+    #              "api_key",
+    #              "base_path",
+    #              "request_timeout",
+    #              "tls",
+    #              "verify_ssl",
+    #              "user_agent",
+    #          ]
+    #      )
+    #      rep = f"{self.__class__.__name__}(" f'{", ".join(attrs)}' ")"
+    #      return rep
 
     def _request(
         self,

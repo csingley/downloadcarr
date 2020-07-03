@@ -4,14 +4,14 @@ https://github.com/Radarr/Radarr/wiki/API
 """
 import json
 from datetime import date
-from typing import Tuple, Optional, Sequence
+from typing import Tuple, Optional
+from dataclasses import dataclass
 
 from downloadcarr.client import Client, ArrClientError
 from downloadcarr.models import (
     CommandStatus,
     DiskSpace,
     SystemStatus,
-    Image,
     RootFolder,
 )
 from downloadcarr.radarr.models import (
@@ -29,10 +29,11 @@ from downloadcarr.enums import (
 from downloadcarr.utils import BOOL2JSON
 
 
+@dataclass(frozen=True)
 class RadarrClient(Client):
     """Main class for handling connections with Radarr API."""
 
-    port_default = 7878
+    port: int = 7878
 
     #  https://github.com/Radarr/Radarr/wiki/API:Calendar
     def get_calendar(
@@ -215,15 +216,9 @@ class RadarrClient(Client):
     def add_movie(
         self,
         movie,
-        #  title: str,
         qualityProfileId: int,
-        #  titleSlug: str,
-        #  tmdbId: int,
         profileId: int,
-        #  year: int,  # release year. Very important needed for the correct path!
         path: Optional[str] = None,  # full path to the movie on disk
-        #  images: Sequence[Image] = (),
-        #  monitored: bool = True,
         searchForMovie: bool = False,
     ) -> Movie:
         """Add a new movie to your collection.

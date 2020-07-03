@@ -2,7 +2,12 @@
 """
 from pathlib import Path
 
+from downloadcarr.radarr import RadarrClient
+
 from .. import mock_server
+
+
+CLIENT = RadarrClient("localhost", "MYKEY")
 
 
 def load(filename):

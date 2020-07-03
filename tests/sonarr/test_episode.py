@@ -11,6 +11,7 @@ https://github.com/Sonarr/Sonarr/wiki/Wanted-Missing
 """
 from datetime import datetime, date
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -30,10 +31,8 @@ from . import (
     QUEUE,
     WANTEDMISSING,
     mock_server,
+    CLIENT,
 )
-
-
-CLIENT = SonarrClient("localhost", "MYKEY")
 
 
 def test_episode() -> None:
@@ -205,8 +204,8 @@ def test_get_episodes(episodes_server):
     GET http://$HOST:8989/api/episode?seriesId=3
     """
 
-    CLIENT.port = episodes_server.server_port
-    response = CLIENT.get_episodes(seriesId=1)
+    client = replace(CLIENT, port=episodes_server.server_port)
+    response = client.get_episodes(seriesId=1)
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Episode)
@@ -225,8 +224,8 @@ def test_get_episode(episode_server):
     NEEDS EXAMPLE
     """
 
-    CLIENT.port = episode_server.server_port
-    response = CLIENT.get_episode(1)
+    client = replace(CLIENT, port=episode_server.server_port)
+    response = client.get_episode(1)
     assert isinstance(response, models.Episode)
 
 
@@ -243,7 +242,7 @@ def test_update_episode(episode_echo_server):
     PUT http://$HOST:8989/api/episode {"seriesId":205,"episodeFileId":46445,"seasonNumber":1,"episodeNumber":1,"title":"The Bone Orchard","airDate":"2017-04-30","airDateUtc":"2017-05-01T01:00:00Z","overview":"When Shadow Moon is released from prison early after the death of his wife, he meets Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that this may be more than he bargained for.","episodeFile":{"seriesId":205,"seasonNumber":1,"relativePath":"Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","path":"/tank/video/TV/American Gods/Season 1/American Gods - S01E01 - The Bone Orchard WEBDL-720p.mp4","size":2352322048,"dateAdded":"2017-04-30T22:01:17.4243Z","quality":{"quality":{"id":5,"name":"WEBDL-720p","source":"web","resolution":720},"revision":{"version":1,"real":0}},"mediaInfo":{"audioChannels":2,"audioCodec":"AAC","videoCodec":"x264"},"qualityCutoffNotMet":false,"id":46445},"hasFile":true,"monitored":false,"absoluteEpisodeNumber":1,"unverifiedSceneNumbering":false,"id":11937,"status":0}
     """
 
-    CLIENT.port = episode_echo_server.server_port
+    client = replace(CLIENT, port=episode_echo_server.server_port)
     episode = models.Episode(
         seriesId=1,
         episodeFileId=0,
@@ -267,11 +266,11 @@ def test_update_episode(episode_echo_server):
         absoluteEpisodeNumber=1,
         id=1,
     )
-    response = CLIENT.update_episode(episode)
+    response = client.update_episode(episode)
     assert isinstance(response, models.Episode)
     assert response == episode
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {
         "absoluteEpisodeNumber": 1,
         "airDate": "2009-09-17",
@@ -309,8 +308,8 @@ def calendar_server():
 def test_calendar_basic(calendar_server):
     """Test API call for SonarrClient.get_calendar() without query args"""
 
-    CLIENT.port = calendar_server.server_port
-    response = CLIENT.get_calendar()
+    client = replace(CLIENT, port=calendar_server.server_port)
+    response = client.get_calendar()
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.Episode)
@@ -330,15 +329,15 @@ def test_calendar_start_end(calendar_server_start_end):
 
     GET http://$HOST:8989/api/calendar?start=2020-06-13T00%3A00%3A00.000Z&end=2020-06-19T00%3A00%3A00.000Z&unmonitored=false
     """
-    CLIENT.port = calendar_server_start_end.server_port
-    resp = CLIENT.get_calendar(date(2014, 1, 26), date(2014, 1, 27))
+    client = replace(CLIENT, port=calendar_server_start_end.server_port)
+    resp = client.get_calendar(date(2014, 1, 26), date(2014, 1, 27))
 
     assert isinstance(resp, tuple)
     assert len(resp) == 1
     assert isinstance(resp[0], models.Episode)
 
     with pytest.raises(ArrHttpError):
-        CLIENT.get_calendar(date(2014, 1, 25), date(2014, 1, 27))
+        client.get_calendar(date(2014, 1, 25), date(2014, 1, 27))
 
 
 def test_episode_file() -> None:
@@ -386,12 +385,11 @@ def episodefiles_server():
 
 def test_get_episodefiles(episodefiles_server):
     """Test API call for SonarrClient.get_episode_files()
-
-    GET http://$HOST:8989/api/episodefile?seriesId=112
     """
+    #  GET http://$HOST:8989/api/episodefile?seriesId=112
 
-    CLIENT.port = episodefiles_server.server_port
-    response = CLIENT.get_episode_files(seriesId=1)
+    client = replace(CLIENT, port=episodefiles_server.server_port)
+    response = client.get_episode_files(seriesId=1)
     assert isinstance(response, tuple)
     assert len(response) == 1
     assert isinstance(response[0], models.EpisodeFile)
@@ -406,12 +404,11 @@ def episodefile_server():
 
 def test_get_episodefile(episodefile_server):
     """Test API call for SonarrClient.get_episode_file()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = episodefile_server.server_port
-    response = CLIENT.get_episode_file(1)
+    client = replace(CLIENT, port=episodefile_server.server_port)
+    response = client.get_episode_file(1)
     assert isinstance(response, models.EpisodeFile)
 
 
@@ -424,12 +421,11 @@ def episodefile_delete_server():
 
 def test_delete_episode_file(episodefile_delete_server):
     """Test API call for SonarrClient.delete_episode_file()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = episodefile_delete_server.server_port
-    response = CLIENT.delete_episode_file(1)
+    client = replace(CLIENT, port=episodefile_delete_server.server_port)
+    response = client.delete_episode_file(1)
     assert response is None
 
 
@@ -445,9 +441,9 @@ def test_bad_delete_episode_file(episodefile_delete_bad_server):
     isn't empty JSON array.
     """
 
-    CLIENT.port = episodefile_delete_bad_server.server_port
+    client = replace(CLIENT, port=episodefile_delete_bad_server.server_port)
     with pytest.raises(ArrClientError):
-        CLIENT.delete_episode_file(1)
+        client.delete_episode_file(1)
 
 
 @pytest.fixture
@@ -459,18 +455,17 @@ def episodefile_echo_server():
 
 def test_update_episode_file(episodefile_echo_server):
     """Test API call for SonarrClient.update_episode_file()
-
-    NEEDS EXAMPLE
     """
+    #  NEEDS EXAMPLE
 
-    CLIENT.port = episodefile_echo_server.server_port
+    client = replace(CLIENT, port=episodefile_echo_server.server_port)
     quality = models.QualityRevision(
         quality=models.Quality(id=8), revision=models.Revision(version=1, real=0)
     )
-    response = CLIENT.update_episode_file(1, quality)
+    response = client.update_episode_file(1, quality)
     assert isinstance(response, models.EpisodeFile)
 
-    echo = CLIENT._request("echo")
+    echo = client._request("echo")
     assert echo == {
         "quality": {
             "quality": {
@@ -497,11 +492,11 @@ def wanted_missing_server():
 
 def test_get_wanted_missing(wanted_missing_server):
     """Test API call for SonarrClient.get_wanted_missing() with default query args
-
-    GET http://$HOST:8989/api/wanted/missing?page=1&pageSize=15&sortKey=airDateUtc&sortDir=desc&filterKey=monitored&filterValue=true
     """
-    CLIENT.port = wanted_missing_server.server_port
-    response = CLIENT.get_wanted_missing(sortKey=SortKey.AIRDATE)
+    #  GET http://$HOST:8989/api/wanted/missing?page=1&pageSize=15&sortKey=airDateUtc&sortDir=desc&filterKey=monitored&filterValue=true
+
+    client = replace(CLIENT, port=wanted_missing_server.server_port)
+    response = client.get_wanted_missing(sortKey=SortKey.AIRDATE)
     assert isinstance(response, models.WantedMissing)
 
     assert response.pageSize == 10
