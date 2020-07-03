@@ -233,7 +233,13 @@ class RadarrClient(Client):
         #  wont function. Some of these without the others can indeed make a
         #  "movie". But it wont function properly in Radarr.
         for attr in (
-            "title", "qualityProfileId", "titleSlug", "tmdbId", "profileId", "year", "images",
+            "title",
+            "qualityProfileId",
+            "titleSlug",
+            "tmdbId",
+            "profileId",
+            "year",
+            "images",
         ):
             if getattr(movie, attr) is None:
                 msg = f"add_movie(): Movie.{attr} is required"

@@ -12,7 +12,7 @@ from downloadcarr.models import (
     UnmappedFolder,
     RootFolder,
     SystemStatus,
-    SystemBackup
+    SystemBackup,
 )
 
 from downloadcarr.client import Client

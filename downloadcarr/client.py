@@ -59,16 +59,19 @@ class Client:
 
     def __repr__(self):
         attrs = (
-            f"{attr}={repr(getattr(self, attr))}" for attr in [
-                "host", "port", "api_key", "base_path", "request_timeout",
-                "tls", "verify_ssl", "user_agent"
+            f"{attr}={repr(getattr(self, attr))}"
+            for attr in [
+                "host",
+                "port",
+                "api_key",
+                "base_path",
+                "request_timeout",
+                "tls",
+                "verify_ssl",
+                "user_agent",
             ]
         )
-        rep = (
-            f"{self.__class__.__name__}("
-            f'{", ".join(attrs)}'
-            ")"
-        )
+        rep = f"{self.__class__.__name__}(" f'{", ".join(attrs)}' ")"
         return rep
 
     def _request(

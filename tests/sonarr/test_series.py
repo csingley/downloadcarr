@@ -772,11 +772,7 @@ def test_add_series_path(add_series_echo_server):
     CLIENT.port = add_series_echo_server.server_port
 
     series = models.Series.from_dict(json.loads(SERIESPOST))
-    response = CLIENT.add_series(
-        series=series,
-        profileId=1,
-        path="T:\\Archer (2009)",
-    )
+    response = CLIENT.add_series(series=series, profileId=1, path="T:\\Archer (2009)",)
     assert isinstance(response, models.Series)
     assert len(response.seasons) == 6
     for season in response.seasons:
@@ -805,7 +801,7 @@ def test_add_series_path(add_series_echo_server):
             "ignoreEpisodesWithoutFiles": False,
             "searchForMissingEpisodes": False,
         },
-        'tvRageId': 23354,
+        "tvRageId": 23354,
     }
 
 
